@@ -1,28 +1,29 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
-import { UsersService } from '../users/users.service';
+import { EstudianteService } from '../estudiante/estudiante.service'; 
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private estudianteService: EstudianteService,
     private jwtService: JwtService,
   ) {}
 
-  async validarUsuario(username: string, password: string) {
-    const user = await this.usersService.findByUsername(username);
-    if (user && await bcrypt.compare(password, user.password)) {
-      const { password, ...rest } = user;
-      return rest;
-    }
-    throw new UnauthorizedException('Credenciales inválidas');
-  }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.id };
+  async loginEstudiante(email: string, password: string) {
+    const estudiante = await this.estudianteService.findEstudiantePorCredenciales(email, password);
+
+    const payload = { 
+      rut: estudiante.rut,
+      sub: estudiante.rut,
+      tipo: 'estudiante',
+      email: email,
+      carreras: estudiante.carreras,
+    };
+    
     return {
       access_token: this.jwtService.sign(payload),
+      estudiante: estudiante
     };
   }
 }

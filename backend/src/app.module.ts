@@ -5,10 +5,9 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EstudianteModule } from './estudiante/estudiante.module';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [EstudianteModule, ConfigModule.forRoot({ isGlobal: true }), MallaModule, AuthModule, UsersModule],
+  imports: [EstudianteModule, ConfigModule.forRoot({ isGlobal: true }), MallaModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })

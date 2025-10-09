@@ -12,5 +12,6 @@ import { EstudianteController } from './estudiante.controller';
   ],
   controllers: [EstudianteController],
   providers: [EstudianteService],
+  exports: [EstudianteService,]
 })
 export class EstudianteModule {}
