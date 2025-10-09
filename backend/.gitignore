@@ -1,0 +1,5 @@
+# Dependencias
+/node_modules
+
+# Archivos de compilación (esto resuelve tu problema)
+/dist
