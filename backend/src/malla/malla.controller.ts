@@ -6,7 +6,10 @@ export class MallaController {
   constructor(private readonly mallaService: MallaService) {}
 
   @Get()
-  async obtenerMalla(@Query('codigoCarrera') codigoCarrera: string) {
-    return this.mallaService.obtenerMalla(codigoCarrera);
+  async obtenerMalla(
+    @Query('codigoCarrera') codigoCarrera: string,
+    @Query('catalogo') catalogo: string,
+  ) {
+    return this.mallaService.obtenerMalla(codigoCarrera, catalogo);
   }
 }
