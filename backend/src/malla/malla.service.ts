@@ -6,9 +6,9 @@ import { ConfigService } from '@nestjs/config';
 export class MallaService {
   constructor(private readonly configService: ConfigService) {}
 
-  async obtenerMalla(codigoCarrera: string) {
+  async obtenerMalla(codigoCarrera: string, catalogo: string) {
     try {
-      const url = `https://losvilos.ucn.cl/hawaii/api/mallas?${codigoCarrera}`;
+      const url = `https://losvilos.ucn.cl/hawaii/api/mallas?${codigoCarrera}-${catalogo}`;
 
       const { data } = await axios.get(url, {
         headers: {
