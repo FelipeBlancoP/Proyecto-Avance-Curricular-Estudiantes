@@ -1,0 +1,77 @@
+/* src/pages/MallaPage.css */
+
+.malla-page-container {
+  padding: 1rem; /* Un poco de padding general para el móvil */
+  padding-top: 5rem;
+}
+
+/* Estilos para el título "Mi malla" */
+.main-title {
+  font-size: 2.5rem; /* Tamaño de fuente grande */
+  font-weight: 700; /* Negrita */
+  color: #222; /* Color casi negro */
+  margin-top: 0; /* Quitar margen superior por defecto */
+  margin-bottom: 1rem; /* Espacio debajo del título */
+  line-height: 1.2; /* Ajuste para la altura de línea */
+}
+
+/* Estilos para el cuadro con el nombre de la carrera */
+.career-box {
+  background-color: #e0f2f7; /* Un azul claro */
+  border: 1px solid #b3e0e9; /* Borde más oscuro */
+  border-radius: 8px; /* Bordes redondeados */
+  padding: 1rem 1.2rem; /* Espaciado interno */
+  margin-bottom: 1.5rem; /* Espacio debajo del cuadro */
+  font-size: 1.1rem; /* Tamaño de fuente */
+  font-weight: 500; /* Peso de fuente */
+  color: #0056b3; /* Color de texto azul oscuro */
+  text-align: center; /* Centrar el texto */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); /* Sutil sombra */
+}
+
+.menu-button {
+  /* Posicionamiento */
+  position: fixed; /* Fijo en la pantalla */
+  top: 1.5rem;     /* 1.5rem desde arriba */
+  left: 1.5rem;    /* 1.5rem desde la izquierda */
+  z-index: 1000;   /* Por encima de todo */
+
+  /* Apariencia */
+  background-color: #0088CC; /* El color azul de tu imagen */
+  border: none;
+  border-radius: 8px; /* Bordes redondeados (puedes poner 50% si lo quieres circular) */
+  width: 50px;
+  height: 50px;
+  padding: 10px; /* Espacio interno para las líneas */
+  
+  /* Flexbox para centrar las líneas */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Distribuye las líneas verticalmente */
+  align-items: center;
+
+  /* Sombra y efectos */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Las 3 líneas dentro del botón */
+.menu-line {
+  width: 100%; /* Ocupa todo el ancho del padding del botón */
+  height: 4px;
+  background-color: white;
+  border-radius: 2px;
+}
+
+.menu-button:hover {
+  background-color: #006da8; /* Un azul más oscuro */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.menu-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+

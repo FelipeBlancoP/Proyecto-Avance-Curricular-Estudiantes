@@ -3,7 +3,8 @@
 import { useEffect, useState, useMemo } from "react";
 import * as mallaService from "../../services/mallaService";
 import { Malla, Asignatura } from "../../types/malla";
-import MallaTimeline from "../../components/MallaTimeline/MallaTimeline"; // Importamos el nuevo componente
+import MallaTimeline from "../../components/MallaTimeline/MallaTimeline";
+import "./MallaPage.css"; // ¡NUEVO! Importamos el CSS para MallaPage
 
 // Definimos el tipo para la data agrupada
 export interface Semestre {
@@ -15,6 +16,10 @@ function MallaPage() {
   const [malla, setMalla] = useState<Malla | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // --- NUEVO: Nombre de la carrera harcodeado ---
+  const nombreCarrera = "Ingeniería Civil en Computación e Informática";
+  // ----------------------------------------------
 
   useEffect(() => {
     const fetchMalla = async () => {
@@ -36,11 +41,9 @@ function MallaPage() {
     fetchMalla();
   }, []);
 
-  // AQUÍ ESTÁ LA MAGIA: Agrupamos la malla por nivel
   const semestresAgrupados = useMemo<Semestre[]>(() => {
     if (!malla) return [];
 
-    // 1. Usamos reduce para agrupar en un objeto (Record)
     const agrupadoPorNivel = malla.reduce((acc, asignatura) => {
       const nivel = asignatura.nivel;
       if (!acc[nivel]) {
@@ -50,7 +53,6 @@ function MallaPage() {
       return acc;
     }, {} as Record<number, Asignatura[]>);
 
-    // 2. Convertimos el objeto a un array ordenado por nivel
     return Object.keys(agrupadoPorNivel)
       .map(Number)
       .sort((a, b) => a - b)
@@ -58,7 +60,12 @@ function MallaPage() {
         nivel: nivel,
         asignaturas: agrupadoPorNivel[nivel],
       }));
-  }, [malla]); // Esta función solo se re-ejecuta si 'malla' cambia
+  }, [malla]);
+
+  const handleToggleMenu = () => {
+    console.log("Abrir/Cerrar menú lateral");
+    // Aquí irá la lógica para mostrar el menú
+  };
 
   if (isLoading) {
     return <div>Cargando malla...</div>;
@@ -69,9 +76,24 @@ function MallaPage() {
   }
 
   return (
-    <div>
-      <h1>Mi malla</h1>
-      {/* Pasamos la data agrupada al nuevo componente */}
+    
+    // Agregamos una clase al contenedor principal
+    <div className="malla-page-container">
+
+      <button className="menu-button" onClick={handleToggleMenu}>
+        <span className="menu-line"></span>
+        <span className="menu-line"></span>
+        <span className="menu-line"></span>
+      </button>
+      {/* 1. Título con el nuevo estilo */}
+      <h1 className="main-title">Mi malla</h1>
+
+      {/* 2. Cuadro con el nombre de la carrera */}
+      <div className="career-box">
+        {nombreCarrera}
+      </div>
+
+      {/* El resto de la malla */}
       {semestresAgrupados.length > 0 ? (
         <MallaTimeline semestres={semestresAgrupados} />
       ) : (
