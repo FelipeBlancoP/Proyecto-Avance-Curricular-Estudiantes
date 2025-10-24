@@ -1,11 +1,10 @@
-/* Estilos para una sola asignatura */
 .asignatura-item {
   display: flex;
-  justify-content: space-between; /* Nombre a la izq, créditos a la der. */
+  justify-content: space-between; 
   align-items: center;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
-  border-left: 5px solid #007bff; /* Barra de color (puedes cambiarla según estado) */
+  border-left: 5px solid #007bff; 
   padding: 0.75rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -23,7 +22,7 @@
 .asignatura-nombre {
   font-weight: 500;
   color: #333;
-  margin-right: 1rem; /* Espacio para que no choque con créditos */
+  margin-right: 1rem; 
 }
 
 .asignatura-creditos {
@@ -33,38 +32,38 @@
   background-color: #555;
   padding: 0.2rem 0.5rem;
   border-radius: 10px;
-  white-space: nowrap; /* Evita que "CR" se parta en otra línea */
+  white-space: nowrap; 
 }
 
-/* Ejemplo de cómo cambiar estilo por estado (si lo implementas) */
+
 .asignatura-item[data-estado="aprobado"] {
-  border-left-color: #28a745; /* Verde */
+  border-left-color: #28a745; 
   background-color: #f0fff4;
 }
 
 .asignatura-item[data-estado="cursando"] {
-  border-left-color: #ffc107; /* Amarillo */
+  border-left-color: #ffc107; 
   background-color: #fffaf0;
 }
 
 @media (min-width: 768px) {
   .asignatura-item {
-    /* Usamos un gris claro, como en la foto de referencia */
+    
     background-color: #f0f0f0;
     border: 1px solid #dcdcdc;
-    /* Mantenemos la barra de estado, pero más sutil */
+    
     border-left: 4px solid #0088CC;
 
-    /* Apilamos el contenido verticalmente */
+    
     flex-direction: column;
-    align-items: flex-start; /* Alineamos a la izquierda */
+    align-items: flex-start; 
     gap: 0.25rem;
     padding: 0.75rem;
-    cursor: grab; /* Indica que se puede (quizás) mover */
+    cursor: grab; 
   }
   
   .asignatura-item:hover {
-    /* Mantenemos el hover de móvil */
+    
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
@@ -74,14 +73,14 @@
     margin-right: 0;
   }
 
-  /* El estilo de la "píldora" de créditos se mantiene bien */
+  
   .asignatura-creditos {
     font-size: 0.75rem;
     padding: 0.1rem 0.4rem;
-    background-color: #6c757d; /* Un gris más oscuro para la píldora */
+    background-color: #6c757d; 
   }
 
-  /* Actualizamos los colores de estado */
+  
   .asignatura-item[data-estado="aprobado"] {
     border-left-color: #28a745;
     background-color: #f0fff4;

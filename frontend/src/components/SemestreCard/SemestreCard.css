@@ -1,18 +1,15 @@
-/* src/components/SemestreCard/SemestreCard.css */
-
-/* Estilos para CADA item (punto + tarjeta) del semestre */
 .semestre-item {
   position: relative;
   margin-bottom: 1.5rem;
   padding-left: 50px;
 }
 
-/* El "punto" en la línea del timeline */
+
 .semestre-item::before {
   content: "";
   position: absolute;
   left: 12px;
-  top: 18px; /* Ajustado para alinear con el header */
+  top: 18px; 
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -21,25 +18,25 @@
   z-index: 1;
 }
 
-/* La tarjeta que contiene las asignaturas */
+
 .semestre-card {
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  overflow: hidden; /* ¡MUY IMPORTANTE para la animación! */
+  overflow: hidden; 
 }
 
-/* --- NUEVOS ESTILOS --- */
 
-/* El header clickeable */
+
+
 .semestre-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
   cursor: pointer;
-  user-select: none; /* Evita que el texto se seleccione al hacer clic */
+  user-select: none; 
   transition: background-color 0.2s ease;
 }
 
@@ -51,24 +48,24 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: #333;
-  margin: 0; /* Quitamos márgenes por defecto */
+  margin: 0; 
 }
 
-/* El ícono de expansión (la flecha) */
+
 .expand-icon {
   font-size: 1rem;
   color: #007bff;
-  transition: transform 0.3s ease; /* Animación de rotación */
+  transition: transform 0.3s ease; 
 }
 
-/* Cuando el item está expandido, rota el ícono 180 grados */
+
 .semestre-item.is-expanded .expand-icon {
   transform: rotate(-180deg);
 }
 
-/* Contenedor de la lista (para la animación) */
+
 .asignaturas-list-container {
-  max-height: 0; /* Por defecto, está colapsado */
+  max-height: 0; 
   opacity: 0;
   visibility: hidden;
   transition:
@@ -77,9 +74,9 @@
     visibility 0.4s ease-out;
 }
 
-/* Cuando está expandido, le damos una altura máxima grande */
+
 .semestre-item.is-expanded .asignaturas-list-container {
-  max-height: 1000px; /* Un valor alto para que quepa todo */
+  max-height: 1000px; 
   opacity: 1;
   visibility: visible;
   transition:
@@ -88,57 +85,57 @@
     visibility 0s ease-in;
 }
 
-/* La lista de asignaturas (ahora dentro del contenedor) */
+
 .asignaturas-list {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 0 1rem 1rem 1rem; /* Padding inferior y a los lados */
-  border-top: 1px solid #eee; /* Línea separadora */
+  padding: 0 1rem 1rem 1rem; 
+  border-top: 1px solid #eee; 
 }
 
 @media (min-width: 768px) {
-  /* 1. El item ahora es una columna fija */
+  
   .semestre-item {
-    padding-left: 0; /* Reseteamos el padding del timeline */
+    padding-left: 0; 
     margin-bottom: 0;
 
-    /* Ancho fijo para cada columna de semestre */
-    flex-grow: 1;  /* <-- Le dice que CREZCA */
-    flex-shrink: 1;/* <-- Le dice que se ENCOJA si es necesario */
-    flex-basis: 0; /* <-- Le dice que parta de 0 antes de repartir espacio */
     
-    /* Forma corta de escribir lo de arriba: */
-    /* flex: 1; */ 
+    flex-grow: 1;  
+    flex-shrink: 1;
+    flex-basis: 0; 
+    
+    
+     
 
-    /* Es buena idea poner un ancho MÍNIMO para que no colapse */
+    
     min-width: 120px;
   }
 
-  /* 2. Ocultamos el "punto" del timeline */
+  
   .semestre-item::before {
     display: none;
   }
 
-  /* 3. Reseteamos la tarjeta */
+  
   .semestre-card {
     border: none;
     box-shadow: none;
     background-color: transparent;
     padding: 0;
-    overflow: visible; /* Importante para que no corte sombras */
+    overflow: visible; 
   }
 
-  /* 4. Estilo del header (el título del semestre) */
+  
   .semestre-header {
-    background-color: #0088CC; /* Color azul solicitado */
+    background-color: #0088CC; 
     border-radius: 8px;
     padding: 0.75rem 1rem;
-    cursor: default; /* Ya no es clickeable */
+    cursor: default; 
   }
 
   .semestre-header:hover {
-    background-color: #0088CC; /* Sin efecto hover */
+    background-color: #0088CC; 
   }
 
   .semestre-titulo {
@@ -148,26 +145,26 @@
     text-align: center;
     border-bottom: none;
     padding-bottom: 0;
-    width: 100%; /* Ocupar todo el header */
+    width: 100%; 
   }
 
-  /* 5. Ocultamos la flecha de expandir */
+  
   .expand-icon {
     display: none;
   }
 
-  /* 6. FORZAMOS la lista de asignaturas a ser visible */
+  
   .asignaturas-list-container {
-    max-height: none !important; /* ¡Clave! Sobrescribe el colapso */
+    max-height: none !important; 
     opacity: 1 !important;
     visibility: visible !important;
-    transition: none; /* Sin animación */
+    transition: none; 
     overflow: visible;
   }
 
-  /* 7. Estilo de la lista de asignaturas */
+  
   .asignaturas-list {
-    padding: 1rem 0 0 0; /* Espacio entre header y primera asignatura */
+    padding: 1rem 0 0 0; 
     border-top: none;
   }
 }

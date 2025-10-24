@@ -1,12 +1,9 @@
-// src/pages/MallaPage.tsx
-
 import { useEffect, useState, useMemo } from "react";
 import * as mallaService from "../../services/mallaService";
 import { Malla, Asignatura } from "../../types/malla";
 import MallaTimeline from "../../components/MallaTimeline/MallaTimeline";
-import "./MallaPage.css"; // ¡NUEVO! Importamos el CSS para MallaPage
+import "./MallaPage.css";
 
-// Definimos el tipo para la data agrupada
 export interface Semestre {
   nivel: number;
   asignaturas: Asignatura[];
@@ -17,9 +14,7 @@ function MallaPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // --- NUEVO: Nombre de la carrera harcodeado ---
   const nombreCarrera = "Ingeniería Civil en Computación e Informática";
-  // ----------------------------------------------
 
   useEffect(() => {
     const fetchMalla = async () => {
@@ -64,7 +59,6 @@ function MallaPage() {
 
   const handleToggleMenu = () => {
     console.log("Abrir/Cerrar menú lateral");
-    // Aquí irá la lógica para mostrar el menú
   };
 
   if (isLoading) {
@@ -76,17 +70,12 @@ function MallaPage() {
   }
 
   return (
-    // --- 1. NUEVO Contenedor Principal ---
     <div className="page-layout-container">
       
-      {/* --- 2. NUEVA Barra Lateral (sidebar) --- */}
-      {/* Estará vacía y oculta en móvil por CSS */}
       <aside className="sidebar"></aside>
 
-      {/* --- 3. Contenedor de tu página ahora es un <main> --- */}
       <main className="malla-page-container">
         
-        {/* Botón de Menú (se oculta en desktop por CSS) */}
         <button className="menu-button" onClick={handleToggleMenu}>
           <span className="menu-line"></span>
           <span className="menu-line"></span>
@@ -104,9 +93,9 @@ function MallaPage() {
         ) : (
           <div>No hay asignaturas para mostrar.</div>
         )}
-      </main> {/* --- Fin del <main> --- */}
+      </main>
 
-    </div> // --- Fin del page-layout-container ---
+    </div>
   );
 }
 

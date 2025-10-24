@@ -7,7 +7,6 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 export class AvanceController {
   constructor(private readonly avanceService: AvanceService) {}
 
-  //Obtener avance versión no protegida
   @Get()
   async obtenerAvance(
     @Query('rut') rut: string,
@@ -16,7 +15,6 @@ export class AvanceController {
     return this.avanceService.avanceDelEstudiante(rut,codcarrera);
   }
 
-  //Obtener avance versión protegida
   @UseGuards(JwtAuthGuard)
   @Get('mi-avance')
   async obtenerMiAvance(@Request() req):Promise<Avance[]> {

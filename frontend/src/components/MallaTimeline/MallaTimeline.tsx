@@ -1,8 +1,6 @@
-// src/components/MallaTimeline/MallaTimeline.tsx
-
-import { Semestre } from "../../pages/MallaPage/mallaPage"; // Importamos el tipo desde MallaPage
+import { Semestre } from "../../pages/MallaPage/mallaPage"; 
 import SemestreCard from "../SemestreCard/SemestreCard";
-import "./MallaTimeline.css"; // Importamos el CSS
+import "./MallaTimeline.css"; 
 
 interface Props {
   semestres: Semestre[];
@@ -11,7 +9,6 @@ interface Props {
 function MallaTimeline({ semestres }: Props) {
   return (
     <div className="timeline-container">
-      {/* La línea del timeline se crea con CSS (ver .css) */}
       {semestres.map((semestre) => (
         <SemestreCard
           key={semestre.nivel}

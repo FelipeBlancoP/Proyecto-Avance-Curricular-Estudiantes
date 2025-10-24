@@ -9,12 +9,6 @@ import { toEstudianteDomain } from './adapters/estudiante.adapter';
 export class EstudianteService {
   constructor(private readonly httpService: HttpService) {}
 
-  /**
-   * Obtiene los datos de un estudiante desde la API externa usando sus credenciales.
-   * @param email Email del estudiante.
-   * @param password Contraseña del estudiante.
-   * @returns Una promesa con los datos del estudiante adaptados al modelo de dominio establecido.
-   */
   async findEstudiantePorCredenciales(email: string, password: string): Promise<Estudiante> {
     try {
       const response = await firstValueFrom(

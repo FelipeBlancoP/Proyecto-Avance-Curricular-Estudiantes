@@ -7,7 +7,6 @@ import { Malla } from './dto/malla-api.interface';
 export class MallaController {
   constructor(private readonly mallaService: MallaService) {}
 
-  //Malla no protegida, obtenible directamente (para pruebas?)
   @Get()
   async obtenerMalla(
     @Query('codigoCarrera') codigoCarrera: string,
@@ -16,7 +15,6 @@ export class MallaController {
     return this.mallaService.obtenerMalla(codigoCarrera, catalogo);
   }
 
-  //Malla protegida, saca los datos del usuario logueado
   @UseGuards(JwtAuthGuard)
   @Get('mi-malla')
   async obtenerMiMalla(@Request() req) {

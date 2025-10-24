@@ -1,39 +1,36 @@
-/* Estilos para el contenedor principal del timeline */
 .timeline-container {
   position: relative;
   padding: 1rem 0;
-  /* La línea vertical del timeline */
-  /* Usamos un pseudo-elemento para crearla */
   &::before {
     content: "";
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 20px; /* Posición de la línea (centrada en el "punto") */
+    left: 20px; 
     width: 4px;
-    background-color: #e0e0e0; /* Color de la línea */
+    background-color: #e0e0e0; 
     border-radius: 2px;
   }
 }
 
 @media (min-width: 768px) {
   .timeline-container {
-    /* 1. Convertimos el layout a horizontal */
+    
     display: flex;
     flex-direction: row;
-    gap: 0.5rem; /* Espacio entre columnas de semestre */
+    gap: 0.5rem; 
 
-    /* 2. Permitimos scroll horizontal si los semestres no caben */
+    
     overflow-x: hidden;
     overflow-y: hidden;
-    padding-bottom: 1.5rem; /* Espacio para la barra de scroll */
+    padding-bottom: 1.5rem; 
 
-    /* 3. Desactivamos la línea del timeline */
+    
     position: static;
     padding-left: 0;
   }
 
-  /* 4. Ocultamos la línea vertical del timeline */
+  
   .timeline-container::before {
     display: none;
   }

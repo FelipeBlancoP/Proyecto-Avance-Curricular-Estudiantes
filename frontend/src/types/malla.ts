@@ -6,5 +6,4 @@ export interface Asignatura {
   prereq:     string;
 }
 
-// La Malla es un ARRAY de Asignaturas
 export type Malla = Asignatura[];
