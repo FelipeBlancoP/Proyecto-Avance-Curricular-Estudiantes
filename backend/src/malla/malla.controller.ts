@@ -1,6 +1,7 @@
 import { Controller, Get, Query, UseGuards, Request } from '@nestjs/common';
 import { MallaService } from './malla.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Malla } from './dto/malla-api.interface';
 
 @Controller('malla')
 export class MallaController {
@@ -11,7 +12,7 @@ export class MallaController {
   async obtenerMalla(
     @Query('codigoCarrera') codigoCarrera: string,
     @Query('catalogo') catalogo: string,
-  ) {
+  ): Promise<Malla>{
     return this.mallaService.obtenerMalla(codigoCarrera, catalogo);
   }
 

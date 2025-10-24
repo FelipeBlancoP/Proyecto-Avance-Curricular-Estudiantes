@@ -1,0 +1,48 @@
+/* Estilos para una sola asignatura */
+.asignatura-item {
+  display: flex;
+  justify-content: space-between; /* Nombre a la izq, créditos a la der. */
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-left: 5px solid #007bff; /* Barra de color (puedes cambiarla según estado) */
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.asignatura-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.asignatura-nombre {
+  font-weight: 500;
+  color: #333;
+  margin-right: 1rem; /* Espacio para que no choque con créditos */
+}
+
+.asignatura-creditos {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  background-color: #555;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  white-space: nowrap; /* Evita que "CR" se parta en otra línea */
+}
+
+/* Ejemplo de cómo cambiar estilo por estado (si lo implementas) */
+.asignatura-item[data-estado="aprobado"] {
+  border-left-color: #28a745; /* Verde */
+  background-color: #f0fff4;
+}
+
+.asignatura-item[data-estado="cursando"] {
+  border-left-color: #ffc107; /* Amarillo */
+  background-color: #fffaf0;
+}

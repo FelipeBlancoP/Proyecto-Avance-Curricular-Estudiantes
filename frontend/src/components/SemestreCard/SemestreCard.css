@@ -1,0 +1,98 @@
+/* src/components/SemestreCard/SemestreCard.css */
+
+/* Estilos para CADA item (punto + tarjeta) del semestre */
+.semestre-item {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding-left: 50px;
+}
+
+/* El "punto" en la línea del timeline */
+.semestre-item::before {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 18px; /* Ajustado para alinear con el header */
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #007bff;
+  border: 3px solid #fff;
+  z-index: 1;
+}
+
+/* La tarjeta que contiene las asignaturas */
+.semestre-card {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden; /* ¡MUY IMPORTANTE para la animación! */
+}
+
+/* --- NUEVOS ESTILOS --- */
+
+/* El header clickeable */
+.semestre-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  cursor: pointer;
+  user-select: none; /* Evita que el texto se seleccione al hacer clic */
+  transition: background-color 0.2s ease;
+}
+
+.semestre-header:hover {
+  background-color: #f0f0f0;
+}
+
+.semestre-titulo {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0; /* Quitamos márgenes por defecto */
+}
+
+/* El ícono de expansión (la flecha) */
+.expand-icon {
+  font-size: 1rem;
+  color: #007bff;
+  transition: transform 0.3s ease; /* Animación de rotación */
+}
+
+/* Cuando el item está expandido, rota el ícono 180 grados */
+.semestre-item.is-expanded .expand-icon {
+  transform: rotate(-180deg);
+}
+
+/* Contenedor de la lista (para la animación) */
+.asignaturas-list-container {
+  max-height: 0; /* Por defecto, está colapsado */
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    max-height 0.4s ease-out,
+    opacity 0.3s ease-out,
+    visibility 0.4s ease-out;
+}
+
+/* Cuando está expandido, le damos una altura máxima grande */
+.semestre-item.is-expanded .asignaturas-list-container {
+  max-height: 1000px; /* Un valor alto para que quepa todo */
+  opacity: 1;
+  visibility: visible;
+  transition:
+    max-height 0.5s ease-in,
+    opacity 0.4s ease-in,
+    visibility 0s ease-in;
+}
+
+/* La lista de asignaturas (ahora dentro del contenedor) */
+.asignaturas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 1rem 1rem 1rem; /* Padding inferior y a los lados */
+  border-top: 1px solid #eee; /* Línea separadora */
+}

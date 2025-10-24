@@ -1,0 +1,17 @@
+/* Estilos para el contenedor principal del timeline */
+.timeline-container {
+  position: relative;
+  padding: 1rem 0;
+  /* La línea vertical del timeline */
+  /* Usamos un pseudo-elemento para crearla */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px; /* Posición de la línea (centrada en el "punto") */
+    width: 4px;
+    background-color: #e0e0e0; /* Color de la línea */
+    border-radius: 2px;
+  }
+}
