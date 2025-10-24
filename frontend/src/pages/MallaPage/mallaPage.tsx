@@ -76,30 +76,37 @@ function MallaPage() {
   }
 
   return (
-    
-    // Agregamos una clase al contenedor principal
-    <div className="malla-page-container">
+    // --- 1. NUEVO Contenedor Principal ---
+    <div className="page-layout-container">
+      
+      {/* --- 2. NUEVA Barra Lateral (sidebar) --- */}
+      {/* Estará vacía y oculta en móvil por CSS */}
+      <aside className="sidebar"></aside>
 
-      <button className="menu-button" onClick={handleToggleMenu}>
-        <span className="menu-line"></span>
-        <span className="menu-line"></span>
-        <span className="menu-line"></span>
-      </button>
-      {/* 1. Título con el nuevo estilo */}
-      <h1 className="main-title">Mi malla</h1>
+      {/* --- 3. Contenedor de tu página ahora es un <main> --- */}
+      <main className="malla-page-container">
+        
+        {/* Botón de Menú (se oculta en desktop por CSS) */}
+        <button className="menu-button" onClick={handleToggleMenu}>
+          <span className="menu-line"></span>
+          <span className="menu-line"></span>
+          <span className="menu-line"></span>
+        </button>
 
-      {/* 2. Cuadro con el nombre de la carrera */}
-      <div className="career-box">
-        {nombreCarrera}
-      </div>
+        <h1 className="main-title">Mi malla</h1>
 
-      {/* El resto de la malla */}
-      {semestresAgrupados.length > 0 ? (
-        <MallaTimeline semestres={semestresAgrupados} />
-      ) : (
-        <div>No hay asignaturas para mostrar.</div>
-      )}
-    </div>
+        <div className="career-box">
+          {nombreCarrera}
+        </div>
+
+        {semestresAgrupados.length > 0 ? (
+          <MallaTimeline semestres={semestresAgrupados} />
+        ) : (
+          <div>No hay asignaturas para mostrar.</div>
+        )}
+      </main> {/* --- Fin del <main> --- */}
+
+    </div> // --- Fin del page-layout-container ---
   );
 }
 

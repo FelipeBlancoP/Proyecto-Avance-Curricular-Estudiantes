@@ -96,3 +96,78 @@
   padding: 0 1rem 1rem 1rem; /* Padding inferior y a los lados */
   border-top: 1px solid #eee; /* Línea separadora */
 }
+
+@media (min-width: 768px) {
+  /* 1. El item ahora es una columna fija */
+  .semestre-item {
+    padding-left: 0; /* Reseteamos el padding del timeline */
+    margin-bottom: 0;
+
+    /* Ancho fijo para cada columna de semestre */
+    flex-grow: 1;  /* <-- Le dice que CREZCA */
+    flex-shrink: 1;/* <-- Le dice que se ENCOJA si es necesario */
+    flex-basis: 0; /* <-- Le dice que parta de 0 antes de repartir espacio */
+    
+    /* Forma corta de escribir lo de arriba: */
+    /* flex: 1; */ 
+
+    /* Es buena idea poner un ancho MÍNIMO para que no colapse */
+    min-width: 120px;
+  }
+
+  /* 2. Ocultamos el "punto" del timeline */
+  .semestre-item::before {
+    display: none;
+  }
+
+  /* 3. Reseteamos la tarjeta */
+  .semestre-card {
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    padding: 0;
+    overflow: visible; /* Importante para que no corte sombras */
+  }
+
+  /* 4. Estilo del header (el título del semestre) */
+  .semestre-header {
+    background-color: #0088CC; /* Color azul solicitado */
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    cursor: default; /* Ya no es clickeable */
+  }
+
+  .semestre-header:hover {
+    background-color: #0088CC; /* Sin efecto hover */
+  }
+
+  .semestre-titulo {
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    border-bottom: none;
+    padding-bottom: 0;
+    width: 100%; /* Ocupar todo el header */
+  }
+
+  /* 5. Ocultamos la flecha de expandir */
+  .expand-icon {
+    display: none;
+  }
+
+  /* 6. FORZAMOS la lista de asignaturas a ser visible */
+  .asignaturas-list-container {
+    max-height: none !important; /* ¡Clave! Sobrescribe el colapso */
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: none; /* Sin animación */
+    overflow: visible;
+  }
+
+  /* 7. Estilo de la lista de asignaturas */
+  .asignaturas-list {
+    padding: 1rem 0 0 0; /* Espacio entre header y primera asignatura */
+    border-top: none;
+  }
+}

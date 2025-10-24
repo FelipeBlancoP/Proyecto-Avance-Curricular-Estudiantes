@@ -15,3 +15,26 @@
     border-radius: 2px;
   }
 }
+
+@media (min-width: 768px) {
+  .timeline-container {
+    /* 1. Convertimos el layout a horizontal */
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem; /* Espacio entre columnas de semestre */
+
+    /* 2. Permitimos scroll horizontal si los semestres no caben */
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-bottom: 1.5rem; /* Espacio para la barra de scroll */
+
+    /* 3. Desactivamos la línea del timeline */
+    position: static;
+    padding-left: 0;
+  }
+
+  /* 4. Ocultamos la línea vertical del timeline */
+  .timeline-container::before {
+    display: none;
+  }
+}

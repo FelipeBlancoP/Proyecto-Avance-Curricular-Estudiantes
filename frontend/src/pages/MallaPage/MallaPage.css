@@ -75,3 +75,62 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+.sidebar {
+  display: none; /* Oculta en móvil por defecto */
+}
+
+.page-layout-container {
+  width: 100%;
+  overflow-x: hidden;
+}
+/* El contenedor principal de la página */
+
+
+@media (min-width: 768px) {
+    .page-layout-container {
+    display: flex; /* <-- ¡La clave! Pone la sidebar y el main uno al lado del otro */
+    flex-direction: row;
+  }
+
+  /* --- 2. Mostramos y estilizamos la sidebar --- */
+  .sidebar {
+    display: block; /* La mostramos */
+    flex-shrink: 0; /* Evita que se encoja */
+    width: 120px;   /* Ancho de la barra (ajusta si quieres) */
+    min-height: 100vh; /* Ocupa toda la altura */
+    background-color: #0088CC; /* El color azul solicitado */
+  }
+
+  /* --- 3. Ajustamos el contenido principal --- */
+  .malla-page-container {
+    flex-grow: 1; /* Ocupa el resto del espacio */
+    padding: 2rem;
+    /* Ajustamos el padding-left para compensar el botón de menú que ya no está */
+    padding-left: 2rem; 
+  }
+
+  /* Ocultamos el botón de menú (esto ya lo tenías, solo confirma) */
+  .menu-button {
+    display: none;
+  }
+  /* Ocultamos el botón de menú en escritorio */
+  .menu-button {
+    display: none;
+  }
+
+  /* Ajustamos el contenedor principal */
+  .malla-page-container {
+    padding: 2rem; /* Más padding en escritorio */
+  }
+
+  /* El título puede ser un poco más grande */
+  .main-title {
+    font-size: 3rem;
+  }
+
+  /* La caja de la carrera puede ser menos ancha */
+  .career-box {
+    max-width: 600px;
+    text-align: left; /* Lo alineamos a la izquierda */
+  }
+}

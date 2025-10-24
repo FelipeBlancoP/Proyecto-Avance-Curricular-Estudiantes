@@ -46,3 +46,48 @@
   border-left-color: #ffc107; /* Amarillo */
   background-color: #fffaf0;
 }
+
+@media (min-width: 768px) {
+  .asignatura-item {
+    /* Usamos un gris claro, como en la foto de referencia */
+    background-color: #f0f0f0;
+    border: 1px solid #dcdcdc;
+    /* Mantenemos la barra de estado, pero más sutil */
+    border-left: 4px solid #0088CC;
+
+    /* Apilamos el contenido verticalmente */
+    flex-direction: column;
+    align-items: flex-start; /* Alineamos a la izquierda */
+    gap: 0.25rem;
+    padding: 0.75rem;
+    cursor: grab; /* Indica que se puede (quizás) mover */
+  }
+  
+  .asignatura-item:hover {
+    /* Mantenemos el hover de móvil */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .asignatura-nombre {
+    font-size: 0.85rem;
+    margin-right: 0;
+  }
+
+  /* El estilo de la "píldora" de créditos se mantiene bien */
+  .asignatura-creditos {
+    font-size: 0.75rem;
+    padding: 0.1rem 0.4rem;
+    background-color: #6c757d; /* Un gris más oscuro para la píldora */
+  }
+
+  /* Actualizamos los colores de estado */
+  .asignatura-item[data-estado="aprobado"] {
+    border-left-color: #28a745;
+    background-color: #f0fff4;
+  }
+  .asignatura-item[data-estado="cursando"] {
+    border-left-color: #ffc107;
+    background-color: #fffaf0;
+  }
+}
