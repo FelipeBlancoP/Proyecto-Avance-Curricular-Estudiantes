@@ -5,6 +5,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { EstudianteModule } from '../estudiante/estudiante.module';
+import { TokenBlacklistService } from './token-blacklist.service';
 
 @Module({
   imports: [
@@ -15,10 +16,8 @@ import { EstudianteModule } from '../estudiante/estudiante.module';
       signOptions: { expiresIn: '2h' },
     }),
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, TokenBlacklistService],
   controllers: [AuthController],
   exports: [AuthService],
 })
 export class AuthModule {}
-
-
