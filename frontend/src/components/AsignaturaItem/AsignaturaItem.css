@@ -1,10 +1,10 @@
 .asignatura-item {
   display: flex;
-  justify-content: space-between; 
+  justify-content: space-between;
   align-items: center;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
-  border-left: 5px solid #007bff; 
+  border-left: 5px solid #007bff;
   padding: 0.75rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -22,7 +22,7 @@
 .asignatura-nombre {
   font-weight: 500;
   color: #333;
-  margin-right: 1rem; 
+  margin-right: 1rem;
 }
 
 .asignatura-creditos {
@@ -32,38 +32,49 @@
   background-color: #555;
   padding: 0.2rem 0.5rem;
   border-radius: 10px;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 
 
 .asignatura-item[data-estado="aprobado"] {
-  border-left-color: #28a745; 
+  border-left-color: #28a745;
   background-color: #f0fff4;
 }
 
-.asignatura-item[data-estado="cursando"] {
-  border-left-color: #ffc107; 
+.asignatura-item[data-estado="inscrito"] {
+  border-left-color: #ffc107;
   background-color: #fffaf0;
 }
 
+.asignatura-item[data-estado="reprobado"] {
+  border-left-color: #ff0000;
+  background-color: #f9f9f9;
+}
+
+.asignatura-item[data-estado="no cursado"] {
+  border-left-color: #858585;
+  background-color: #f9f9f9;
+}
+
+
 @media (min-width: 768px) {
   .asignatura-item {
-    
+
     background-color: #f0f0f0;
     border: 1px solid #dcdcdc;
-    
+
     border-left: 4px solid #0088CC;
 
-    
+
     flex-direction: column;
-    align-items: flex-start; 
+    align-items: flex-start;
     gap: 0.25rem;
     padding: 0.75rem;
-    cursor: grab; 
+    cursor: grab;
   }
-  
+
   .asignatura-item:hover {
-    
+
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
@@ -73,20 +84,32 @@
     margin-right: 0;
   }
 
-  
+
   .asignatura-creditos {
     font-size: 0.75rem;
     padding: 0.1rem 0.4rem;
-    background-color: #6c757d; 
+    background-color: #6c757d;
   }
 
-  
+
   .asignatura-item[data-estado="aprobado"] {
     border-left-color: #28a745;
     background-color: #f0fff4;
   }
-  .asignatura-item[data-estado="cursando"] {
+
+  .asignatura-item[data-estado="inscrito"] {
     border-left-color: #ffc107;
     background-color: #fffaf0;
   }
+
+  .asignatura-item[data-estado="reprobado"] {
+    border-left-color: #ff0000;
+    background-color: #f9f9f9;
+  }
+
+  .asignatura-item[data-estado="no cursado"] {
+    border-left-color: #858585;
+    background-color: #f9f9f9;
+  }
+
 }

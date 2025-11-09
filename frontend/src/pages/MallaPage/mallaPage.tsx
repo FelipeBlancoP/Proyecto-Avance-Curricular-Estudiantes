@@ -21,7 +21,7 @@ function MallaPage() {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await mallaService.obtenerMalla("8266", "202410");
+        const data = await mallaService.obtenerMalla("333333333", "8266", "202410");
         setMalla(data);
       } catch (err) {
         if (err instanceof Error) {
@@ -71,11 +71,11 @@ function MallaPage() {
 
   return (
     <div className="page-layout-container">
-      
+
       <aside className="sidebar"></aside>
 
       <main className="malla-page-container">
-        
+
         <button className="menu-button" onClick={handleToggleMenu}>
           <span className="menu-line"></span>
           <span className="menu-line"></span>
