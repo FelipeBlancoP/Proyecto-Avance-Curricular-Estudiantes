@@ -18,7 +18,15 @@ export class MallaService {
           'X-HAWAII-AUTH': this.configService.get<string>('HAWAII_AUTH'),
         },
       });
-      return data;
+
+      const malla = data.map((curso: any) => ({
+        ...curso,
+        prereq: curso.prereq
+          ? curso.prereq.split(',').map((p: string) => p.trim())
+          : [],
+      }));
+
+      return malla;
     } catch (error) {
       console.error('Error al obtener malla:', error.message);
       throw new HttpException(

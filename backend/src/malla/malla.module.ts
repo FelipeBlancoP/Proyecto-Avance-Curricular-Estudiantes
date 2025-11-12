@@ -8,5 +8,6 @@ import { AvanceModule } from '../avance/avance.module';
   imports: [ConfigModule, AvanceModule],
   providers: [MallaService],
   controllers: [MallaController],
+  exports: [MallaService],
 })
 export class MallaModule { }
