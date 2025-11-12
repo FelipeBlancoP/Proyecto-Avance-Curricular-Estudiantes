@@ -10,25 +10,32 @@ function normalizarCodigo(codigo: string): string {
 /**
  * Determina si un curso puede ser tomado según los prerrequisitos ya tomados.
  */
-function puedeTomarse(curso: Asignatura, tomados: Set<string>): boolean {
+function puedeTomarse(curso: Asignatura, tomados: Set<string>, allCourseCodes: Set<string>): boolean {
     if (tomados.has(curso.codigo)) return false;
     if (curso.estado?.toLowerCase() === 'aprobado') return false;
 
-    // Sin prerrequisitos o prerrequisitos vacíos = disponible
+    // Sin prerrequisitos o prerrequisitos vacÃ­os = disponible
     if (!curso.prereq || curso.prereq.length === 0) return true;
 
     // Todos los prerrequisitos deben haberse tomado
     return curso.prereq.every(p => {
         const pr = normalizarCodigo(p);
+
+        if (!allCourseCodes.has(pr)) {
+            console.log(`⚠️ Prerrequisito ${pr} no encontrado en la malla. Se asume como cumplido.`);
+            return true;
+        }
         return pr === '' || tomados.has(pr);
     });
 }
 
+
+
 /**
  * Devuelve los cursos disponibles actualmente.
  */
-function cursosDisponibles(malla: Asignatura[], tomados: Set<string>): Asignatura[] {
-    return malla.filter(curso => puedeTomarse(curso, tomados));
+function cursosDisponibles(malla: Asignatura[], tomados: Set<string>, allCourseCodes: Set<string>): Asignatura[] {
+    return malla.filter(curso => puedeTomarse(curso, tomados, allCourseCodes));
 }
 
 /**
@@ -73,11 +80,21 @@ export function simularProgreso(malla: Asignatura[]) {
     const simulacion: any[] = [];
 
     const pendientes = malla.filter(c => c.estado?.toLowerCase() !== 'aprobado');
-    const totalCursos = pendientes.length;
-    const tomados = new Set<string>();
+    const totalCursos = malla.length;
+    const allCourseCodes = new Set(
+        malla.map(c => normalizarCodigo(c.codigo))
+    );
+    const tomados = new Set(
+        malla
+            .filter(c => c.estado?.toLowerCase() === 'aprobado' || c.estado?.toLowerCase() === 'inscrito')
+            .map(c => normalizarCodigo(c.codigo))
+    );
+
 
     console.log(`🚀 Simulación iniciada: ${totalCursos} cursos pendientes.`);
-
+    for (const curso of pendientes) {
+        console.log(`🔍 Curso pendiente: ${curso.codigo} - ${curso.asignatura}`);
+    }
     let iteraciones = 0;
     while (tomados.size < totalCursos) {
         iteraciones++;
@@ -86,7 +103,11 @@ export function simularProgreso(malla: Asignatura[]) {
             break;
         }
 
-        let disponibles = cursosDisponibles(pendientes, tomados);
+
+        let disponibles = cursosDisponibles(pendientes, tomados, allCourseCodes);
+        for (const curso of disponibles) {
+            console.log(`🔍 Curso pendiente: ${curso.codigo} - ${curso.asignatura}`);
+        }
         disponibles = ordenarPorPrioridad(disponibles);
 
         if (disponibles.length === 0) {
@@ -98,6 +119,7 @@ export function simularProgreso(malla: Asignatura[]) {
         let creditos = 0;
 
         for (const curso of disponibles) {
+            console.log(curso.asignatura);
             if (creditos + curso.creditos > 30) continue;
             semestre.push(curso);
             creditos += curso.creditos;
