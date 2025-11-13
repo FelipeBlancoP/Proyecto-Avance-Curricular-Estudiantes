@@ -2,7 +2,6 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from '../estudiante/dto/login.dto';
 import { EstudianteService } from '../estudiante/estudiante.service';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
 
 @Injectable()
 export class AuthService {
@@ -11,22 +10,23 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(identifier: string, password: string): Promise<JwtPayload | null> {
+  async validateUser(identifier: string, password: string): Promise<any | null> {
     try {
+      // Usar directamente el servicio que llama a la API externa
       const estudiante = await this.estudianteService.findEstudiantePorCredenciales(identifier, password);
       
-      if (!estudiante) {
-        return null;
-      }
-
+      // Si llegamos aquí, las credenciales son válidas
+      // porque el servicio no lanzó una excepción
       return {
-        sub: estudiante.rut,
+        sub: estudiante.rut, // Usar rut como subject
         rut: estudiante.rut,
-        email: identifier,
+        email: identifier, // Usar el identifier que se envió
         tipo: 'estudiante',
         carreras: estudiante.carreras,
       };
     } catch (error) {
+      // Si hay cualquier error, las credenciales son inválidas
+      console.error('Error en validación:', error.message);
       return null;
     }
   }

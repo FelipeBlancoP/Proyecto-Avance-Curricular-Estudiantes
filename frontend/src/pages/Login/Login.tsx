@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
+// Importa las imágenes
+import logoUCN from '../../images/logoUCN.png';
+import ucenin from '../../images/ucenin.png';
+
 function Login() {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
@@ -28,9 +32,9 @@ function Login() {
       if (response.ok) {
         localStorage.setItem('access_token', data.access_token);
         localStorage.setItem('user', JSON.stringify(data.user));
-        navigate('/dashboard');
+        navigate('/');
       } else {
-        setError(data.message || 'Error en el login');
+        setError(data.message || 'Credenciales incorrectas');
       }
     } catch (err) {
       setError('Error de conexión con el servidor');
@@ -40,37 +44,60 @@ function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h1>Sistema de Avance Curricular UCN</h1>
-        <form onSubmit={handleLogin} className="login-form">
-          <div className="form-group">
-            <label>Email o RUT:</label>
-            <input
-              type="text"
-              value={identifier}
-              onChange={(e) => setIdentifier(e.target.value)}
-              required
-            />
+    <div className="login-page">
+      <div className="container">
+        <div className="info-section">
+          <div className="welcome-message">
+            <h1>Sistema de Avance Curricular</h1>
           </div>
-          <div className="form-group">
-            <label>Contraseña:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+
+          <div className="description">
+            <p>Esta plataforma le permite realizar un seguimiento detallado de su progreso académico, verificar el estado de sus asignaturas y planificar su trayectoria educativa.</p>
+            
+            {/* Logo Ucenin en la parte inferior izquierda */}
+            <div className="ucenin-logo-container">
+              <img src={ucenin} alt="Ucenin" className="ucenin-logo" />
+            </div>
           </div>
-          {error && <div className="error-message">{error}</div>}
-          <button type="submit" disabled={loading}>
-            {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-          </button>
-        </form>
-        <div className="test-credentials">
-          <h3>Credenciales de prueba:</h3>
-          <p>Email: pedro@example.com | Password: qwerty</p>
-          <p>Email: juan@example.com | Password: 1234</p>
+        </div>
+
+        <div className="login-container">
+          <div className="login-section">
+            <img src={logoUCN} alt="Logo UCN" className="login-logo" />
+            
+            {/* Universidad Católica del Norte debajo del logo */}
+            <div className="university-name">
+              <h3>Universidad Católica del Norte</h3>
+            </div>
+            
+            <h2 className="login-title">Inicio de Sesión</h2>
+
+            <form onSubmit={handleLogin} className="login-form">
+              <input 
+                type="text" 
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                placeholder="Rut sin puntos ni guión" 
+                required 
+              />
+              <input 
+                type="password" 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contraseña" 
+                required 
+              />
+              <button type="submit" disabled={loading}>
+                {loading ? 'Ingresando...' : 'Ingresar'}
+              </button>
+            </form>
+
+            <div className="convio-option">
+              <a href="#">¿Olvidaste tu contraseña?</a>
+            </div>
+            
+            {error && <div className="error-message">{error}</div>}
+          </div>
         </div>
       </div>
     </div>

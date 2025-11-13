@@ -1,75 +1,238 @@
-.login-container {
+.login-page {
+  font-family: 'Open Sans', sans-serif;
+  background: #0081cc;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1rem;
 }
 
-.login-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+.container {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
-  max-width: 400px;
+  max-width: 1200px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  min-height: 600px;
+}
+
+.info-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  position: relative;
+}
+
+.welcome-message h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.description p {
+  font-size: 1.1rem;
+  color: #5a6c7d;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Logo Ucenin en la parte inferior izquierda */
+.ucenin-logo-container {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+}
+
+.ucenin-logo {
+  max-width: 120px;
+  height: auto;
+}
+
+.login-container {
+  flex: 0 0 450px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+}
+
+.login-section {
+  background: #c2e9ff;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+}
+
+.login-logo {
+  width: 60px; /* Logo más pequeño */
+  margin-bottom: 0.5rem;
+}
+
+/* Universidad Católica del Norte debajo del logo */
+.university-name {
+  margin-bottom: 1.5rem;
+}
+
+.university-name h3 {
+  color: #2c3e50;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.login-title {
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+  font-size: 1.3rem;
+  font-weight: 600;
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
+.login-form input {
+  padding: 0.9rem;
+  border: 2px solid #e1e8ed;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  background: white;
 }
 
-.form-group label {
-  margin-bottom: 0.5rem;
-  font-weight: bold;
+.login-form input:focus {
+  outline: none;
+  border-color: #0081cc;
+  box-shadow: 0 0 0 3px rgba(0, 129, 204, 0.1);
 }
 
-.form-group input {
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
+.login-form input::placeholder {
+  color: #a0aec0;
 }
 
-button {
-  padding: 0.75rem;
-  background: #667eea;
-  color: white;
+.login-form button {
+  padding: 0.9rem;
+  background: #af4c0f;
   border: none;
-  border-radius: 5px;
+  color: white;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all 0.3s ease;
   font-size: 1rem;
+  width: 100%;
   cursor: pointer;
+  margin-top: 0.5rem;
 }
 
-button:disabled {
+.login-form button:hover:not(:disabled) {
+  background: #96410d;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(175, 76, 15, 0.3);
+}
+
+.login-form button:disabled {
   background: #ccc;
   cursor: not-allowed;
+  transform: none;
+}
+
+.convio-option {
+  margin-bottom: 1rem;
+}
+
+.convio-option a {
+  font-size: 0.85rem;
+  color: #0081cc;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.convio-option a:hover {
+  color: #0066a6;
+  text-decoration: underline;
 }
 
 .error-message {
-  color: #e74c3c;
-  background: #fdf2f2;
-  padding: 0.5rem;
-  border-radius: 5px;
-  border: 1px solid #e74c3c;
-}
-
-.test-credentials {
+  background: #fed7d7;
+  color: #c53030;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #feb2b2;
+  font-size: 0.85rem;
   margin-top: 1rem;
-  padding: 1rem;
-  background: #f8f9fa;
-  border-radius: 5px;
-  font-size: 0.9rem;
 }
 
-.test-credentials h3 {
-  margin: 0 0 0.5rem 0;
-  color: #666;
+/* Responsive */
+@media (max-width: 968px) {
+  .container {
+    flex-direction: column;
+    max-width: 500px;
+  }
+  
+  .info-section {
+    padding: 2rem;
+    text-align: center;
+    min-height: 300px;
+  }
+  
+  .welcome-message h1 {
+    font-size: 2rem;
+  }
+  
+  .ucenin-logo-container {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    margin-top: 2rem;
+    text-align: center;
+  }
+  
+  .login-container {
+    flex: none;
+    width: 100%;
+    padding: 2rem;
+  }
+  
+  .login-section {
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    border-radius: 15px;
+    margin: 0.5rem;
+  }
+  
+  .info-section {
+    padding: 1.5rem;
+  }
+  
+  .welcome-message h1 {
+    font-size: 1.75rem;
+  }
+  
+  .login-section {
+    padding: 2rem 1.5rem;
+  }
+  
+  .ucenin-logo {
+    max-width: 100px;
+  }
 }
