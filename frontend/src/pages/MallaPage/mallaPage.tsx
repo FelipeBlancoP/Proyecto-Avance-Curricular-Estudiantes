@@ -15,14 +15,14 @@ function MallaPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // 🧩 Estado para la simulación
+  
   const [mostrarSimulacion, setMostrarSimulacion] = useState(false);
 
   const nombreCarrera = "Ingeniería Civil en Computación e Informática";
   const rut = "333333333";
   const codigoCarrera = "8266";
   const catalogo = "202410";
-  const token = localStorage.getItem("token") || ""; // o donde guardes tu JWT
+  const token = localStorage.getItem("token") || ""; 
 
   useEffect(() => {
     const fetchMalla = async () => {
@@ -44,7 +44,7 @@ function MallaPage() {
     fetchMalla();
   }, []);
 
-  // Agrupamos las asignaturas por nivel (igual que antes)
+  
   const semestresAgrupados = useMemo<Semestre[]>((() => {
     if (!malla) return [];
 
@@ -85,8 +85,6 @@ function MallaPage() {
         <h1 className="main-title">Mi malla</h1>
 
         <div className="career-box">{nombreCarrera}</div>
-
-        {/* 🔹 Botón para mostrar / ocultar la simulación */}
         <div style={{ marginBottom: "1rem" }}>
           <button
             className="simulacion-btn"
@@ -102,7 +100,6 @@ function MallaPage() {
           <div>No hay asignaturas para mostrar.</div>
         )}
 
-        {/* 🔹 Sección de simulación */}
         {mostrarSimulacion && malla && (
           <SimulacionView
             rut={rut}

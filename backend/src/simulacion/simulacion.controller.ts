@@ -6,7 +6,6 @@ import { SimulacionService } from './simulacion.service';
 export class SimulacionController {
     constructor(private readonly simulacionService: SimulacionService) { }
 
-    //@UseGuards(JwtAuthGuard)
     @Get('mi-simulacion')
     async simularMalla(
         @Query('rut') rut: string,

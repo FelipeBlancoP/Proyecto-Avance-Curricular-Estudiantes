@@ -1,28 +1,22 @@
 import { Asignatura } from '../malla/dto/malla-api.interface';
 
-/**
- * Limpia y normaliza los códigos de prerrequisitos.
- */
 function normalizarCodigo(codigo: string): string {
     return codigo.trim().toUpperCase();
 }
 
-/**
- * Determina si un curso puede ser tomado según los prerrequisitos ya tomados.
- */
 function puedeTomarse(curso: Asignatura, tomados: Set<string>, allCourseCodes: Set<string>): boolean {
     if (tomados.has(curso.codigo)) return false;
     if (curso.estado?.toLowerCase() === 'aprobado') return false;
 
-    // Sin prerrequisitos o prerrequisitos vacÃ­os = disponible
+    
     if (!curso.prereq || curso.prereq.length === 0) return true;
 
-    // Todos los prerrequisitos deben haberse tomado
+    
     return curso.prereq.every(p => {
         const pr = normalizarCodigo(p);
 
         if (!allCourseCodes.has(pr)) {
-            console.log(`⚠️ Prerrequisito ${pr} no encontrado en la malla. Se asume como cumplido.`);
+            console.log(`Prerrequisito ${pr} no encontrado en la malla. Se asume como cumplido.`);
             return true;
         }
         return pr === '' || tomados.has(pr);
@@ -30,20 +24,10 @@ function puedeTomarse(curso: Asignatura, tomados: Set<string>, allCourseCodes: S
 }
 
 
-
-/**
- * Devuelve los cursos disponibles actualmente.
- */
 function cursosDisponibles(malla: Asignatura[], tomados: Set<string>, allCourseCodes: Set<string>): Asignatura[] {
     return malla.filter(curso => puedeTomarse(curso, tomados, allCourseCodes));
 }
 
-/**
- * Priorización avanzada:
- * 1️⃣ Ramos base (Programación, Matemática, Física, etc.)
- * 2️⃣ Cursos de menor nivel
- * 3️⃣ Electivos al final
- */
 function ordenarPorPrioridad(cursos: Asignatura[]): Asignatura[] {
     const prioridadAlta = /(programación|matemática|álgebra|física|química|taller|introducción)/i;
     const prioridadBaja = /(electiva|formación general|valórica|fg)/i;
@@ -57,25 +41,22 @@ function ordenarPorPrioridad(cursos: Asignatura[]): Asignatura[] {
         const aBaja = prioridadBaja.test(aNombre);
         const bBaja = prioridadBaja.test(bNombre);
 
-        // Alta prioridad primero
+        
         if (aAlta && !bAlta) return -1;
         if (!aAlta && bAlta) return 1;
 
-        // Baja prioridad al final
+        
         if (aBaja && !bBaja) return 1;
         if (!aBaja && bBaja) return -1;
 
-        // Luego por nivel
+        
         if (a.nivel !== b.nivel) return a.nivel - b.nivel;
 
-        // Finalmente por código
+        
         return a.codigo.localeCompare(b.codigo);
     });
 }
 
-/**
- * Simula semestre a semestre respetando prerrequisitos y máximo de créditos.
- */
 export function simularProgreso(malla: Asignatura[]) {
     const simulacion: any[] = [];
 
@@ -91,27 +72,27 @@ export function simularProgreso(malla: Asignatura[]) {
     );
 
 
-    console.log(`🚀 Simulación iniciada: ${totalCursos} cursos pendientes.`);
+    console.log(`Simulación iniciada: ${totalCursos} cursos pendientes.`);
     for (const curso of pendientes) {
-        console.log(`🔍 Curso pendiente: ${curso.codigo} - ${curso.asignatura}`);
+        console.log(`Curso pendiente: ${curso.codigo} - ${curso.asignatura}`);
     }
     let iteraciones = 0;
     while (tomados.size < totalCursos) {
         iteraciones++;
         if (iteraciones > totalCursos * 3) {
-            console.warn('⚠️ Detenido: dependencia circular o prerrequisitos imposibles.');
+            console.warn('Detenido: dependencia circular o prerrequisitos imposibles.');
             break;
         }
 
 
         let disponibles = cursosDisponibles(pendientes, tomados, allCourseCodes);
         for (const curso of disponibles) {
-            console.log(`🔍 Curso pendiente: ${curso.codigo} - ${curso.asignatura}`);
+            console.log(`Curso pendiente: ${curso.codigo} - ${curso.asignatura}`);
         }
         disponibles = ordenarPorPrioridad(disponibles);
 
         if (disponibles.length === 0) {
-            console.warn('⚠️ No hay cursos disponibles (quizá prerrequisitos no encontrados).');
+            console.warn('No hay cursos disponibles (quizá prerrequisitos no encontrados).');
             break;
         }
 
@@ -126,7 +107,7 @@ export function simularProgreso(malla: Asignatura[]) {
         }
 
         if (semestre.length === 0) {
-            console.warn('⚠️ No se pudo llenar el semestre.');
+            console.warn('No se pudo llenar el semestre.');
             break;
         }
 
@@ -144,16 +125,13 @@ export function simularProgreso(malla: Asignatura[]) {
 
         semestre.forEach(c => tomados.add(normalizarCodigo(c.codigo)));
 
-        console.log(`📘 Semestre ${simulacion.length}: ${semestre.length} cursos, ${creditos} créditos.`);
+        console.log(`Semestre ${simulacion.length}: ${semestre.length} cursos, ${creditos} créditos.`);
     }
 
-    console.log(`✅ Simulación finalizada con ${simulacion.length} semestres.`);
+    console.log(`Simulación finalizada con ${simulacion.length} semestres.`);
     return simulacion;
 }
 
-/**
- * Detecta cuellos de botella.
- */
 export function detectarCuellosDeBotella(malla: Asignatura[]) {
     const dependencias: Record<string, number> = {};
 
