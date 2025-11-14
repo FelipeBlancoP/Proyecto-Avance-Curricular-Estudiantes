@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { estudianteService } from '../../services/estudianteService';
+import { Estudiante } from '../../types/estudiante';
 import './Dashboard.css';
 
 function Dashboard() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [estudiante, setEstudiante] = useState<Estudiante | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,6 +18,20 @@ function Dashboard() {
       navigate('/login');
       return;
     }
+
+    const cargarPerfil = async () => {
+      try {
+        const perfil = await estudianteService.obtenerPerfil();
+        setEstudiante(perfil);
+      } catch (error) {
+        console.error('Error al cargar perfil:', error);
+        navigate('/login');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargarPerfil();
 
     try {
       const userParsed = JSON.parse(userData);
@@ -52,6 +69,16 @@ function Dashboard() {
           <h3>✏️ Malla Manual</h3>
           <p>Simular diferentes escenarios de avance</p>
         </div>
+      </div>
+
+      <div className="carreras-section">
+        <h3>Tus Carreras:</h3>
+        {estudiante?.carreras.map((carrera, index) => (
+          <div key={index} className="carrera-card">
+            <strong>{carrera.nombre}</strong>
+            <p>Código: {carrera.codigo} | Catálogo: {carrera.catalogo}</p>
+          </div>
+        ))}
       </div>
 
       <div className="logout-section">

@@ -82,6 +82,42 @@
   line-height: 1.5;
 }
 
+.carreras-section {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.carreras-section h3 {
+  margin: 0 0 1rem 0;
+  color: #2c3e50;
+}
+
+.carrera-card {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+  border-left: 4px solid #3498db;
+}
+
+.carrera-card:last-child {
+  margin-bottom: 0;
+}
+
+.carrera-card strong {
+  color: #2c3e50;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.carrera-card p {
+  color: #7f8c8d;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
 .loading {
   display: flex;
   justify-content: center;
