@@ -1,0 +1,25 @@
+.simulacion-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 1rem;
+}
+
+.semestre-card {
+    background-color: #f7f9fc;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.cuellos-card {
+    background-color: #fff8e1;
+    border: 1px solid #f7d26a;
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.error {
+    color: red;
+    text-align: center;
+}

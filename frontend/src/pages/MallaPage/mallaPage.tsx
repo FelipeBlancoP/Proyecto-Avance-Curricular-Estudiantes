@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import * as mallaService from "../../services/mallaService";
 import { Malla, Asignatura } from "../../types/malla";
 import MallaTimeline from "../../components/MallaTimeline/MallaTimeline";
+import SimulacionView from "../../components/SimulacionView/SimulacionView";
 import "./MallaPage.css";
 
 export interface Semestre {
@@ -14,14 +15,21 @@ function MallaPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  
+  const [mostrarSimulacion, setMostrarSimulacion] = useState(false);
+
   const nombreCarrera = "Ingeniería Civil en Computación e Informática";
+  const rut = "333333333";
+  const codigoCarrera = "8266";
+  const catalogo = "202410";
+  const token = localStorage.getItem("token") || ""; 
 
   useEffect(() => {
     const fetchMalla = async () => {
       try {
         setIsLoading(true);
         setError(null);
-        const data = await mallaService.obtenerMalla("8266", "202410");
+        const data = await mallaService.obtenerMalla(rut, codigoCarrera, catalogo);
         setMalla(data);
       } catch (err) {
         if (err instanceof Error) {
@@ -36,14 +44,13 @@ function MallaPage() {
     fetchMalla();
   }, []);
 
-  const semestresAgrupados = useMemo<Semestre[]>(() => {
+  
+  const semestresAgrupados = useMemo<Semestre[]>((() => {
     if (!malla) return [];
 
     const agrupadoPorNivel = malla.reduce((acc, asignatura) => {
       const nivel = asignatura.nivel;
-      if (!acc[nivel]) {
-        acc[nivel] = [];
-      }
+      if (!acc[nivel]) acc[nivel] = [];
       acc[nivel].push(asignatura);
       return acc;
     }, {} as Record<number, Asignatura[]>);
@@ -52,30 +59,23 @@ function MallaPage() {
       .map(Number)
       .sort((a, b) => a - b)
       .map((nivel) => ({
-        nivel: nivel,
+        nivel,
         asignaturas: agrupadoPorNivel[nivel],
       }));
-  }, [malla]);
+  }), [malla]);
 
   const handleToggleMenu = () => {
     console.log("Abrir/Cerrar menú lateral");
   };
 
-  if (isLoading) {
-    return <div>Cargando malla...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  if (isLoading) return <div>Cargando malla...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="page-layout-container">
-      
       <aside className="sidebar"></aside>
 
       <main className="malla-page-container">
-        
         <button className="menu-button" onClick={handleToggleMenu}>
           <span className="menu-line"></span>
           <span className="menu-line"></span>
@@ -84,8 +84,14 @@ function MallaPage() {
 
         <h1 className="main-title">Mi malla</h1>
 
-        <div className="career-box">
-          {nombreCarrera}
+        <div className="career-box">{nombreCarrera}</div>
+        <div style={{ marginBottom: "1rem" }}>
+          <button
+            className="simulacion-btn"
+            onClick={() => setMostrarSimulacion(!mostrarSimulacion)}
+          >
+            {mostrarSimulacion ? "Ocultar simulación" : "Simular avance curricular"}
+          </button>
         </div>
 
         {semestresAgrupados.length > 0 ? (
@@ -93,8 +99,17 @@ function MallaPage() {
         ) : (
           <div>No hay asignaturas para mostrar.</div>
         )}
-      </main>
 
+        {mostrarSimulacion && malla && (
+          <SimulacionView
+            rut={rut}
+            codigoCarrera={codigoCarrera}
+            catalogo={catalogo}
+            token={token}
+            malla={malla}
+          />
+        )}
+      </main>
     </div>
   );
 }

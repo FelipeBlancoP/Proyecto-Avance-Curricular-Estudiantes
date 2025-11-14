@@ -7,7 +7,9 @@ interface Props {
 }
 
 function AsignaturaItem({ asignatura }: Props) {
-  const [estado, setEstado] = useState("pendiente");
+  console.log("Estado de la asignatura:", asignatura.estado);
+  const estado = asignatura.estado?.toLowerCase() || "pendiente";
+
 
   return (
     <div className="asignatura-item" data-estado={estado}>

@@ -12,5 +12,6 @@ import { HttpModule } from '@nestjs/axios';
   ],
   controllers: [AvanceController],
   providers: [AvanceService],
+  exports: [AvanceService],
 })
-export class AvanceModule {}
+export class AvanceModule { }
