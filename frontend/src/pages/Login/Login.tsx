@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
-
-// Importa las imágenes
 import logoUCN from '../../images/logoUCN.png';
 import ucenin from '../../images/ucenin.png';
 
@@ -53,8 +51,6 @@ function Login() {
 
           <div className="description">
             <p>Esta plataforma le permite realizar un seguimiento detallado de su progreso académico, verificar el estado de sus asignaturas y planificar su trayectoria educativa.</p>
-            
-            {/* Logo Ucenin en la parte inferior izquierda */}
             <div className="ucenin-logo-container">
               <img src={ucenin} alt="Ucenin" className="ucenin-logo" />
             </div>
@@ -64,8 +60,6 @@ function Login() {
         <div className="login-container">
           <div className="login-section">
             <img src={logoUCN} alt="Logo UCN" className="login-logo" />
-            
-            {/* Universidad Católica del Norte debajo del logo */}
             <div className="university-name">
               <h3>Universidad Católica del Norte</h3>
             </div>
@@ -77,7 +71,7 @@ function Login() {
                 type="text" 
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
-                placeholder="Rut sin puntos ni guión" 
+                placeholder="correo" 
                 required 
               />
               <input 
