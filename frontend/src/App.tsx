@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MallaPage from './pages/MallaPage/mallaPage';
+import MallaManual from './pages/MallaManual/MallaManual';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Login from './pages/Login/Login';
 
@@ -11,6 +12,7 @@ function App() {
           <Routes>
             <Route path='/login' element={<Login />} />
             <Route path='/malla' element={<MallaPage />} />
+            <Route path='/malla-manual' element={<MallaManual />} />
             <Route path='/' element={<Dashboard />} />
           </Routes>
         </main>

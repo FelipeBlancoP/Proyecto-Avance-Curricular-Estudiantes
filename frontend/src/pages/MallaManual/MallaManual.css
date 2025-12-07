@@ -1,0 +1,498 @@
+.malla-manual-container {
+  min-height: 100vh;
+  background: #f5f6fa;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.malla-manual-header {
+  background: white;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.malla-manual-header h1 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  flex: 1;
+}
+
+.back-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.back-btn:hover {
+  background: #5a6268;
+  transform: translateX(-2px);
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.save-btn, .reset-btn {
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.save-btn {
+  background: #28a745;
+  color: white;
+}
+
+.save-btn:hover {
+  background: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
+}
+
+.reset-btn {
+  background: #dc3545;
+  color: white;
+}
+
+.reset-btn:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.2);
+}
+
+.success-message {
+  background: #d4edda;
+  color: #155724;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #c3e6cb;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.estado-info {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 1.5rem;
+}
+
+.estado-info h3 {
+  color: #2c3e50;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+}
+
+.estado-stats {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.estado-stat {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75rem;
+  border-radius: 8px;
+  text-align: center;
+  flex: 1;
+  min-width: 150px;
+}
+
+.estado-stat.aprobado {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.estado-stat.reprobado {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+.estado-stat.cursando {
+  background: #d1ecf1;
+  border: 1px solid #bee5eb;
+}
+
+.estado-stat.pendiente {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+}
+
+.estado-label {
+  font-size: 0.85rem;
+  color: #495057;
+  margin-bottom: 0.25rem;
+}
+
+.estado-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.estado-stat.aprobado .estado-value { color: #155724; }
+.estado-stat.reprobado .estado-value { color: #721c24; }
+.estado-stat.cursando .estado-value { color: #0c5460; }
+.estado-stat.pendiente .estado-value { color: #856404; }
+
+.estado-nota {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border-left: 4px solid #3498db;
+}
+
+.stats-bar {
+  display: flex;
+  gap: 2rem;
+  background: white;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-bottom: 1.5rem;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* === LAYOUT PRINCIPAL: 50% IZQUIERDA / 50% DERECHA === */
+.main-content {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  min-height: 500px;
+  width: 100%; /* Asegurar que ocupe todo el ancho */
+}
+
+/* CURSOS DISPONIBLES - 50% IZQUIERDA */
+.cursos-section {
+  width: 50%; /* ← 50% EXACTO del ancho */
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: 500px;
+  overflow: hidden;
+  flex-shrink: 0; /* No se encoje */
+}
+
+.cursos-section h2 {
+  color: #2c3e50;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.section-subtitle {
+  color: #6c757d;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+  flex-shrink: 0;
+}
+
+.cursos-disponibles-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 0.5rem;
+  background: #f8f9fa;
+  min-height: 0;
+}
+
+/* SEMESTRES SIMULADOS - 50% DERECHA */
+.semestres-section {
+  width: 50%; /* ← 50% EXACTO del ancho */
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  max-height: 500px;
+  overflow: hidden;
+  flex-shrink: 0; /* No se encoje */
+}
+
+.semestres-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-shrink: 0;
+}
+
+.semestres-header h2 {
+  color: #2c3e50;
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.add-semestre-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.add-semestre-btn:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+}
+
+.semestres-grid {
+  flex: 1;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 1rem;
+  padding: 0.5rem 0.5rem 1rem 0.5rem;
+  align-items: stretch;
+  min-height: 0;
+}
+
+.semestre-manual {
+  flex: 0 0 320px;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 380px;
+  transition: all 0.3s ease;
+}
+
+.instructions {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  margin-bottom: 1.5rem;
+}
+
+.instructions h3 {
+  color: #2c3e50;
+  margin: 0 0 1rem 0;
+  font-size: 1.2rem;
+}
+
+.instructions ul {
+  margin: 0;
+  padding-left: 1.5rem;
+  color: #495057;
+}
+
+.instructions li {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.instructions li:last-child {
+  margin-bottom: 0;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+.error {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 1.5rem;
+  border-radius: 10px;
+  text-align: center;
+  margin: 2rem auto;
+  max-width: 500px;
+}
+
+/* === SCROLLBARS ESPECÍFICOS === */
+/* Scrollbar horizontal SOLO para semestres */
+.semestres-grid::-webkit-scrollbar {
+  height: 8px;
+}
+
+.semestres-grid::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.semestres-grid::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.semestres-grid::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Scrollbar vertical SOLO para cursos */
+.cursos-disponibles-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cursos-disponibles-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.cursos-disponibles-container::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.cursos-disponibles-container::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 992px) {
+  .main-content {
+    height: auto;
+  }
+  
+  .cursos-section, .semestres-section {
+    width: 100%;
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .malla-manual-container {
+    padding: 15px;
+  }
+  
+  .malla-manual-header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .malla-manual-header h1 {
+    order: -1;
+    margin-bottom: 0.5rem;
+  }
+  
+  .estado-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .stats-bar {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .semestres-grid {
+    flex-direction: column;
+    overflow-x: visible;
+    overflow-y: auto;
+  }
+  
+  .semestre-manual {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+  
+  .main-content {
+    gap: 1rem;
+  }
+  
+  .cursos-section, .semestres-section, .instructions {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .save-btn, .reset-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .semestres-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .add-semestre-btn {
+    align-self: flex-start;
+  }
+  
+  .estado-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .estado-stat {
+    min-width: 100%;
+  }
+}

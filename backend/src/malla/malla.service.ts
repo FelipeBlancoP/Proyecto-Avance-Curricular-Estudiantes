@@ -37,24 +37,43 @@ export class MallaService {
   }
 
   async obtenerMallaConEstado(
-    rut: string,
-    codigoCarrera: string,
-    catalogo: string,
-  ) {
-
+  rut: string,
+  codigoCarrera: string,
+  catalogo: string,
+) {
+  try {
     const [malla, avances] = await Promise.all([
       this.obtenerMalla(codigoCarrera, catalogo),
-      this.avanceService.avanceDelEstudiante(rut, codigoCarrera),
+      this.avanceService.avanceDelEstudiante(rut, codigoCarrera)
+        .catch(error => {
+          console.warn('⚠️ Error obteniendo avance, usando array vacío:', error.message);
+          return []; // Si falla el avance, usar array vacío
+        })
     ]);
 
     const estadoPorCodigo = new Map<string, string>();
-    for (const a of avances) {
-      estadoPorCodigo.set(a.course, a.status);
+    
+    // Solo procesar si avances es un array
+    if (Array.isArray(avances)) {
+      for (const a of avances) {
+        if (a && a.course) {
+          estadoPorCodigo.set(a.course, a.status || 'No cursado');
+        }
+      }
     }
 
     return malla.map((asig) => ({
       ...asig,
       estado: estadoPorCodigo.get(asig.codigo) ?? 'No cursado',
     }));
+  } catch (error) {
+    console.error('❌ Error en obtenerMallaConEstado:', error.message);
+    // Si falla todo, devolver solo la malla básica
+    const malla = await this.obtenerMalla(codigoCarrera, catalogo);
+    return malla.map(asig => ({
+      ...asig,
+      estado: 'No cursado'
+    }));
   }
+}
 }

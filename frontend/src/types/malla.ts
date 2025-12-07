@@ -3,7 +3,7 @@ export interface Asignatura {
   asignatura: string;
   creditos: number;
   nivel: number;
-  prereq: string;
+  prereq: string | string[];
   estado: string;
 }
 

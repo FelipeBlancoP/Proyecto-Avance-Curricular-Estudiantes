@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { estudianteService } from '../../services/estudianteService';
-import { Estudiante } from '../../types/estudiante';
 import './Dashboard.css';
 
 function Dashboard() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [estudiante, setEstudiante] = useState<Estudiante | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,20 +15,6 @@ function Dashboard() {
       navigate('/login');
       return;
     }
-
-    const cargarPerfil = async () => {
-      try {
-        const perfil = await estudianteService.obtenerPerfil();
-        setEstudiante(perfil);
-      } catch (error) {
-        console.error('Error al cargar perfil:', error);
-        navigate('/login');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    cargarPerfil();
 
     try {
       const userParsed = JSON.parse(userData);
@@ -59,26 +42,34 @@ function Dashboard() {
         <p>RUT: {user?.rut}</p>
       </div>
 
-      <div className="navigation-cards">
-        <div className="nav-card" onClick={() => navigate('/malla')}>
-          <h3>📊 Malla Automatizada</h3>
-          <p>Ver malla curricular con avance automático</p>
-        </div>
+      <div className="main-content">
+        <div className="options-section">
+          <h3>¿Qué te gustaría hacer?</h3>
+          
+          <div className="options-buttons">
+            <button 
+              className="option-button automated" 
+              onClick={() => navigate('/malla')}
+            >
+              <span className="option-icon">📊</span>
+              <div className="option-content">
+                <h4>Malla Automatizada</h4>
+                <p>Ver malla curricular con avance automático</p>
+              </div>
+            </button>
 
-        <div className="nav-card">
-          <h3>✏️ Malla Manual</h3>
-          <p>Simular diferentes escenarios de avance</p>
-        </div>
-      </div>
-
-      <div className="carreras-section">
-        <h3>Tus Carreras:</h3>
-        {estudiante?.carreras.map((carrera, index) => (
-          <div key={index} className="carrera-card">
-            <strong>{carrera.nombre}</strong>
-            <p>Código: {carrera.codigo} | Catálogo: {carrera.catalogo}</p>
+            <button 
+              className="option-button manual"
+               onClick={() => navigate('/malla-manual')}
+            >
+              <span className="option-icon">✏️</span>
+              <div className="option-content">
+                <h4>Malla Manual</h4>
+                <p>Simular diferentes escenarios de avance</p>
+              </div>
+            </button>
           </div>
-        ))}
+        </div>
       </div>
 
       <div className="logout-section">

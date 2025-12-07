@@ -9,27 +9,39 @@ import { firstValueFrom } from 'rxjs';
 export class AvanceService {
   constructor(private readonly httpService: HttpService){}
 
-  async avanceDelEstudiante(rut:string,codcarrera:string):Promise<Avance[]> {
+  async avanceDelEstudiante(rut: string, codcarrera: string): Promise<Avance[]> {
     try{
+      console.log('🔍 Llamando a API avance con:', { rut, codcarrera });
+      
+      // Construir URL completa con parámetros
+      const url = `https://puclaro.ucn.cl/eross/avance/avance.php?rut=${rut}&codcarrera=${codcarrera}`;
+      
       const response = await firstValueFrom(
-        this.httpService.get<AvanceAPI[]>('avance.php', {
-          params: { rut, codcarrera },
-        }),
+        this.httpService.get<AvanceAPI[]>(url)
       ); 
 
-      const apiData  = response.data;
+      const apiData = response.data;
 
-      return toAvancesDomain(apiData);
+      // Si la API devuelve un error (como objeto con propiedad error)
+      if (apiData && typeof apiData === 'object' && 'error' in apiData) {
+        console.warn('API avance devolvió error:', apiData.error);
+        return []; // Devolver array vacío en lugar de error
+      }
 
+      console.log('✅ Avance obtenido:', Array.isArray(apiData) ? apiData.length : 'no-array');
+      return toAvancesDomain(apiData || []);
+
+    } catch (error) {
+      console.error('❌ Error en avanceDelEstudiante:', error.message);
+      
+      // Si es error 404 o la API devuelve error, devolver array vacío
+      if (error.response?.status === 404 || error.response?.data?.error) {
+        console.log('⚠️ No se encontró avance, devolviendo array vacío');
+        return [];
+      }
+      
+      // Para otros errores, lanzar excepción
+      throw new InternalServerErrorException('Error al obtener el avance del estudiante.');
     }
-    catch (error) {
-          if (error instanceof NotFoundException) {
-            throw error;
-          }
-          console.error('Error al contactar la API externa:', error.message);
-          throw new InternalServerErrorException('Error al obtener el avance del estudiante.');
-        }
-
   }
-
 }
