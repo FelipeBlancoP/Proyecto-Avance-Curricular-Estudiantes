@@ -17,7 +17,7 @@ function MallaPage() {
   const [mostrarMallaTimeline, setMostrarMallaTimeline] = useState(false);
 
 
-  const [mostrarSimulacion, setMostrarSimulacion] = useState(false);
+  const [mostrarSimulacion, setMostrarSimulacion] = useState(true);
 
   const nombreCarrera = "Ingeniería Civil en Computación e Informática";
   const rut = "333333333";
@@ -86,14 +86,15 @@ function MallaPage() {
         <h1 className="main-title">Mi malla</h1>
 
         <div className="career-box">{nombreCarrera}</div>
-        <div style={{ marginBottom: "1rem" }}>
+        {/* BOTÓN DE MOSTRAR SIMULACIÓN Y OCULTAR */}
+        {/* <div style={{ marginBottom: "1rem" }}>
           <button
             className="simulacion-btn"
             onClick={() => setMostrarSimulacion(!mostrarSimulacion)}
           >
             {mostrarSimulacion ? "Ocultar simulación" : "Simular avance curricular"}
           </button>
-        </div>
+        </div> */}
 
         <button
           className="desplegable-malla-btn"

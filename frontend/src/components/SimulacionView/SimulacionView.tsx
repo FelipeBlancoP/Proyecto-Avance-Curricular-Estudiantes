@@ -13,6 +13,45 @@ interface Props {
     malla: Asignatura[];
 }
 
+function calcularEtiquetaSimulacion(simulacionIndex: number): string {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const currentYear = today.getFullYear();
+
+    let startSemestre: number;
+    let startYear: number;
+
+    if (month >= 4 && month <= 8) {
+        startSemestre = 2;
+        startYear = currentYear;
+    }
+
+    else if (month >= 9 && month <= 12) {
+        startSemestre = 1;
+        startYear = currentYear + 1;
+    } 
+
+    else {
+        startSemestre = 1;
+        startYear = currentYear;
+    }
+
+    let targetSemestre = startSemestre;
+    let targetYear = startYear;
+
+    for (let i = 0; i < simulacionIndex; i++) {
+        if (targetSemestre === 1) {
+            targetSemestre = 2;
+        } else {
+            targetSemestre = 1;
+            targetYear++;
+        }
+    }
+
+    const semestreLabel = targetSemestre === 1 ? "I" : "II";
+    return `${semestreLabel} - ${targetYear}`;
+}
+
 function SimulacionView({ rut, codigoCarrera, catalogo, token, malla }: Props) {
     const [simulacionAPI, setSimulacionAPI] = useState<any[]>([]);
     const [cuellos, setCuellos] = useState<any[]>([]);
@@ -34,7 +73,8 @@ function SimulacionView({ rut, codigoCarrera, catalogo, token, malla }: Props) {
     const semestresSimulados = useMemo<Semestre[]>(() => {
         if (!simulacionAPI.length) return [];
 
-        return simulacionAPI.map(semestreAPI => {
+        return simulacionAPI.map((semestreAPI, index) => {
+            const etiquetaTemporal = calcularEtiquetaSimulacion(index);
             const asignaturasTransformadas: Asignatura[] = semestreAPI.cursos.map((curso: any): Asignatura => {
                 return {
                     codigo: curso.codigo || `${curso.nombre}-${semestreAPI.numero}`,
@@ -47,7 +87,7 @@ function SimulacionView({ rut, codigoCarrera, catalogo, token, malla }: Props) {
             });
 
             return {
-                nivel: semestreAPI.numero,
+                nivel: etiquetaTemporal as any,
                 asignaturas: asignaturasTransformadas,
             };
         });
