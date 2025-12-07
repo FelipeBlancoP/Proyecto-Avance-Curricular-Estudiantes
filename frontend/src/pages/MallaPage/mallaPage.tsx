@@ -16,14 +16,14 @@ function MallaPage() {
   const [error, setError] = useState<string | null>(null);
   const [mostrarMallaTimeline, setMostrarMallaTimeline] = useState(false);
 
-  
+
   const [mostrarSimulacion, setMostrarSimulacion] = useState(false);
 
   const nombreCarrera = "Ingeniería Civil en Computación e Informática";
   const rut = "333333333";
   const codigoCarrera = "8266";
   const catalogo = "202410";
-  const token = localStorage.getItem("token") || ""; 
+  const token = localStorage.getItem("token") || "";
 
   useEffect(() => {
     const fetchMalla = async () => {
@@ -45,7 +45,7 @@ function MallaPage() {
     fetchMalla();
   }, []);
 
-  
+
   const semestresAgrupados = useMemo<Semestre[]>((() => {
     if (!malla) return [];
 
@@ -95,8 +95,8 @@ function MallaPage() {
           </button>
         </div>
 
-        <button 
-          className="desplegable-malla-btn" 
+        <button
+          className="desplegable-malla-btn"
           onClick={() => setMostrarMallaTimeline(!mostrarMallaTimeline)}
         >
           {mostrarMallaTimeline ? "Ocultar Malla Curricular ▲" : "Ver Malla Curricular ▼"}
