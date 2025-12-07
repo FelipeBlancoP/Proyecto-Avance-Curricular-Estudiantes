@@ -19,7 +19,7 @@ function MallaPage() {
 
   const [mostrarSimulacion, setMostrarSimulacion] = useState(true);
 
-  const nombreCarrera = "Ingeniería Civil en Computación e Informática";
+  const nombreCarrera = "Ingeniería en Tecnologías de Información";
   const rut = "333333333";
   const codigoCarrera = "8266";
   const catalogo = "202410";
@@ -83,7 +83,7 @@ function MallaPage() {
           <span className="menu-line"></span>
         </button>
 
-        <h1 className="main-title">Mi malla</h1>
+        <h1 className="main-title">Simulación de Avance Curricular</h1>
 
         <div className="career-box">{nombreCarrera}</div>
         {/* BOTÓN DE MOSTRAR SIMULACIÓN Y OCULTAR */}
@@ -100,7 +100,7 @@ function MallaPage() {
           className="desplegable-malla-btn"
           onClick={() => setMostrarMallaTimeline(!mostrarMallaTimeline)}
         >
-          {mostrarMallaTimeline ? "Ocultar Malla Curricular ▲" : "Ver Malla Curricular ▼"}
+          {mostrarMallaTimeline ? "Ocultar Malla Curricular Actual ▲" : "Ver Malla Curricular Actual ▼"}
         </button>
 
         {mostrarMallaTimeline && (

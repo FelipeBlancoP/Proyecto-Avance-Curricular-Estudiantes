@@ -98,7 +98,7 @@ function SimulacionView({ rut, codigoCarrera, catalogo, token, malla }: Props) {
 
     return (
         <div className="simulacion-container" >
-            <h2>Simulación de Avance Curricular </h2>
+            <h2>Malla Curricular Simulada </h2>
 
             <MallaTimeline semestres={semestresSimulados} />
         </div>
