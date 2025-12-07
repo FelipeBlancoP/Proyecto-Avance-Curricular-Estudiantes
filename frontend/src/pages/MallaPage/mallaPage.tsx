@@ -14,6 +14,7 @@ function MallaPage() {
   const [malla, setMalla] = useState<Malla | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [mostrarMallaTimeline, setMostrarMallaTimeline] = useState(false);
 
   
   const [mostrarSimulacion, setMostrarSimulacion] = useState(false);
@@ -94,10 +95,21 @@ function MallaPage() {
           </button>
         </div>
 
-        {semestresAgrupados.length > 0 ? (
-          <MallaTimeline semestres={semestresAgrupados} />
-        ) : (
-          <div>No hay asignaturas para mostrar.</div>
+        <button 
+          className="desplegable-malla-btn" 
+          onClick={() => setMostrarMallaTimeline(!mostrarMallaTimeline)}
+        >
+          {mostrarMallaTimeline ? "Ocultar Malla Curricular ▲" : "Ver Malla Curricular ▼"}
+        </button>
+
+        {mostrarMallaTimeline && (
+          <div className="timeline-container-animado">
+            {semestresAgrupados.length > 0 ? (
+              <MallaTimeline semestres={semestresAgrupados} />
+            ) : (
+              <div>No hay asignaturas para mostrar.</div>
+            )}
+          </div>
         )}
 
         {mostrarSimulacion && malla && (
