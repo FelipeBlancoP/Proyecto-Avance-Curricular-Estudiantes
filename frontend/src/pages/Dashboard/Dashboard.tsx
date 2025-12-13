@@ -62,7 +62,7 @@ function Dashboard() {
         {sidebarOpen && (
           <div className="sidebar-content">
             <div className="sidebar-image-container">
-              <img src="src/images/perfil-usuario.png" alt="Foto usuario" className="sidebar-image" />
+              <img src="src/images/usuario.png" alt="Foto usuario" className="sidebar-image" />
             </div>
             <h2>Datos Personales</h2>
             <p><strong>Email:</strong> {user?.email}</p>
@@ -78,7 +78,7 @@ function Dashboard() {
               ))}
             </div>
             <h2>Avance</h2>
-            {/*acá se va a mostrar el avance en porcentaje(?*/}
+            <p>acá se va a mostrar el avance en porcentaje</p>
           </div>
 
         )}
