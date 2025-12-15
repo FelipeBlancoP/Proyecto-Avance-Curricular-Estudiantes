@@ -208,10 +208,13 @@
 /* === LAYOUT PRINCIPAL: 50% IZQUIERDA / 50% DERECHA === */
 .main-content {
   display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-  min-height: 500px;
-  width: 100%; /* Asegurar que ocupe todo el ancho */
+  flex-direction: row !important; /* ¡OBLIGAR a ser fila! */
+  flex-wrap: nowrap !important;   /* ¡PROHIBIR que se bajen! */
+  gap: 20px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  height: 500px; /* Altura fija recomendada */
+  width: 100%;
 }
 
 /* CURSOS DISPONIBLES - 50% IZQUIERDA */
