@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { estudianteService } from '../../services/estudianteService';
 import { Estudiante } from '../../types/estudiante';
 import './Dashboard.css';
+import ThemeToggle from '../../components/TemaToggle/TemaToggle';
+
 
 function Dashboard() {
   const [user, setUser] = useState<any>(null);
@@ -86,6 +88,7 @@ function Dashboard() {
       <div className="dashboard-container">
         <div className="welcome-section">
           <h2>Bienvenido, {user?.email}</h2>
+          <ThemeToggle />
         </div>
 
         <div className="navigation-cards">

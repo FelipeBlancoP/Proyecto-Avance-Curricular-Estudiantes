@@ -1,20 +1,12 @@
-/* Paleta de Colores Sugerida */
 :root {
   --color-primary: #003366;
-  /* Azul Oscuro Institucional */
   --color-secondary: #00A896;
-  /* Acento Turquesa/Menta */
   --color-background: #F4F7F6;
-  /* Fondo muy claro */
   --color-text-dark: #333333;
-  /* Texto principal */
   --color-text-light: #e0e0e0;
-  /* Texto claro en sidebar */
   --color-danger: #C0392B;
-  /* Rojo de advertencia */
 }
 
-/* Tipografía (Asumiendo que se importa una fuente como 'Poppins' o 'Roboto' en tu index.css) */
 body {
   font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -24,9 +16,8 @@ body {
   min-height: 100vh;
 }
 
-/* --- Sidebar --- */
 .sidebar {
-  background-color: var(--color-primary);
+  background-color: var(--sidebar-color);
   /* Azul Institucional */
   color: white;
   width: 280px;
@@ -115,7 +106,7 @@ body {
 /* --- Dashboard Principal --- */
 .dashboard-container {
   flex-grow: 1;
-  background: var(--color-background);
+  background: var(--bg-color);
   /* Fondo muy claro */
   padding: 30px;
   display: flex;
@@ -130,7 +121,7 @@ body {
 
 .welcome-section h2 {
   font-size: 2.2rem;
-  color: var(--color-text-dark);
+  color: var(--text-color);
   font-weight: 700;
 }
 
@@ -147,7 +138,7 @@ body {
 }
 
 .nav-card {
-  background: white;
+  background: var(--card-color);
   padding: 3rem;
   /* Reducido para mejor estética */
   border-radius: 10px;
@@ -170,14 +161,13 @@ body {
 
 .nav-card h3 {
   margin: 0 0 0.5rem 0;
-  color: var(--color-primary);
-  /* Título con color primario */
+  color: var(--nav-title-color);
   font-size: 1.4rem;
   font-weight: 600;
 }
 
 .nav-card p {
-  color: var(--color-text-dark);
+  color: var(--nav-text-color);
   margin: 0;
   font-size: 1rem;
   line-height: 1.5;
@@ -210,8 +200,17 @@ body {
 
 .logout-btn:hover {
   background: #A93226;
-  /* Rojo más oscuro al hacer hover */
   transform: translateY(-1px);
+}
+
+.welcome-section {
+  position: relative;
+}
+
+.theme-switch {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 /* Responsive */
