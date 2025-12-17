@@ -7,18 +7,19 @@ interface Semestre {
 }
 
 export const MallaManualService = {
-  async obtenerMalla(rut: string, codigoCarrera: string, catalogo: string): Promise<Asignatura[]> {
+  async obtenerMalla(codigoCarrera: string, catalogo: string): Promise<Asignatura[]> {
     try {
-      const token = localStorage.getItem('access_token');
+      const token = localStorage.getItem('access_token') || localStorage.getItem('token'); // Asegura obtener el token correcto
       if (!token) {
         throw new Error('No hay token de autenticación');
       }
 
-      console.log('🔍 Obteniendo malla con estados para manual...');
+      console.log('🔍 Obteniendo malla autenticada para manual...');
       
-      // USAR EL MISMO ENDPOINT QUE LA MALLA AUTOMATIZADA
+      // CAMBIO: Llamamos al nuevo endpoint 'mi-malla-con-estado-auth'
+      // Ya NO enviamos el RUT en la URL, el backend lo saca del token
       const response = await fetch(
-        `http://localhost:3000/malla/mi-malla-con-estado?rut=${rut}&codigoCarrera=${codigoCarrera}&catalogo=${catalogo}`,
+        `http://localhost:3000/malla/mi-malla-con-estado-auth?codigoCarrera=${codigoCarrera}&catalogo=${catalogo}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -28,18 +29,16 @@ export const MallaManualService = {
       );
       
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ Error obteniendo malla con estados:', response.status, errorText);
-        throw new Error(`Error al obtener malla: ${response.status} ${response.statusText}`);
+        throw new Error(`Error al obtener malla: ${response.status}`);
       }
       
       const data = await response.json();
-      console.log('✅ Malla con estados obtenida:', data.length, 'cursos');
+      console.log('✅ Malla obtenida correctamente:', data.length, 'cursos');
       return data;
       
     } catch (error) {
-      console.error('❌ Error completo al obtener malla:', error);
-      throw error; // Propagar el error para manejarlo en el componente
+      console.error('❌ Error:', error);
+      throw error;
     }
   },
 

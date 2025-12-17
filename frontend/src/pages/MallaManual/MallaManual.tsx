@@ -31,7 +31,6 @@ function MallaManual() {
   const dragOverItem = useRef<any>(null);
 
   // Datos de ejemplo - deberían venir del backend o localStorage
-  const rut = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!).rut : '333333333';
   const codigoCarrera = '8266';
   const catalogo = '202410';
 
@@ -42,8 +41,8 @@ function MallaManual() {
       setLoading(true);
       console.log('=== 🚀 INICIANDO CARGA MALLA MANUAL ===');
       
-      const malla = await MallaManualService.obtenerMalla(rut, codigoCarrera, catalogo);
-      console.log('✅ Malla obtenida, total cursos:', malla.length);
+      const malla = await MallaManualService.obtenerMalla(codigoCarrera, catalogo);
+      console.log('✅ Datos recibidos para el usuario autenticado');
       
       // DEBUG DETALLADO
       console.log('=== 📊 ESTADOS DE CURSOS ===');
@@ -65,14 +64,9 @@ function MallaManual() {
         const estado = curso.estado?.toUpperCase() || '';
         const esAprobado = estado.includes('APROBADO');
         const esCursando = estado.includes('INSCRITO') || 
-                          estado.includes('CURSANDO') || 
-                          estado.includes('EN CURSO');
-        
-        const esPendiente = !esAprobado && !esCursando;
-        
-        console.log(`${curso.codigo}: Estado="${estado}", Aprobado=${esAprobado}, Cursando=${esCursando}, Pendiente=${esPendiente}`);
-        
-        return esPendiente;
+                           estado.includes('CURSANDO') || 
+                           estado.includes('EN CURSO');
+        return !esAprobado && !esCursando;
       });
       
       console.log('=== 📈 RESULTADO FILTRADO ===');
@@ -142,7 +136,7 @@ function MallaManual() {
     };
 
     cargarMalla();
-  }, [rut, codigoCarrera, catalogo]);
+  }, [codigoCarrera, catalogo]);
 
   const handleDragStart = (e: React.DragEvent, curso: Asignatura, source: string, semestreId?: number) => {
     dragItem.current = { curso, source, semestreId };
