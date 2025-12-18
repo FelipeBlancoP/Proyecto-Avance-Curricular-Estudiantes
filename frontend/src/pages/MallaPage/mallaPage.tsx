@@ -11,6 +11,7 @@ import { estudianteService } from "../../services/estudianteService";
 export interface Semestre {
   nivel: number;
   asignaturas: Asignatura[];
+  totalCreditos?: number;
 }
 
 function MallaPage() {

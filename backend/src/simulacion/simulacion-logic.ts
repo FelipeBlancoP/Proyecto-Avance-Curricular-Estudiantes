@@ -109,6 +109,7 @@ export function simularProgreso(malla: Asignatura[]) {
             if (esCapstone && disponibles.length == 1) {
                 console.log(`${curso.asignatura}: ${curso.creditos}`);
                 semestre.push(curso);
+                creditos += 30;
                 break;
             }
             else if (esCapstone) continue;

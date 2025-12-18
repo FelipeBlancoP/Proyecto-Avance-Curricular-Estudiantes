@@ -14,6 +14,7 @@ function MallaTimeline({ semestres }: Props) {
           key={semestre.nivel}
           nivel={semestre.nivel}
           asignaturas={semestre.asignaturas}
+          totalCreditos={semestre.totalCreditos}
         />
       ))}
     </div>

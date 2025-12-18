@@ -89,6 +89,7 @@ function SimulacionView({ rut, codigoCarrera, catalogo, token, malla }: Props) {
             return {
                 nivel: etiquetaTemporal as any,
                 asignaturas: asignaturasTransformadas,
+                totalCreditos: semestreAPI.creditos,
             };
         });
     }, [simulacionAPI]);

@@ -94,6 +94,20 @@
   border-top: 1px solid #eee; 
 }
 
+.semestre-creditos-bar {
+    /* Celeste claro con un poco de transparencia */
+    background-color: rgba(186, 230, 253, 0.6);
+    /* Alternativa color sólido: background-color: #e0f2fe; */
+    margin-top: -6px;
+    margin-bottom: 1px;
+
+    color: #0c4a6e; /* Un azul oscuro para buen contraste del texto */
+    padding: 6px 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(14, 165, 233, 0.3); /* Borde sutil inferior */
+}
+
 @media (min-width: 768px) {
   
   .semestre-item {
