@@ -224,25 +224,19 @@
   font-weight: 700;
 }
 
-/* === LAYOUT PRINCIPAL: 50% IZQUIERDA / 50% DERECHA === */
 .main-content {
   display: flex;
   flex-direction: row !important;
-  /* ¡OBLIGAR a ser fila! */
   flex-wrap: nowrap !important;
-  /* ¡PROHIBIR que se bajen! */
   gap: 20px;
   margin-top: 50px;
   margin-bottom: 50px;
   height: 500px;
-  /* Altura fija recomendada */
   width: 100%;
 }
 
-/* CURSOS DISPONIBLES - 50% IZQUIERDA */
 .cursos-section {
   width: 50%;
-  /* ← 50% EXACTO del ancho */
   background: white;
   padding: 1.5rem;
   border-radius: 12px;
@@ -253,7 +247,6 @@
   max-height: 500px;
   overflow: hidden;
   flex-shrink: 0;
-  /* No se encoje */
 }
 
 .cursos-section h2 {
@@ -270,15 +263,34 @@
   flex-shrink: 0;
 }
 
+.cursos-header-row {
+  flex-shrink: 0;
+}
+
 .cursos-disponibles-container {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  border: 2px dashed #dee2e6;
-  border-radius: 8px;
-  padding: 0.5rem;
-  background: #f8f9fa;
   min-height: 0;
+  padding: 0.5rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cursos-disponibles-container>div {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto !important;
+  padding-right: 5px;
+  box-sizing: border-box;
+}
+
+.cursos-disponibles-container>div::-webkit-scrollbar {
+  width: 8px;
+}
+
+.cursos-disponibles-container>div::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
 }
 
 .semestres-section {
