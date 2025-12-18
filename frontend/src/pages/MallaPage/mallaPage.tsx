@@ -135,7 +135,7 @@ function MallaPage() {
     <div className="page-layout-container">
       <main className="malla-page-container">
         <button onClick={() => navigate('/')} className="back-btn">
-          ← Volver al Dashboard
+          🡰
         </button>
 
         <h1 className="main-title">Simulación de Avance Curricular</h1>
