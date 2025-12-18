@@ -259,7 +259,7 @@
 
 /* SEMESTRES SIMULADOS - 50% DERECHA */
 .semestres-section {
-  width: 50%; /* ← 50% EXACTO del ancho */
+  width: 99.4%; /* ← 50% EXACTO del ancho */
   background: white;
   padding: 1.5rem;
   border-radius: 12px;
