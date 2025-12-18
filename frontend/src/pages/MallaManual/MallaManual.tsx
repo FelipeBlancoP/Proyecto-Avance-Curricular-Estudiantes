@@ -105,7 +105,7 @@ function MallaManual() {
 
     const cursosPendientesReales = mallaCompleta.filter(c => {
       const estado = c.estado?.toUpperCase() || '';
-      return !estado.includes('APROBADO');
+      return !estado.includes('APROBADO') && !estado.includes('INSCRITO') && !estado.includes('CURSANDO');
     });
 
     const cursosSimuladosAnteriormente = new Set<string>();
@@ -139,13 +139,15 @@ function MallaManual() {
     // =================================================================
     // 3. VALIDACIÓN DE CRÉDITOS
     // =================================================================
+    const esPractica = /práctica profesional/i.test(curso.asignatura);
+
     const semestreTarget = semestres.find(s => s.id === targetSemestreId);
     if (semestreTarget) {
       const creditosActuales = source === 'semestre' && sourceSemestreId === targetSemestreId
         ? semestreTarget.creditos - curso.creditos
         : semestreTarget.creditos;
 
-      if (creditosActuales + curso.creditos > 30) {
+      if (creditosActuales + curso.creditos > 30 && !esPractica) {
         alert('Límite de créditos excedido (máximo 30 por semestre)');
         return;
       }
@@ -159,7 +161,7 @@ function MallaManual() {
           return {
             ...semestre,
             cursos: [...semestre.cursos, curso],
-            creditos: semestre.creditos + curso.creditos
+            creditos: esPractica? semestre.creditos : semestre.creditos + curso.creditos
           };
         }
         return semestre;
@@ -170,14 +172,14 @@ function MallaManual() {
           return {
             ...semestre,
             cursos: semestre.cursos.filter(c => c.codigo !== curso.codigo),
-            creditos: semestre.creditos - curso.creditos
+            creditos: esPractica? semestre.creditos : semestre.creditos - curso.creditos
           };
         }
         if (semestre.id === targetSemestreId) {
           return {
             ...semestre,
             cursos: [...semestre.cursos, curso],
-            creditos: semestre.creditos + curso.creditos
+            creditos: esPractica? semestre.creditos : semestre.creditos + curso.creditos
           };
         }
         return semestre;
