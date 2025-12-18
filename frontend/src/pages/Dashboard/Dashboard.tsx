@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { estudianteService } from '../../services/estudianteService';
+import { Estudiante } from '../../types/estudiante';
 import './Dashboard.css';
 import ThemeToggle from '../../components/TemaToggle/TemaToggle';
-import { Estudiante } from '../../types/estudiante';
-import { estudianteService } from '../../services/estudianteService';
 
 
 function Dashboard() {
@@ -22,6 +22,20 @@ function Dashboard() {
       navigate('/login');
       return;
     }
+
+    const cargarPerfil = async () => {
+      try {
+        const perfil = await estudianteService.obtenerPerfil();
+        setEstudiante(perfil);
+      } catch (error) {
+        console.error('Error al cargar perfil:', error);
+        navigate('/login');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargarPerfil();
 
     try {
       const userParsed = JSON.parse(userData);
@@ -108,7 +122,7 @@ function Dashboard() {
             <p>Ver malla curricular con avance automático</p>
           </div>
 
-          <div className="nav-card" onClick={() => navigate('/malla-manual')}>
+          <div className="nav-card">
             <h3>✏️ Malla Manual</h3>
             <p>Simular diferentes escenarios de avance</p>
           </div>
