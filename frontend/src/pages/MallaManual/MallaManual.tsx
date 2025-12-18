@@ -152,22 +152,18 @@ function MallaManual() {
     const data = JSON.parse(e.dataTransfer.getData('text/plain'));
     const { curso, source, semestreId: sourceSemestreId } = data;
 
-    // Validar prerrequisitos
     if (!MallaManualService.validarPrerrequisitos(curso, mallaCompleta, semestres, targetSemestreId)) {
       alert(`No se puede asignar ${curso.asignatura}. Faltan prerrequisitos.`);
       return;
     }
 
-    // Validar límite de créditos (máximo 30 por semestre)
     const semestreTarget = semestres.find(s => s.id === targetSemestreId);
     if (semestreTarget && semestreTarget.creditos + curso.creditos > 30) {
       alert('Límite de créditos excedido (máximo 30 por semestre)');
       return;
     }
 
-    // Mover curso
     if (source === 'disponibles') {
-      // Mover de disponibles a semestre
       setCursosDisponibles(prev => prev.filter(c => c.codigo !== curso.codigo));
       setSemestres(prev => prev.map(semestre => {
         if (semestre.id === targetSemestreId) {
@@ -207,7 +203,6 @@ function MallaManual() {
     const { curso, source, semestreId: sourceSemestreId } = data;
 
     if (source === 'semestre') {
-      // Mover de semestre a disponibles
       setSemestres(prev => prev.map(semestre => {
         if (semestre.id === sourceSemestreId) {
           return {
@@ -233,13 +228,20 @@ function MallaManual() {
       return;
     }
 
-    // Mover cursos de vuelta a disponibles
     const semestreAEliminar = semestres.find(s => s.id === id);
     if (semestreAEliminar) {
       setCursosDisponibles(prev => [...prev, ...semestreAEliminar.cursos]);
     }
 
-    setSemestres(prev => prev.filter(s => s.id !== id));
+    setSemestres(prev => {
+      const semestresRestantes = prev.filter(s => s.id !== id);
+      const semestresRenumerados = semestresRestantes.map((semestre, index) => ({
+        ...semestre,
+        id: index + 1
+      }));
+
+      return semestresRenumerados;
+    });
   };
 
   const guardarSimulacion = () => {
@@ -250,7 +252,6 @@ function MallaManual() {
 
   const reiniciarSimulacion = () => {
     if (window.confirm('¿Estás seguro de reiniciar toda la simulación?')) {
-      // USAR EL MISMO FILTRO QUE EN EL USEEFFECT
       const disponibles = mallaCompleta.filter(curso => {
         const estado = curso.estado?.toUpperCase() || '';
         const esAprobado = estado.includes('APROBADO');
