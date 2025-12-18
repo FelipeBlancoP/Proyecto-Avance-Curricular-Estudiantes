@@ -108,7 +108,7 @@
     background-color: rgba(186, 230, 253, 0.6);
     /* Alternativa color sólido: background-color: #e0f2fe; */
     margin-top: -6px;
-    margin-bottom: 1px;
+    margin-bottom: 6px;
 
     color: #0c4a6e; /* Un azul oscuro para buen contraste del texto */
     padding: 6px 10px;
@@ -120,19 +120,14 @@
 @media (min-width: 768px) {
   
   .semestre-item {
-    padding-left: 0; 
+    /* 1. OBLIGAR A ENTRAR EN PANTALLA */
+    flex: 1;        /* Crecer equitativamente */
+    min-width: 0;   /* Permitir encogerse más allá del contenido mínimo */
+    
+    /* Quitar márgenes externos */
     margin-bottom: 0;
-
-    
-    flex-grow: 1;  
-    flex-shrink: 1;
-    flex-basis: 0; 
-    
-    
-     
-
-    
-    min-width: 120px;
+    margin-right: 0;
+    padding-left: 0;
   }
 
   
@@ -142,9 +137,9 @@
 
   
   .semestre-card {
+    background-color: transparent;
     border: none;
     box-shadow: none;
-    background-color: transparent;
     padding: 0;
     overflow: visible; 
   }
@@ -152,8 +147,12 @@
   
   .semestre-header {
     background-color: #0088CC; 
-    border-radius: 8px;
-    padding: 0.75rem 1rem;
+    border-radius: 4px; /* Bordes menos redondeados ahorran espacio visual */
+    
+    /* Padding reducido drásticamente */
+    padding: 0.5rem 0.2rem; 
+    
+    justify-content: center;
     cursor: default; 
   }
 
@@ -163,17 +162,24 @@
 
   .semestre-titulo {
     color: white;
-    font-size: 1rem;
-    font-weight: 600;
+    /* Fuente más pequeña para que "Semestre X" no se rompa */
+    font-size: 0.85rem; 
+    font-weight: 700;
     text-align: center;
-    border-bottom: none;
-    padding-bottom: 0;
-    max-width: 128px;
     width: 100%; 
+    
+    /* Evitar que el texto se parta en palabras raras */
+    white-space: normal; 
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   
   .expand-icon {
+    display: none;
+  }
+
+  .semestre-item::before {
     display: none;
   }
 
@@ -182,13 +188,21 @@
     max-height: none !important; 
     opacity: 1 !important;
     visibility: visible !important;
-    transition: none; 
-    overflow: visible;
   }
 
   
   .asignaturas-list {
-    padding: 1rem 0 0 0; 
+    padding: 0.5rem 0 0 0; 
     border-top: none;
+    gap: 0.4rem; /* Menos espacio entre ramos */
+  }
+
+  .semestre-creditos-bar {
+      font-size: 0.75rem; /* Letra pequeña */
+      padding: 2px 0;
+      margin-top: 4px;
+      margin-bottom: 4px;
+      border-radius: 4px;
+      /* Texto corto: "22 cred" en vez de "Total créditos..." si es necesario */
   }
 }

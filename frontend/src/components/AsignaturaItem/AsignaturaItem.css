@@ -4,7 +4,7 @@
   align-items: center;
   background-color: #ffffff;
   border: 1px solid #e0e0e0;
-  border-left: 5px solid #007bff;
+  border-left: 4px solid #007bff;
   padding: 0.75rem;
   border-radius: 4px;
   font-size: 0.9rem;
@@ -59,37 +59,56 @@
 
 @media (min-width: 768px) {
   .asignatura-item {
-
     background-color: #f0f0f0;
     border: 1px solid #dcdcdc;
-
-    border-left: 4px solid #0088CC;
-
+    border-left: 4px solid #0088CC; /* Borde un poco más visible de nuevo */
 
     flex-direction: column;
+    
+    /* CAMBIO 1: Centrar el contenido verticalmente si sobra espacio */
+    justify-content: center; 
     align-items: flex-start;
-    gap: 0.25rem;
-    padding: 0.75rem;
+    
+    gap: 0.3rem; /* Un poco más de separación entre nombre y créditos */
+    
+    /* CAMBIO 2: Más relleno vertical (antes era 0.4rem) */
+    padding: 0.8rem 0.4rem; 
+    
     cursor: grab;
-    min-height: 70px;
+    
+    /* CAMBIO 3: Altura mínima para uniformidad y que no se vean chatos */
+    min-height: 50px; /* Ajusta este valor a tu gusto (60px, 70px, 80px...) */
+    
+    word-break: break-word;
   }
 
   .asignatura-item:hover {
-
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px); /* Efecto más sutil */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10; /* Para que al pasar el mouse quede por encima de las otras */
   }
 
   .asignatura-nombre {
-    font-size: 0.85rem;
+    /* FUENTE PEQUEÑA: Estilo "Dashboard" */
+    font-size: 0.68rem; 
+    font-weight: 600; /* Un poco más negrita para compensar el tamaño */
+    line-height: 1.1; /* Líneas pegaditas */
     margin-right: 0;
+    color: #444;
   }
 
 
   .asignatura-creditos {
-    font-size: 0.75rem;
-    padding: 0.1rem 0.4rem;
+    /* CREDITOS DIMINUTOS */
+    font-size: 0.6rem;
+    padding: 1px 4px;
+    border-radius: 3px;
     background-color: #6c757d;
+    font-weight: normal;
+    
+    /* Alineación */
+    align-self: flex-start;
+    margin-top: 2px;
   }
 
 

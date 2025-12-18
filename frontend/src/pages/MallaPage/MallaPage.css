@@ -159,8 +159,13 @@
 
   .malla-page-container {
     flex-grow: 1;
-    padding: 2rem;
-    padding-left: 2rem;
+    
+    /* CAMBIO: Reducir padding lateral drásticamente */
+    padding: 2rem 0.5rem; /* 0.5rem a los lados en vez de 2rem */
+    
+    width: 0; 
+    min-width: 0; 
+    overflow-x: hidden; 
   }
 
   .menu-button {

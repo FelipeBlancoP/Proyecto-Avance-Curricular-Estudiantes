@@ -15,21 +15,21 @@
 
 @media (min-width: 768px) {
   .timeline-container {
-    
     display: flex;
     flex-direction: row;
-    gap: 0.5rem; 
-
+    width: 100%;
     
-    overflow-x: hidden;
-    overflow-y: hidden;
-    padding-bottom: 1.5rem; 
-
+    /* Espacio muy pequeño entre columnas para que quepan */
+    gap: 4px; 
     
-    position: static;
-    padding-left: 0;
+    /* Importante: evitar desbordamientos */
+    padding-bottom: 0; 
+    overflow: hidden; 
   }
 
+  .timeline-container::-webkit-scrollbar {
+    display: none;
+  }
   
   .timeline-container::before {
     display: none;
