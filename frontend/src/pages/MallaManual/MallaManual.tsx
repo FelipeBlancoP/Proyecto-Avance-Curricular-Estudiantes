@@ -167,6 +167,7 @@ function MallaManual() {
         return semestre;
       }));
     } else if (source === 'semestre') {
+      if (sourceSemestreId === targetSemestreId) return;
       setSemestres(prev => prev.map(semestre => {
         if (semestre.id === sourceSemestreId) {
           return {
