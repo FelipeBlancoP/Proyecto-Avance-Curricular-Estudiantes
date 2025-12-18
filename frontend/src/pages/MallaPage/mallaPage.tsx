@@ -3,6 +3,7 @@ import * as mallaService from "../../services/mallaService";
 import { Malla, Asignatura } from "../../types/malla";
 import MallaTimeline from "../../components/MallaTimeline/MallaTimeline";
 import SimulacionView from "../../components/SimulacionView/SimulacionView";
+import { useNavigate } from 'react-router-dom';
 import "./MallaPage.css";
 
 export interface Semestre {
@@ -11,6 +12,7 @@ export interface Semestre {
 }
 
 function MallaPage() {
+  const navigate = useNavigate();
   const [malla, setMalla] = useState<Malla | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -75,10 +77,8 @@ function MallaPage() {
   return (
     <div className="page-layout-container">
       <main className="malla-page-container">
-        <button className="menu-button" onClick={handleToggleMenu}>
-          <span className="menu-line"></span>
-          <span className="menu-line"></span>
-          <span className="menu-line"></span>
+        <button onClick={() => navigate('/')} className="back-btn">
+          ← Volver al Dashboard
         </button>
 
         <h1 className="main-title">Simulación de Avance Curricular</h1>

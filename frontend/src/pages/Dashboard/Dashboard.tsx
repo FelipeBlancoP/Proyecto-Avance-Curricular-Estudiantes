@@ -108,7 +108,7 @@ function Dashboard() {
             <p>Ver malla curricular con avance automático</p>
           </div>
 
-          <div className="nav-card">
+          <div className="nav-card" onClick={() => navigate('/malla-manual')}>
             <h3>✏️ Malla Manual</h3>
             <p>Simular diferentes escenarios de avance</p>
           </div>
