@@ -14,15 +14,16 @@ function MallaPage() {
   const [malla, setMalla] = useState<Malla | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [mostrarMallaTimeline, setMostrarMallaTimeline] = useState(false);
 
-  
-  const [mostrarSimulacion, setMostrarSimulacion] = useState(false);
 
-  const nombreCarrera = "Ingeniería Civil en Computación e Informática";
+  const [mostrarSimulacion, setMostrarSimulacion] = useState(true);
+
+  const nombreCarrera = "Ingeniería en Tecnologías de Información";
   const rut = "333333333";
   const codigoCarrera = "8266";
   const catalogo = "202410";
-  const token = localStorage.getItem("token") || ""; 
+  const token = localStorage.getItem("token") || "";
 
   useEffect(() => {
     const fetchMalla = async () => {
@@ -44,7 +45,7 @@ function MallaPage() {
     fetchMalla();
   }, []);
 
-  
+
   const semestresAgrupados = useMemo<Semestre[]>((() => {
     if (!malla) return [];
 
@@ -73,8 +74,6 @@ function MallaPage() {
 
   return (
     <div className="page-layout-container">
-      <aside className="sidebar"></aside>
-
       <main className="malla-page-container">
         <button className="menu-button" onClick={handleToggleMenu}>
           <span className="menu-line"></span>
@@ -82,22 +81,34 @@ function MallaPage() {
           <span className="menu-line"></span>
         </button>
 
-        <h1 className="main-title">Mi malla</h1>
+        <h1 className="main-title">Simulación de Avance Curricular</h1>
 
         <div className="career-box">{nombreCarrera}</div>
-        <div style={{ marginBottom: "1rem" }}>
+        {/* BOTÓN DE MOSTRAR SIMULACIÓN Y OCULTAR */}
+        {/* <div style={{ marginBottom: "1rem" }}>
           <button
             className="simulacion-btn"
             onClick={() => setMostrarSimulacion(!mostrarSimulacion)}
           >
             {mostrarSimulacion ? "Ocultar simulación" : "Simular avance curricular"}
           </button>
-        </div>
+        </div> */}
 
-        {semestresAgrupados.length > 0 ? (
-          <MallaTimeline semestres={semestresAgrupados} />
-        ) : (
-          <div>No hay asignaturas para mostrar.</div>
+        <button
+          className="desplegable-malla-btn"
+          onClick={() => setMostrarMallaTimeline(!mostrarMallaTimeline)}
+        >
+          {mostrarMallaTimeline ? "Ocultar Malla Curricular Actual ▲" : "Ver Malla Curricular Actual ▼"}
+        </button>
+
+        {mostrarMallaTimeline && (
+          <div className="timeline-container-animado">
+            {semestresAgrupados.length > 0 ? (
+              <MallaTimeline semestres={semestresAgrupados} />
+            ) : (
+              <div>No hay asignaturas para mostrar.</div>
+            )}
+          </div>
         )}
 
         {mostrarSimulacion && malla && (

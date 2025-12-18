@@ -63,23 +63,23 @@ function Login() {
             <div className="university-name">
               <h3>Universidad Católica del Norte</h3>
             </div>
-            
+
             <h2 className="login-title">Inicio de Sesión</h2>
 
             <form onSubmit={handleLogin} className="login-form">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
-                placeholder="correo" 
-                required 
+                placeholder="Correo"
+                required
               />
-              <input 
-                type="password" 
+              <input
+                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Contraseña" 
-                required 
+                placeholder="Contraseña"
+                required
               />
               <button type="submit" disabled={loading}>
                 {loading ? 'Ingresando...' : 'Ingresar'}
@@ -89,7 +89,7 @@ function Login() {
             <div className="convio-option">
               <a href="#">¿Olvidaste tu contraseña?</a>
             </div>
-            
+
             {error && <div className="error-message">{error}</div>}
           </div>
         </div>

@@ -1,167 +1,182 @@
-/* Dashboard.css - Versión Definitiva: Cajas Grandes, Espacio Mínimo */
+:root {
+  --color-primary: #003366;
+  --color-secondary: #00A896;
+  --color-background: #F4F7F6;
+  --color-text-dark: #333333;
+  --color-text-light: #e0e0e0;
+  --color-danger: #C0392B;
+}
 
-.dashboard-container {
+body {
+  font-family: 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.dashboard-layout {
+  display: flex;
   min-height: 100vh;
-  background: #f5f6fa;
-  padding: 20px; /* Volvemos a un padding decente para que no se vea pegado al borde de la pantalla */
+}
+
+.sidebar {
+  background-color: var(--sidebar-color);
+  /* Azul Institucional */
+  color: white;
+  width: 280px;
+  /* Un poco más ancho para más espacio */
+  transition: width 0.3s ease, padding 0.3s ease;
+  padding: 30px 20px;
+  /* Más padding vertical */
+  position: relative;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  z-index: 10;
+}
+
+.sidebar.closed {
+  width: 70px;
+  padding: 30px 10px;
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 11;
+}
+
+.sidebar-content h2 {
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 8px;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.sidebar-content p {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.sidebar-image-container {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.sidebar-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.8);
+  /* Borde de enfoque */
+  object-fit: cover;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.carrera-card {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  transition: background 0.2s ease;
+}
+
+.carrera-card:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.carrera-card strong {
+  color: white;
+  font-weight: 500;
+  display: block;
+}
+
+.carrera-card p {
+  margin: 2px 0 0 0;
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+}
+
+/* --- Dashboard Principal --- */
+.dashboard-container {
+  flex-grow: 1;
+  background: var(--bg-color);
+  /* Fondo muy claro */
+  padding: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.dashboard-header {
-  width: 100%;
-  max-width: 800px;
-  text-align: center;
-  margin-bottom: 1.5rem; /* Espacio normal bajo el título principal */
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e0e0e0;
-}
-
-.dashboard-header h1 {
-  color: #2c3e50;
-  margin: 0;
-  font-size: 2rem;
-  font-weight: 600;
-}
-
-/* === SECCIÓN DE BIENVENIDA (CAJA BLANCA DE ARRIBA) === */
 .welcome-section {
-  width: 100%;
-  max-width: 800px;
-  text-align: center;
-  
-  /* 1. Volvemos a hacerlo "gordito" (padding grande) */
-  padding: 2rem; 
-  
-  /* 2. ELIMINAMOS el espacio hacia abajo */
-  margin-bottom: 10px !important; 
-  
-  background: white;
-  border-radius: 12px; /* Bordes más redondeados */
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Sombra más bonita */
+  padding: 1.5rem 0;
+  margin-bottom: 1.5rem;
+  text-align: left;
 }
 
 .welcome-section h2 {
-  color: #2c3e50;
-  margin: 0 0 0.5rem 0;
-  font-size: 1.6rem;
+  font-size: 2.2rem;
+  color: var(--text-color);
+  font-weight: 700;
 }
 
-.welcome-section p {
-  color: #7f8c8d;
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-/* === CONTENEDOR INTERMEDIO === */
-.main-content {
-  width: 100%;
-  max-width: 800px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  height: auto !important; /* Anula los 500px de la otra página */
-  min-height: 0;
-  /* Aseguramos que este contenedor invisible no estorbe */
-  margin-top: 0 !important;
-  padding-top: 0 !important;
-}
-
-.options-section {
-  width: 100%;
-  margin-top: 0 !important;
-  margin-bottom: 1rem;
-}
-
-/* === EL TÍTULO "¿QUÉ TE GUSTARÍA HACER?" === */
-.options-section h3 {
-  color: #2c3e50;
-  
-  /* 3. AQUÍ ESTÁ EL TRUCO: Margen superior en 0 o muy pequeño */
-  margin-top: 0 !important; 
-  padding-top: 0 !important;
-  
-  margin-bottom: 15px; /* Espacio hacia los botones */
-  font-size: 1.3rem;
-  text-align: center;
-  font-weight: 600;
-}
-
-/* === BOTONES DE OPCIONES === */
-.options-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.navigation-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  max-width: 900px;
+  /* Un poco más de espacio */
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
 }
 
-.option-button {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  
-  /* Volvemos a hacerlo "gordito" */
-  padding: 1.5rem; 
-  
-  background: white;
-  border: 2px solid transparent;
-  border-radius: 12px;
+.nav-card {
+  background: var(--card-color);
+  padding: 3rem;
+  /* Reducido para mejor estética */
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  /* Sombra más suave */
   cursor: pointer;
   transition: all 0.3s ease;
-  text-align: left;
-  width: 100%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.option-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-}
-
-.option-button.automated:hover {
-  border-color: #3498db;
-  background: #f0f8ff;
-}
-
-.option-button.manual:hover {
-  border-color: #2ecc71;
-  background: #f0fff4;
-}
-
-.option-icon {
-  font-size: 2.5rem;
-  flex-shrink: 0;
-  width: 60px;
+  border-left: 5px solid var(--color-secondary);
+  /* Borde con color de acento */
   text-align: center;
 }
 
-.option-content {
-  flex: 1;
+.nav-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  /* Sombra más pronunciada al hacer hover */
+  border-left-color: var(--color-primary);
+  /* Cambio de color de acento al hacer hover */
 }
 
-.option-content h4 {
-  color: #2c3e50;
+.nav-card h3 {
   margin: 0 0 0.5rem 0;
-  font-size: 1.2rem;
+  color: var(--nav-title-color);
+  font-size: 1.4rem;
   font-weight: 600;
 }
 
-.option-content p {
-  color: #7f8c8d;
+.nav-card p {
+  color: var(--nav-text-color);
   margin: 0;
   font-size: 1rem;
-  line-height: 1.4;
+  line-height: 1.5;
 }
 
 .loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
-  font-size: 1.5rem;
-  color: #7f8c8d;
+  /* Mantener */
 }
 
 .logout-section {
@@ -174,29 +189,65 @@
 }
 
 .logout-btn {
-  background: #e74c3c;
+  background: var(--color-danger);
+  /* Rojo de advertencia */
   color: white;
   border: none;
-  padding: 0.8rem 2.5rem;
+  padding: 0.85rem 2.5rem;
+  /* Botón un poco más grande */
   border-radius: 8px;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.05rem;
+  font-weight: 500;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .logout-btn:hover {
-  background: #c0392b;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+  background: #A93226;
+  transform: translateY(-1px);
+}
+
+.welcome-section {
+  position: relative;
+}
+
+.theme-switch {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .dashboard-container {
-    padding: 15px;
+  .dashboard-layout {
+    flex-direction: column;
   }
-  .welcome-section, .option-button {
-    padding: 1.2rem; /* Un poco menos en móviles, pero sigue siendo cómodo */
+
+  .sidebar {
+    width: 100% !important;
+    height: auto;
+    padding: 20px;
+  }
+
+  .sidebar.closed {
+    width: 100% !important;
+    height: auto;
+    padding: 20px;
+  }
+
+  .toggle-btn {
+    position: static;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .dashboard-container {
+    padding: 20px;
+  }
+
+  .navigation-cards {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }

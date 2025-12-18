@@ -75,5 +75,38 @@ export class MallaService {
       estado: 'No cursado'
     }));
   }
+
+  async calcularAvance(
+    rut: string,
+    codigoCarrera: string,
+    catalogo: string,
+  ) {
+    const malla = await this.obtenerMallaConEstado(
+      rut,
+      codigoCarrera,
+      catalogo,
+    );
+
+    const creditosTotales = malla.reduce(
+      (acc, asig) => acc + (asig.creditos || 0),
+      0,
+    );
+
+    const creditosAprobados = malla
+      .filter(a => a.estado?.toLowerCase() === 'aprobado')
+      .reduce((acc, asig) => acc + (asig.creditos || 0), 0);
+
+    const porcentaje =
+      creditosTotales === 0
+        ? 0
+        : Math.round((creditosAprobados / creditosTotales) * 100);
+
+    return {
+      porcentaje,
+      creditosAprobados,
+      creditosTotales,
+    };
+  }
+
 }
 }

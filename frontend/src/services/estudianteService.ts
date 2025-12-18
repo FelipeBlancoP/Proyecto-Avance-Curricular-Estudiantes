@@ -11,8 +11,22 @@ export const estudianteService = {
         'Content-Type': 'application/json'
       }
     });
-    
+
     if (!response.ok) throw new Error('Error al obtener perfil');
     return response.json();
-  }
+  },
+
+  async obtenerAvance() {
+    const token = localStorage.getItem('access_token');
+
+    const res = await fetch(`${API_URL}/estudiante/avance`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) throw new Error('Error al obtener avance');
+    return res.json();
+  },
+
 }
