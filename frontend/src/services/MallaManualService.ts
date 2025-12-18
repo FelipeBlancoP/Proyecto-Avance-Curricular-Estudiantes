@@ -15,7 +15,7 @@ export const MallaManualService = {
       }
 
       console.log('🔍 Obteniendo malla autenticada para manual...');
-      
+
       // CAMBIO: Llamamos al nuevo endpoint 'mi-malla-con-estado-auth'
       // Ya NO enviamos el RUT en la URL, el backend lo saca del token
       const response = await fetch(
@@ -27,60 +27,95 @@ export const MallaManualService = {
           }
         }
       );
-      
+
       if (!response.ok) {
         throw new Error(`Error al obtener malla: ${response.status}`);
       }
-      
+
       const data = await response.json();
       console.log('✅ Malla obtenida correctamente:', data.length, 'cursos');
       return data;
-      
+
     } catch (error) {
       console.error('❌ Error:', error);
       throw error;
     }
   },
 
+  // En MallaManualService.ts
+
+  // 1. Fíjate que el tipo de retorno ahora es un Objeto, no un boolean
   validarPrerrequisitos(
     curso: Asignatura,
     mallaCompleta: Asignatura[],
     semestres: Semestre[],
     semestreTargetId: number
-  ): boolean {
-    if (!curso.prereq || curso.prereq.length === 0) return true;
+  ): { valido: boolean; mensaje?: string } {  // <--- CAMBIO IMPORTANTE AQUÍ
+
+    if (!curso.prereq || curso.prereq.length === 0) return { valido: true };
 
     // Convertir prereq a array si es string
-    const prerequisitos = typeof curso.prereq === 'string' 
+    const prerequisitos = typeof curso.prereq === 'string'
       ? curso.prereq.split(',').map(p => p.trim()).filter(p => p.length > 0)
       : curso.prereq;
 
-    if (prerequisitos.length === 0) return true;
+    if (prerequisitos.length === 0) return { valido: true };
 
-    // Encontrar en qué semestres están los prerrequisitos
-    const prerequisitosCumplidos = prerequisitos.every(prereqCodigo => {
-      // Buscar si el prerrequisito está en la malla
+    // Iteramos sobre los requisitos
+    for (const prereqCodigo of prerequisitos) {
+      let cumplido = false;
+
+      // A. Buscar en la malla histórica (lo que ya traes del backend)
       const prereqCurso = mallaCompleta.find(c => c.codigo === prereqCodigo);
-      if (!prereqCurso) return true; // Si no existe en la malla, asumimos cumplido
 
-      // Verificar si el curso está aprobado
-      if (prereqCurso.estado?.toLowerCase() === 'aprobado') return true;
+      if (prereqCurso) {
+        const estado = prereqCurso.estado?.toLowerCase();
+        // Aquí está la lógica que permite "Cursando"
+        if (estado === 'aprobado' || estado === 'cursando' || estado === 'inscrito') {
+          cumplido = true;
+        }
+      } else {
+        // Si no existe en la malla (ej: electivo fantasma), asumimos cumplido para no bloquear
+        cumplido = true;
+      }
 
-      // Verificar si está en algún semestre anterior al target
-      let prereqEnSemestreAnterior = false;
-      for (const semestre of semestres) {
-        if (semestre.id < semestreTargetId) {
-          const encontrado = semestre.cursos.find(c => c.codigo === prereqCodigo);
-          if (encontrado) {
-            prereqEnSemestreAnterior = true;
-            break;
+      // B. Si no está cumplido por historia, buscamos en la simulación actual
+      if (!cumplido) {
+        const semestreConPrereq = semestres.find(s =>
+          s.cursos.some(c => c.codigo === prereqCodigo)
+        );
+
+        if (semestreConPrereq) {
+          if (semestreConPrereq.id < semestreTargetId) {
+            cumplido = true;
+          } else if (semestreConPrereq.id === semestreTargetId) {
+            const nombre = prereqCurso?.asignatura || prereqCodigo;
+            return {
+              valido: false,
+              mensaje: `El prerrequisito ${nombre} (${prereqCodigo}) está en este mismo semestre (correquisito no permitido).`
+            };
+          } else {
+            const nombre = prereqCurso?.asignatura || prereqCodigo;
+            return {
+              valido: false,
+              mensaje: `El prerrequisito ${nombre} (${prereqCodigo}) está planificado para un futuro posterior.`
+            };
           }
         }
       }
-      return prereqEnSemestreAnterior;
-    });
 
-    return prerequisitosCumplidos;
+      // C. Si falló todo lo anterior, devolvemos el error
+      if (!cumplido) {
+        const nombre = prereqCurso?.asignatura || prereqCodigo;
+        return {
+          valido: false,
+          mensaje: `Falta prerrequisito: ${nombre} (${prereqCodigo}).`
+        };
+      }
+    }
+
+    // Si pasa todo el loop, es válido
+    return { valido: true };
   },
 
   guardarSimulacion(semestres: Semestre[]): void {
@@ -134,7 +169,7 @@ export const MallaManualService = {
     };
   },
 
-    obtenerMallaEjemplo(): Asignatura[] {
+  obtenerMallaEjemplo(): Asignatura[] {
     // Datos de ejemplo para desarrollo - algunos aprobados, otros no
     return [
       {
@@ -146,7 +181,7 @@ export const MallaManualService = {
         estado: "APROBADO"
       },
       {
-        codigo: "DCCB-00106", 
+        codigo: "DCCB-00106",
         asignatura: "Cálculo I",
         creditos: 6,
         nivel: 1,
