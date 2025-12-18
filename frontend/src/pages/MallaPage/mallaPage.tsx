@@ -74,8 +74,6 @@ function MallaPage() {
 
   return (
     <div className="page-layout-container">
-      <aside className="sidebar"></aside>
-
       <main className="malla-page-container">
         <button className="menu-button" onClick={handleToggleMenu}>
           <span className="menu-line"></span>
