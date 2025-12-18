@@ -157,10 +157,35 @@ function MallaManual() {
       return;
     }
 
-    const semestreTarget = semestres.find(s => s.id === targetSemestreId);
-    if (semestreTarget && semestreTarget.creditos + curso.creditos > 30) {
-      alert('Límite de créditos excedido (máximo 30 por semestre)');
+    const cursosNoAprobados = mallaCompleta.filter(c => {
+      const estado = c.estado?.toUpperCase() || '';
+      return !estado.includes('APROBADO');
+    });
+
+    let nivelBaseAlumno = 1;
+    if (cursosNoAprobados.length > 0) {
+      nivelBaseAlumno = Math.min(...cursosNoAprobados.map(c => c.nivel));
+    }
+
+    if ((curso.nivel - nivelBaseAlumno) > 2) {
+      alert(
+        `Bloqueo por Dispersión Académica: Tienes asignaturas pendientes del Nivel ${nivelBaseAlumno}.\n` +
+        `Por reglamento, no puedes tomar asignaturas del Nivel ${curso.nivel} ` +
+        `(más de 2 semestres de diferencia).`
+      );
       return;
+    }
+
+    const semestreTarget = semestres.find(s => s.id === targetSemestreId);
+    if (semestreTarget) {
+      const creditosActuales = source === 'semestre' && sourceSemestreId === targetSemestreId
+        ? semestreTarget.creditos - curso.creditos
+        : semestreTarget.creditos;
+
+      if (creditosActuales + curso.creditos > 30) {
+        alert('Límite de créditos excedido (máximo 30 por semestre)');
+        return;
+      }
     }
 
     if (source === 'disponibles') {
@@ -297,7 +322,6 @@ function MallaManual() {
         </div>
       )}
 
-      {/* === CONTENIDO PRINCIPAL ENVUELTO === */}
       <div className="content-wrapper">
         <div className="estado-info">
           <h3>📊 Estado Actual del Estudiante</h3>
@@ -412,7 +436,6 @@ function MallaManual() {
         </div>
 
       </div>
-      {/* === FIN CONTENIDO PRINCIPAL === */}
     </div>
   );
 }
