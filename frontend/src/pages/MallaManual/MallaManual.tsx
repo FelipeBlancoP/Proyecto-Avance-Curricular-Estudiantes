@@ -138,6 +138,73 @@ function MallaManual() {
     cargarMalla();
   }, [codigoCarrera, catalogo]);
 
+  const validarPrerrequisitosDinamicos = (
+    curso: Asignatura,
+    targetSemestreId: number
+  ): { valido: boolean; mensaje?: string } => {
+
+    let codigosPrereq: string[] = [];
+
+    if (!curso.prereq) {
+      return { valido: true };
+    }
+
+    if (Array.isArray(curso.prereq)) {
+      codigosPrereq = curso.prereq;
+    }
+
+    else if (typeof curso.prereq === 'string') {
+      if (curso.prereq.trim() === '') return { valido: true };
+      codigosPrereq = curso.prereq.split(/[,;]+/).map(p => p.trim());
+    }
+
+    codigosPrereq = codigosPrereq.filter(p => p && p.trim() !== '');
+
+    if (codigosPrereq.length === 0) return { valido: true };
+
+    for (const codigoReq of codigosPrereq) {
+      let cumplido = false;
+
+      const enHistorial = mallaCompleta.find(c => c.codigo === codigoReq);
+      if (enHistorial && enHistorial.estado?.toUpperCase().includes('APROBADO')) {
+        cumplido = true;
+      }
+
+      if (!cumplido) {
+        const semestreConPrereq = semestres.find(s =>
+          s.cursos.some(c => c.codigo === codigoReq)
+        );
+
+        if (semestreConPrereq) {
+          if (semestreConPrereq.id < targetSemestreId) {
+            cumplido = true;
+          } else if (semestreConPrereq.id === targetSemestreId) {
+            return {
+              valido: false,
+              mensaje: `El prerrequisito (${codigoReq}) está en este mismo semestre (correquisito no permitido).`
+            };
+          } else {
+            return {
+              valido: false,
+              mensaje: `El prerrequisito (${codigoReq}) está planificado para un futuro posterior.`
+            };
+          }
+        }
+      }
+
+      if (!cumplido) {
+        const infoPrereq = mallaCompleta.find(c => c.codigo === codigoReq);
+        const nombrePrereq = infoPrereq ? infoPrereq.asignatura : codigoReq;
+        return {
+          valido: false,
+          mensaje: `Falta prerrequisito: ${nombrePrereq} (${codigoReq}).`
+        };
+      }
+    }
+
+    return { valido: true };
+  };
+
   const handleDragStart = (e: React.DragEvent, curso: Asignatura, source: string, semestreId?: number) => {
     dragItem.current = { curso, source, semestreId };
     e.dataTransfer.setData('text/plain', JSON.stringify({ curso, source, semestreId }));
@@ -152,30 +219,66 @@ function MallaManual() {
     const data = JSON.parse(e.dataTransfer.getData('text/plain'));
     const { curso, source, semestreId: sourceSemestreId } = data;
 
-    if (!MallaManualService.validarPrerrequisitos(curso, mallaCompleta, semestres, targetSemestreId)) {
-      alert(`No se puede asignar ${curso.asignatura}. Faltan prerrequisitos.`);
+    // 1. VALIDACIÓN DE PRERREQUISITOS DINÁMICOS
+    const validacionPrereq = validarPrerrequisitosDinamicos(curso, targetSemestreId);
+    if (!validacionPrereq.valido) {
+      alert(`🚫 No puedes tomar ${curso.asignatura}:\n\n${validacionPrereq.mensaje}`);
       return;
     }
 
-    const cursosNoAprobados = mallaCompleta.filter(c => {
+    // =================================================================
+    // 2. VALIDACIÓN DE DISPERSIÓN ACADÉMICA "INTELIGENTE"
+    // =================================================================
+
+    // A. Obtenemos todo lo que no está aprobado en la base de datos
+    const cursosPendientesReales = mallaCompleta.filter(c => {
       const estado = c.estado?.toUpperCase() || '';
       return !estado.includes('APROBADO');
     });
 
+    // B. Identificamos qué cursos ya "pasaste" en semestres ANTERIORES simulados
+    // (Si estás en Semestre 2, los cursos del Semestre 1 cuentan como aprobados para este cálculo)
+    const cursosSimuladosAnteriormente = new Set<string>();
+    semestres.forEach(s => {
+      if (s.id < targetSemestreId) {
+        s.cursos.forEach(c => cursosSimuladosAnteriormente.add(c.codigo));
+      }
+    });
+
+    // C. Filtramos: Nos quedamos solo con la "Deuda Real" (Pendientes - Simulados)
+    const deudaActualizada = cursosPendientesReales.filter(c =>
+      !cursosSimuladosAnteriormente.has(c.codigo)
+    );
+
+    // D. Calculamos el nivel base dinámico
     let nivelBaseAlumno = 1;
-    if (cursosNoAprobados.length > 0) {
-      nivelBaseAlumno = Math.min(...cursosNoAprobados.map(c => c.nivel));
+
+    if (deudaActualizada.length > 0) {
+      // Si aún hay deuda, el nivel base es el mínimo de esa deuda
+      nivelBaseAlumno = Math.min(...deudaActualizada.map(c => c.nivel));
+    } else {
+      // Si no hay deuda (o simulaste aprobar todo lo anterior), 
+      // el nivel base se ajusta al nivel del curso actual para permitir tomarlo
+      nivelBaseAlumno = curso.nivel;
     }
 
+    // E. Ejecutamos la validación
+    // Si nivelBaseAlumno es 1 (porque te falta algo de nivel 1 no simulado) y quieres tomar nivel 4:
+    // 4 - 1 = 3 (> 2) -> ERROR.
+    // Pero si simulaste el nivel 1, nivelBaseAlumno subirá (ej: a 2 o 3), permitiendo el nivel 4.
     if ((curso.nivel - nivelBaseAlumno) > 2) {
       alert(
-        `Bloqueo por Dispersión Académica: Tienes asignaturas pendientes del Nivel ${nivelBaseAlumno}.\n` +
+        `🚫 Bloqueo por Dispersión Académica:\n\n` +
+        `Aunque has simulado algunos ramos, aún tienes asignaturas pendientes del Nivel ${nivelBaseAlumno} sin asignar en semestres anteriores.\n` +
         `Por reglamento, no puedes tomar asignaturas del Nivel ${curso.nivel} ` +
-        `(más de 2 semestres de diferencia).`
+        `(más de 2 semestres de diferencia con tu rezago actual).`
       );
       return;
     }
+    // =================================================================
 
+
+    // 3. VALIDACIÓN DE CRÉDITOS
     const semestreTarget = semestres.find(s => s.id === targetSemestreId);
     if (semestreTarget) {
       const creditosActuales = source === 'semestre' && sourceSemestreId === targetSemestreId
@@ -188,6 +291,7 @@ function MallaManual() {
       }
     }
 
+    // 4. LÓGICA DE MOVIMIENTO (Drag & Drop)
     if (source === 'disponibles') {
       setCursosDisponibles(prev => prev.filter(c => c.codigo !== curso.codigo));
       setSemestres(prev => prev.map(semestre => {
@@ -201,7 +305,6 @@ function MallaManual() {
         return semestre;
       }));
     } else if (source === 'semestre') {
-      // Mover entre semestres
       setSemestres(prev => prev.map(semestre => {
         if (semestre.id === sourceSemestreId) {
           return {
@@ -260,12 +363,10 @@ function MallaManual() {
 
     setSemestres(prev => {
       const semestresRestantes = prev.filter(s => s.id !== id);
-      const semestresRenumerados = semestresRestantes.map((semestre, index) => ({
+      return semestresRestantes.map((semestre, index) => ({
         ...semestre,
         id: index + 1
       }));
-
-      return semestresRenumerados;
     });
   };
 
