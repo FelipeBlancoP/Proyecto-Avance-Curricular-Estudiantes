@@ -5,6 +5,8 @@ import MallaTimeline from "../../components/MallaTimeline/MallaTimeline";
 import SimulacionView from "../../components/SimulacionView/SimulacionView";
 import { useNavigate } from 'react-router-dom';
 import "./MallaPage.css";
+import { Estudiante } from "../../types/estudiante";
+import { estudianteService } from "../../services/estudianteService";
 
 export interface Semestre {
   nivel: number;
@@ -13,26 +15,68 @@ export interface Semestre {
 
 function MallaPage() {
   const navigate = useNavigate();
+
+  const [estudiante, setEstudiante] = useState<Estudiante | null>(null);
   const [malla, setMalla] = useState<Malla | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
   const [mostrarMallaTimeline, setMostrarMallaTimeline] = useState(false);
-
-
   const [mostrarSimulacion, setMostrarSimulacion] = useState(true);
 
-  const nombreCarrera = "Ingeniería en Tecnologías de Información";
-  const rut = "333333333";
-  const codigoCarrera = "8266";
-  const catalogo = "202410";
-  const token = localStorage.getItem("token") || "";
+  // const nombreCarrera = "Ingeniería en Tecnologías de Información";
+  // const rut = "333333333";
+  // const codigoCarrera = "8266";
+  // const catalogo = "202410";
+  // const token = localStorage.getItem("token") || "";
+
+  useEffect(() => {
+    const cargarDatosEstudiante = async () => {
+      const token = localStorage.getItem("token") || localStorage.getItem("access_token");
+
+      if (!token) {
+        navigate("/login"); // Si no hay token, fuera
+        return;
+      }
+
+      try {
+        // Obtenemos el perfil completo con las carreras
+        const perfil = await estudianteService.obtenerPerfil();
+        setEstudiante(perfil);
+      } catch (err) {
+        console.error("Error cargando perfil:", err);
+        setError("No se pudieron cargar los datos del estudiante.");
+        setIsLoading(false);
+      }
+    };
+
+    cargarDatosEstudiante();
+  }, [navigate]);
+
 
   useEffect(() => {
     const fetchMalla = async () => {
+      if (!estudiante) return; // Esperamos a que cargue el estudiante
+      
+      // Validamos que tenga carreras
+      if (!estudiante.carreras || estudiante.carreras.length === 0) {
+        setError("El estudiante no tiene carreras asociadas.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Tomamos la primera carrera (puedes cambiar esto si quieres un selector de carreras)
+      const carreraActual = estudiante.carreras[0]; 
+
       try {
         setIsLoading(true);
-        setError(null);
-        const data = await mallaService.obtenerMalla(rut, codigoCarrera, catalogo);
+        // Usamos los datos dinámicos: rut del estudiante y datos de la carrera
+        const data = await mallaService.obtenerMalla(
+          estudiante.rut, 
+          carreraActual.codigo, 
+          carreraActual.catalogo
+        );
         setMalla(data);
       } catch (err) {
         if (err instanceof Error) {
@@ -44,8 +88,9 @@ function MallaPage() {
         setIsLoading(false);
       }
     };
+
     fetchMalla();
-  }, []);
+  }, [estudiante]);
 
 
   const semestresAgrupados = useMemo<Semestre[]>((() => {
@@ -73,6 +118,17 @@ function MallaPage() {
 
   if (isLoading) return <div>Cargando malla...</div>;
   if (error) return <div>Error: {error}</div>;
+  if (!estudiante) return null;
+
+  const carreraActual = estudiante.carreras[0];
+  const nombreCarreraAbr = carreraActual ? carreraActual.nombre : "Carrera no encontrada";
+
+  let nombreCarrera = ""
+  if (nombreCarreraAbr === "ICCI") nombreCarrera = "Ingeniería Civil en Computación e Informática"
+  if (nombreCarreraAbr === "ICI") nombreCarrera = "Ingeniería Civil Industrial"
+  if (nombreCarreraAbr === "ITI") nombreCarrera = "Ingeniería en Tecnologías de Información"
+
+  const token = localStorage.getItem("token") || localStorage.getItem("access_token") || "";
 
   return (
     <div className="page-layout-container">
@@ -113,9 +169,9 @@ function MallaPage() {
 
         {mostrarSimulacion && malla && (
           <SimulacionView
-            rut={rut}
-            codigoCarrera={codigoCarrera}
-            catalogo={catalogo}
+            rut={estudiante.rut}
+            codigoCarrera={carreraActual.codigo}
+            catalogo={carreraActual.catalogo}
             token={token}
             malla={malla}
           />
