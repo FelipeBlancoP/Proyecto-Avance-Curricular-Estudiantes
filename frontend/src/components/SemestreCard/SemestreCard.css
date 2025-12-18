@@ -32,12 +32,15 @@
 
 .semestre-header {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between;  <-- ELIMINA O COMENTA ESTO */
+  justify-content: center;         /* <-- AGREGA ESTO: Centra el contenido (título) */
   align-items: center;
   padding: 1rem;
+  padding-bottom: 0px;
   cursor: pointer;
-  user-select: none; 
+  user-select: none;
   transition: background-color 0.2s ease;
+  position: relative;              /* <-- AGREGA ESTO: Para posicionar la flecha */
 }
 
 .semestre-header:hover {
@@ -48,14 +51,20 @@
   font-size: 1.2rem;
   font-weight: 600;
   color: #333;
-  margin: 0; 
+  margin: 0;
+  text-align: center; /* <-- Asegura el centrado del texto */
+  /* max-width: 128px; <-- ELIMINA ESTO si lo tenías, restringía el ancho */
 }
 
 
 .expand-icon {
   font-size: 1rem;
   color: #007bff;
-  transition: transform 0.3s ease; 
+  transition: transform 0.3s ease;
+  
+  /* --- NUEVOS ESTILOS PARA LA FLECHA --- */
+  position: absolute; /* La sacamos del flujo */
+  right: 1rem;        /* La pegamos a la derecha (mismo valor que el padding del header) */
 }
 
 
@@ -159,6 +168,7 @@
     text-align: center;
     border-bottom: none;
     padding-bottom: 0;
+    max-width: 128px;
     width: 100%; 
   }
 
