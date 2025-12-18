@@ -11,6 +11,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [estudiante, setEstudiante] = useState<Estudiante | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [avance, setAvance] = useState<any>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,6 +48,18 @@ function Dashboard() {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    const cargarAvance = async () => {
+      try {
+        const data = await estudianteService.obtenerAvance();
+        setAvance(data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    cargarAvance();
+  }, []);
+
   if (loading) {
     return <div className="loading">Cargando...</div>;
   }
@@ -79,8 +92,20 @@ function Dashboard() {
                 </div>
               ))}
             </div>
-            <h2>Avance</h2>
-            <p>acá se va a mostrar el avance en porcentaje</p>
+
+            <div className="avance-section">
+              <h3>Avance</h3>
+              {avance && (
+                <>
+                  <p>{avance.porcentaje}% completado</p>
+                  <progress value={avance.porcentaje} max={100} />
+                  <p>
+                    {avance.creditosAprobados} / {avance.creditosTotales} créditos
+                  </p>
+                </>
+              )}
+            </div>
+
           </div>
 
         )}
