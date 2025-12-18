@@ -281,20 +281,14 @@ function MallaManual() {
 
   return (
     <div className="malla-manual-container">
-      <header className="malla-manual-header">
-        <button onClick={() => navigate('/')} className="back-btn">
-          ← Volver al Dashboard
-        </button>
-        <h1>Simulación Manual de Malla</h1>
-        <div className="header-actions">
-          <button onClick={guardarSimulacion} className="save-btn">
-            💾 Guardar Simulación
+      <div className="malla-manual-top-bar">
+        <div className="header-left-group">
+          <button onClick={() => navigate('/')} className="back-btn">
+            🡰
           </button>
-          <button onClick={reiniciarSimulacion} className="reset-btn">
-            🔄 Reiniciar
-          </button>
+          <h1>Simulación Manual de Malla</h1>
         </div>
-      </header>
+      </div>
 
       {simulacionGuardada && (
         <div className="success-message">
@@ -339,26 +333,39 @@ function MallaManual() {
           </p>
         </div>
 
-        <div className="stats-bar">
-          <div className="stat">
-            <span className="stat-label">Cursos asignados:</span>
-            <span className="stat-value">{cursosAsignados}</span>
-          </div>
-          <div className="stat">
-            <span className="stat-label">Total créditos:</span>
-            <span className="stat-value">{totalCreditos}</span>
-          </div>
-          <div className="stat">
-            <span className="stat-label">Semestres:</span>
-            <span className="stat-value">{semestres.length}</span>
-          </div>
+        <div className="instructions">
+          <h3>📋 Instrucciones:</h3>
+          <ul>
+            <li>Arrastra cursos desde "Cursos Disponibles" hacia los semestres</li>
+            <li>Mueve cursos entre semestres arrastrándolos</li>
+            <li>Devuelve cursos arrastrándolos de vuelta a "Cursos Disponibles"</li>
+            <li>Límite: 30 créditos por semestre</li>
+            <li>Se validan automáticamente los prerrequisitos</li>
+          </ul>
         </div>
 
         <div className="main-content">
           <div className="cursos-section">
-            <h2>Cursos Disponibles</h2>
-            <p className="section-subtitle">Arrastra cursos a los semestres</p>
-
+            <div className="cursos-header-row">
+              <div className="cursos-header-left">
+                <h2>Cursos Disponibles</h2>
+                <p className="section-subtitle">Arrastra cursos a los semestres</p>
+              </div>
+              <div className="stats-bar">
+                <div className="stat">
+                  <span className="stat-label">Asignados:</span>
+                  <span className="stat-value">{cursosAsignados}</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-label">Créditos:</span>
+                  <span className="stat-value">{totalCreditos}</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-label">Semestres:</span>
+                  <span className="stat-value">{semestres.length}</span>
+                </div>
+              </div>
+            </div>
             <div
               className="cursos-disponibles-container"
               onDragOver={handleDragOver}
@@ -391,19 +398,18 @@ function MallaManual() {
                 />
               ))}
             </div>
+
+            <div className="header-actions">
+              <button onClick={guardarSimulacion} className="save-btn">
+                Guardar Simulación
+              </button>
+              <button onClick={reiniciarSimulacion} className="reset-btn">
+                Reiniciar
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="instructions">
-          <h3>📋 Instrucciones:</h3>
-          <ul>
-            <li>Arrastra cursos desde "Cursos Disponibles" hacia los semestres</li>
-            <li>Mueve cursos entre semestres arrastrándolos</li>
-            <li>Devuelve cursos arrastrándolos de vuelta a "Cursos Disponibles"</li>
-            <li>Límite: 30 créditos por semestre</li>
-            <li>Se validan automáticamente los prerrequisitos</li>
-          </ul>
-        </div>
       </div>
       {/* === FIN CONTENIDO PRINCIPAL === */}
     </div>

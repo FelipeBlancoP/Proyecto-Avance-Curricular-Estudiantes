@@ -5,48 +5,53 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.malla-manual-header {
-  background: white;
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1.5rem;
+.malla-manual-top-bar {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+  width: 100%;
 }
 
-.malla-manual-header h1 {
-  color: #2c3e50;
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 600;
+.malla-manual-top-bar h1 {
   text-align: center;
   flex: 1;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #222;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  line-height: 1.2;
 }
 
 .back-btn {
-  background: #6c757d;
+  background: #003366;
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
   font-size: 0.9rem;
   transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  align-self: flex-start;
+  margin-top: -5px;
+  margin-bottom: 1.5rem;
 }
 
 .back-btn:hover {
-  background: #5a6268;
-  transform: translateX(-2px);
+  background: #002244;
+  transform: translateY(-2px);
 }
 
 .header-actions {
   display: flex;
-  gap: 0.75rem;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  flex-shrink: 0;
 }
 
 .save-btn,
@@ -109,11 +114,8 @@
 }
 
 .estado-info {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 .estado-info h3 {
@@ -191,19 +193,20 @@
   color: #6c757d;
   margin: 0;
   padding: 0.75rem;
-  background: #f8f9fa;
+  background: white;
   border-radius: 6px;
   border-left: 4px solid #3498db;
 }
 
 .stats-bar {
   display: flex;
-  gap: 2rem;
-  background: white;
-  padding: 1rem 1.5rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1.5rem;
+  gap: 1rem;
+  background: #f8f9fa;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  box-shadow: none;
+  margin-bottom: 0;
 }
 
 .stat {
@@ -213,15 +216,12 @@
 }
 
 .stat-label {
-  font-size: 0.85rem;
-  color: #6c757d;
-  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
 }
 
 .stat-value {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #2c3e50;
+  font-size: 1.1rem;
+  font-weight: 700;
 }
 
 /* === LAYOUT PRINCIPAL: 50% IZQUIERDA / 50% DERECHA === */
@@ -281,10 +281,8 @@
   min-height: 0;
 }
 
-/* SEMESTRES SIMULADOS - 50% DERECHA */
 .semestres-section {
   width: 42%;
-  /* ← 50% EXACTO del ancho */
   background: white;
   padding: 1.5rem;
   border-radius: 12px;
@@ -295,7 +293,6 @@
   max-height: 500px;
   overflow: hidden;
   flex-shrink: 0;
-  /* No se encoje */
 }
 
 .semestres-header {
@@ -337,6 +334,7 @@
   padding: 0.5rem 0.5rem 1rem 0.5rem;
   align-items: stretch;
   min-height: 0;
+  margin-bottom: 1rem;
 }
 
 .semestre-manual {
@@ -353,12 +351,8 @@
 }
 
 .instructions {
-  background: white;
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  margin-bottom: 1.5rem;
-  margin-top: 5rem;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
 }
 
 .instructions h3 {
@@ -399,6 +393,20 @@
   text-align: center;
   margin: 2rem auto;
   max-width: 500px;
+}
+
+.cursos-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.cursos-header-left {
+  display: flex;
+  flex-direction: column;
 }
 
 /* === SCROLLBARS ESPECÍFICOS === */
