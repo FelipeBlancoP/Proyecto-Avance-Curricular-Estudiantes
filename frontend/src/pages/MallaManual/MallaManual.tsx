@@ -370,11 +370,12 @@ function MallaManual() {
         <div className="instructions">
           <h3>📋 Instrucciones:</h3>
           <ul>
-            <li>Arrastra cursos desde "Cursos Disponibles" hacia los semestres</li>
-            <li>Mueve cursos entre semestres arrastrándolos</li>
-            <li>Devuelve cursos arrastrándolos de vuelta a "Cursos Disponibles"</li>
-            <li>Límite: 30 créditos por semestre</li>
-            <li>Se validan automáticamente los prerrequisitos</li>
+            <li>Arrastra cursos desde "Cursos Disponibles" hacia los semestres.</li>
+            <li>Mueve cursos entre semestres arrastrándolos.</li>
+            <li>Devuelve cursos arrastrándolos de vuelta a "Cursos Disponibles".</li>
+            <li>Límite: 30 créditos por semestre.</li>
+            <li>Se validan automáticamente los prerrequisitos.</li>
+            <li>Nota: La práctica profesional no ocupa carga académica (créditos) al realizarse en verano.</li>
           </ul>
         </div>
 
