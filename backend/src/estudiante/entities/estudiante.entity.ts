@@ -12,7 +12,6 @@ export class Estudiante {
   @Column({ name: 'nombre_completo', nullable: true })
   nombreCompleto: string;
 
-  // Relación: Un estudiante tiene muchas simulaciones
   @OneToMany(() => Simulacion, (simulacion) => simulacion.estudiante)
   simulaciones: Simulacion[];
 }

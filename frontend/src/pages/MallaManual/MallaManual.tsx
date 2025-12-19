@@ -32,18 +32,11 @@ function MallaManual() {
   const [guardando, setGuardando] = useState(false);
   const dragItem = useRef<any>(null);
 
-
-  // const dragOverItem = useRef<any>(null); // No se estaba usando
-
-  // Datos de ejemplo
-
   useEffect(() => {
     const inicializarDatos = async () => {
       try {
         setLoading(true);
         console.log('=== 🚀 INICIANDO CARGA MALLA MANUAL ===');
-
-        // 1. Obtener datos del estudiante logueado (RUT y Carreras)
         const perfil = await estudianteService.obtenerPerfil();
 
 
@@ -51,19 +44,14 @@ function MallaManual() {
           throw new Error("No se encontraron datos de carrera para el estudiante.");
           throw new Error("No se encontraron datos de carrera para el estudiante.");
         }
-
-        // 2. Extraer datos necesarios (Usamos la primera carrera por defecto)
         const { rut } = perfil;
         const carreraActual = perfil.carreras[0];
         const codigoCarrera = carreraActual.codigo;
         const catalogo = carreraActual.catalogo;
 
         console.log(`✅ Usuario autenticado: ${rut} - Carrera: ${codigoCarrera}`);
-
-        // 3. Obtener la malla usando los datos dinámicos
         const malla = await MallaManualService.obtenerMalla(rut, codigoCarrera, catalogo);
 
-        // 4. Filtrar cursos (Lógica original)
         const cursosPendientes = malla.filter(curso => {
           const estado = curso.estado?.toUpperCase() || '';
           const esAprobado = estado.includes('APROBADO');
@@ -81,8 +69,6 @@ function MallaManual() {
         console.error('❌ Error al cargar datos:', err);
         const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
         setError(`Error: ${errorMessage}. ¿Has iniciado sesión?`);
-
-        // Si falla por auth, redirigir al login después de un momento podría ser útil
         if (errorMessage.includes('token')) {
           navigate('/login');
         }
@@ -153,9 +139,6 @@ function MallaManual() {
       return;
     }
 
-    // =================================================================
-    // 3. VALIDACIÓN DE CRÉDITOS
-    // =================================================================
     const esPractica = /práctica profesional/i.test(curso.asignatura);
 
     const semestreTarget = semestres.find(s => s.id === targetSemestreId);
@@ -169,8 +152,6 @@ function MallaManual() {
         return;
       }
     }
-
-    // 4. LÓGICA DE MOVIMIENTO (Update State)
     if (source === 'disponibles') {
       setCursosDisponibles(prev => prev.filter(c => c.codigo !== curso.codigo));
       setSemestres(prev => prev.map(semestre => {
@@ -251,21 +232,17 @@ function MallaManual() {
   };
 
   const guardarSimulacion = async () => {
-    // 1. Validar que hay algo que guardar
     const tieneCursos = semestres.some(s => s.cursos.length > 0);
     if (!tieneCursos) {
       alert("La simulación está vacía. Agrega cursos antes de guardar.");
       return;
     }
-
-    // 2. Pedir nombre (Simple window.prompt)
     const nombre = window.prompt("Ingresa un nombre para tu simulación:", `Simulación ${new Date().toLocaleDateString()}`);
 
-    if (!nombre) return; // Si cancela o deja vacío
+    if (!nombre) return; 
 
     try {
       setGuardando(true);
-      // 3. Llamar al servicio actualizado
       await MallaManualService.guardarSimulacion(nombre, semestres);
 
       setSimulacionGuardada(true);
@@ -280,7 +257,6 @@ function MallaManual() {
 
   const reiniciarSimulacion = () => {
     if (window.confirm('¿Estás seguro de reiniciar toda la simulación?')) {
-      // Recalcular disponibles basándose en la mallaCompleta original
       const disponibles = mallaCompleta.filter(curso => {
         const estado = curso.estado?.toUpperCase() || '';
         const esAprobado = estado.includes('APROBADO');
@@ -442,7 +418,7 @@ function MallaManual() {
               <button
                 onClick={guardarSimulacion}
                 className="save-btn"
-                disabled={guardando} // Deshabilitar mientras guarda
+                disabled={guardando}
               >
                 {guardando ? 'Guardando...' : 'Guardar Simulación'}
               </button>

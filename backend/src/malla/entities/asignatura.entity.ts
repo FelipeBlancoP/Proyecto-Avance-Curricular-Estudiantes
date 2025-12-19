@@ -4,18 +4,17 @@ import { SimulacionDetalle } from '../../simulacion/entities/simulacion-detalle.
 @Entity('asignatura')
 export class Asignatura {
   @PrimaryColumn()
-  codigo: string; // PK: "INF-101"
+  codigo: string;
 
   @Column()
-  nombre: string; // Guardamos el nombre para mostrarlo directo
+  nombre: string;
 
   @Column()
-  creditos: number; // Guardamos los créditos para sumarlos en el front
+  creditos: number;
 
   @Column({ name: 'nivel_malla' })
-  nivelMalla: number; // Guardamos el nivel original (semestre 1, 2, etc.)
+  nivelMalla: number;
 
-  // Relación con el detalle
   @OneToMany(() => SimulacionDetalle, (detalle) => detalle.asignatura)
   detallesSimulacion: SimulacionDetalle[];
 }

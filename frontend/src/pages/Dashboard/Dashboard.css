@@ -18,13 +18,10 @@ body {
 
 .sidebar {
   background-color: var(--sidebar-color);
-  /* Azul Institucional */
   color: white;
   width: 280px;
-  /* Un poco más ancho para más espacio */
   transition: width 0.3s ease, padding 0.3s ease;
   padding: 30px 20px;
-  /* Más padding vertical */
   position: relative;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -74,7 +71,6 @@ body {
   height: 100px;
   border-radius: 50%;
   border: 4px solid rgba(255, 255, 255, 0.8);
-  /* Borde de enfoque */
   object-fit: cover;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
@@ -103,11 +99,9 @@ body {
   color: var(--color-text-light);
 }
 
-/* --- Dashboard Principal --- */
 .dashboard-container {
   flex-grow: 1;
   background: var(--bg-color);
-  /* Fondo muy claro */
   padding: 30px;
   display: flex;
   flex-direction: column;
@@ -131,7 +125,6 @@ body {
   gap: 2rem;
   margin-bottom: 3rem;
   max-width: 900px;
-  /* Un poco más de espacio */
   margin-left: auto;
   margin-right: auto;
   width: 100%;
@@ -140,23 +133,18 @@ body {
 .nav-card {
   background: var(--card-color);
   padding: 3rem;
-  /* Reducido para mejor estética */
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  /* Sombra más suave */
   cursor: pointer;
   transition: all 0.3s ease;
   border-left: 5px solid var(--color-secondary);
-  /* Borde con color de acento */
   text-align: center;
 }
 
 .nav-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  /* Sombra más pronunciada al hacer hover */
   border-left-color: var(--color-primary);
-  /* Cambio de color de acento al hacer hover */
 }
 
 .nav-card h3 {
@@ -174,7 +162,6 @@ body {
 }
 
 .loading {
-  /* Mantener */
 }
 
 .logout-section {
@@ -185,11 +172,9 @@ body {
 
 .logout-btn {
   background: var(--color-danger);
-  /* Rojo de advertencia */
   color: white;
   border: none;
   padding: 0.85rem 2.5rem;
-  /* Botón un poco más grande */
   border-radius: 8px;
   cursor: pointer;
   font-size: 1.05rem;
@@ -213,7 +198,6 @@ body {
   right: 10px;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .dashboard-layout {
     flex-direction: column;

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MallaManualService from '../../services/MallaManualService';
 import MallaTimeline from '../../components/MallaTimeline/MallaTimeline';
-import './MisSimulaciones.css'; // Crearemos este CSS abajo
+import './MisSimulaciones.css';
 
 interface SimulacionItem {
   id: number;
@@ -14,11 +14,7 @@ function MisSimulaciones() {
   const navigate = useNavigate();
   const [lista, setLista] = useState<SimulacionItem[]>([]);
   const [loading, setLoading] = useState(true);
-  
-  // Controla cuál acordeón está abierto
   const [expandedId, setExpandedId] = useState<number | null>(null);
-  
-  // Caché para no volver a cargar una simulación si ya la abrimos antes
   const [detallesCache, setDetallesCache] = useState<Record<number, any[]>>({});
   const [loadingId, setLoadingId] = useState<number | null>(null);
 
@@ -35,14 +31,12 @@ function MisSimulaciones() {
 
   const toggleSimulacion = async (id: number) => {
     if (expandedId === id) {
-      // Si ya está abierto, lo cerramos
       setExpandedId(null);
       return;
     }
 
     setExpandedId(id);
 
-    // Si no tenemos los datos en caché, los cargamos
     if (!detallesCache[id]) {
       setLoadingId(id);
       const detalle = await MallaManualService.cargarSimulacion(id);
@@ -77,7 +71,6 @@ function MisSimulaciones() {
           lista.map((sim) => (
             <div key={sim.id} className="simulacion-item-wrapper">
               
-              {/* Botón Acordeón (Estilo MallaPage) */}
               <button
                 className={`desplegable-malla-btn ${expandedId === sim.id ? 'active' : ''}`}
                 onClick={() => toggleSimulacion(sim.id)}
@@ -91,7 +84,6 @@ function MisSimulaciones() {
                 </span>
               </button>
 
-              {/* Contenido Desplegable */}
               {expandedId === sim.id && (
                 <div className="timeline-container-animado">
                   {loadingId === sim.id ? (
@@ -99,7 +91,6 @@ function MisSimulaciones() {
                   ) : (
                     detallesCache[sim.id] ? (
                       <div className="timeline-wrapper">
-                         {/* Reutilizamos MallaTimeline para pintar los semestres */}
                          <MallaTimeline semestres={detallesCache[sim.id]} />
                       </div>
                     ) : (

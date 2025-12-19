@@ -46,7 +46,6 @@ export class EstudianteService {
 
   private async validarOCrearEstudiante(rut: string, email: string): Promise<void> {
     try {
-      // Buscamos si ya existe por RUT (PK)
       const existe = await this.estudianteRepo.findOneBy({ rut });
 
       if (!existe) {
@@ -60,7 +59,7 @@ export class EstudianteService {
       }
 
     } catch (dbError) {
-      console.error('⚠️ Error al sincronizar estudiante en BD local:', dbError);
+      console.error('Error al sincronizar estudiante en BD local:', dbError);
     }
   }
 }

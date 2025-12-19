@@ -45,7 +45,6 @@
   margin-bottom: 2rem;
 }
 
-/* Logo Ucenin en la parte inferior izquierda */
 .ucenin-logo-container {
   position: absolute;
   bottom: 2rem;
@@ -76,11 +75,10 @@
 }
 
 .login-logo {
-  width: 60px; /* Logo más pequeño */
+  width: 60px;
   margin-bottom: 0.5rem;
 }
 
-/* Universidad Católica del Norte debajo del logo */
 .university-name {
   margin-bottom: 1.5rem;
 }
@@ -178,7 +176,6 @@
   margin-top: 1rem;
 }
 
-/* Responsive */
 @media (max-width: 968px) {
   .container {
     flex-direction: column;

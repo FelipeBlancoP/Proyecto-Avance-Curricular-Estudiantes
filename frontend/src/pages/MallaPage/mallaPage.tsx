@@ -17,33 +17,23 @@ export interface Semestre {
 
 function MallaPage() {
   const navigate = useNavigate();
-
   const [estudiante, setEstudiante] = useState<Estudiante | null>(null);
   const [malla, setMalla] = useState<Malla | null>(null);
-
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [mostrarMallaTimeline, setMostrarMallaTimeline] = useState(false);
   const [mostrarSimulacion, setMostrarSimulacion] = useState(true);
-
-  // const nombreCarrera = "Ingeniería en Tecnologías de Información";
-  // const rut = "333333333";
-  // const codigoCarrera = "8266";
-  // const catalogo = "202410";
-  // const token = localStorage.getItem("token") || "";
 
   useEffect(() => {
     const cargarDatosEstudiante = async () => {
       const token = localStorage.getItem("token") || localStorage.getItem("access_token");
 
       if (!token) {
-        navigate("/login"); // Si no hay token, fuera
+        navigate("/login");
         return;
       }
 
       try {
-        // Obtenemos el perfil completo con las carreras
         const perfil = await estudianteService.obtenerPerfil();
         setEstudiante(perfil);
       } catch (err) {
@@ -59,21 +49,18 @@ function MallaPage() {
 
   useEffect(() => {
     const fetchMalla = async () => {
-      if (!estudiante) return; // Esperamos a que cargue el estudiante
+      if (!estudiante) return;
 
-      // Validamos que tenga carreras
       if (!estudiante.carreras || estudiante.carreras.length === 0) {
         setError("El estudiante no tiene carreras asociadas.");
         setIsLoading(false);
         return;
       }
 
-      // Tomamos la primera carrera (puedes cambiar esto si quieres un selector de carreras)
       const carreraActual = estudiante.carreras[0];
 
       try {
         setIsLoading(true);
-        // Usamos los datos dinámicos: rut del estudiante y datos de la carrera
         const data = await mallaService.obtenerMalla(
           estudiante.rut,
           carreraActual.codigo,
@@ -143,16 +130,6 @@ function MallaPage() {
         <ThemeToggle />
 
         <div className="career-box">{nombreCarrera}</div>
-        {/* BOTÓN DE MOSTRAR SIMULACIÓN Y OCULTAR */}
-        {/* <div style={{ marginBottom: "1rem" }}>
-          <button
-            className="simulacion-btn"
-            onClick={() => setMostrarSimulacion(!mostrarSimulacion)}
-          >
-            {mostrarSimulacion ? "Ocultar simulación" : "Simular avance curricular"}
-          </button>
-        </div> */}
-
         <button
           className="desplegable-malla-btn"
           onClick={() => setMostrarMallaTimeline(!mostrarMallaTimeline)}

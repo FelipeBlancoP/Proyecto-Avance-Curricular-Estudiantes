@@ -7,7 +7,6 @@ interface CursosDisponiblesProps {
 }
 
 function CursosDisponibles({ cursos, onDragStart }: CursosDisponiblesProps) {
-  // Agrupar cursos por nivel
   const cursosPorNivel = cursos.reduce((acc, curso) => {
     const nivel = curso.nivel;
     if (!acc[nivel]) acc[nivel] = [];

@@ -52,14 +52,13 @@ export class MallaService {
         this.obtenerMalla(codigoCarrera, catalogo),
         this.avanceService.avanceDelEstudiante(rut, codigoCarrera)
           .catch(error => {
-            console.warn('⚠️ Error obteniendo avance, usando array vacío:', error.message);
-            return []; // Si falla el avance, usar array vacío
+            console.warn('Error obteniendo avance, usando array vacío:', error.message);
+            return [];
           })
       ]);
 
       const estadoPorCodigo = new Map<string, string>();
 
-      // Solo procesar si avances es un array
       if (Array.isArray(avances)) {
         for (const a of avances) {
           if (a && a.course) {
@@ -73,8 +72,7 @@ export class MallaService {
         estado: estadoPorCodigo.get(asig.codigo) ?? 'No cursado',
       }));
     } catch (error) {
-      console.error('❌ Error en obtenerMallaConEstado:', error.message);
-      // Si falla todo, devolver solo la malla básica
+      console.error('Error en obtenerMallaConEstado:', error.message);
       const malla = await this.obtenerMalla(codigoCarrera, catalogo);
       return malla.map(asig => ({
         ...asig,
@@ -120,32 +118,24 @@ export class MallaService {
     console.log(`🔄 Iniciando sincronización para ${codigoCarrera}-${catalogo}...`);
     
     try {
-      // 1. Obtenemos la malla "cruda" de la API externa (usamos tu método existente)
-      // Nota: Tu método obtenerMalla devuelve { codigo, asignatura, creditos, nivel, prereq... }
       const mallaExterna = await this.obtenerMalla(codigoCarrera, catalogo);
       
       if (!mallaExterna || mallaExterna.length === 0) {
         return { mensaje: 'No se encontraron asignaturas en la API externa', total: 0 };
       }
 
-      // 2. Preparamos las entidades para guardar
       const asignaturasParaGuardar: Asignatura[] = mallaExterna.map((curso: any) => {
         const entity = new Asignatura();
-        entity.codigo = curso.codigo;       // PK
-        entity.nombre = curso.asignatura;   // Nombre del ramo
+        entity.codigo = curso.codigo;       
+        entity.nombre = curso.asignatura;   
         entity.creditos = curso.creditos || 0; 
         entity.nivelMalla = curso.nivel || 0;
         
         return entity;
       });
-
-      // 3. Guardado Inteligente (UPSERT)
-      // .save() verifica la PK (codigo). Si existe, actualiza los campos. Si no, inserta.
-      // Esto maneja perfectamente el caso de "Cálculo I" compartido entre carreras.
-      // Si ya existía por ICCI, al sincronizar ITI solo actualizará el nombre/créditos (que deberían ser iguales).
       await this.asignaturaRepo.save(asignaturasParaGuardar);
 
-      console.log(`✅ Sincronización exitosa. ${asignaturasParaGuardar.length} cursos procesados.`);
+      console.log(`Sincronización exitosa. ${asignaturasParaGuardar.length} cursos procesados.`);
       
       return { 
         mensaje: 'Catálogo sincronizado correctamente', 
@@ -154,7 +144,7 @@ export class MallaService {
       };
 
     } catch (error) {
-      console.error('❌ Error en sincronización:', error);
+      console.error('Error en sincronización:', error);
       throw new HttpException(
         `Error al sincronizar catálogo: ${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,

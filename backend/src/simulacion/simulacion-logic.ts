@@ -16,7 +16,6 @@ function puedeTomarse(curso: Asignatura, tomados: Set<string>, allCourseCodes: S
         const pr = normalizarCodigo(p);
 
         if (!allCourseCodes.has(pr)) {
-            // console.log(`Prerrequisito ${pr} no encontrado en la malla. Se asume como cumplido.`);
             return true;
         }
         return pr === '' || tomados.has(pr);
@@ -73,9 +72,6 @@ export function simularProgreso(malla: Asignatura[]) {
 
 
     console.log(`Simulación iniciada: ${totalCursos} cursos pendientes.`);
-    // for (const curso of pendientes) {
-    //     console.log(`Curso pendiente: ${curso.codigo} - ${curso.asignatura}`);
-    // }
     let iteraciones = 0;
     while (tomados.size < totalCursos) {
         iteraciones++;
@@ -89,11 +85,6 @@ export function simularProgreso(malla: Asignatura[]) {
         const nivelMinimo = Math.min(...disponibles.map(c => c.nivel));
         disponibles = disponibles.filter(c => c.nivel <= nivelMinimo + 2);
         disponibles = ordenarPorPrioridad(disponibles);
-
-
-        // for (const curso of disponibles) {
-        //     console.log(`Curso pendiente: ${curso.codigo} - ${curso.asignatura}`);
-        // }
         disponibles = ordenarPorPrioridad(disponibles);
 
         if (disponibles.length === 0) {
@@ -113,16 +104,12 @@ export function simularProgreso(malla: Asignatura[]) {
                 break;
             }
             else if (esCapstone) continue;
-
+            
             const esPractica = /práctica profesional/i.test(curso.asignatura);
             const costoCreditos = esPractica ? 0 : curso.creditos;
-            // console.log(`${curso.asignatura}: ${curso.codigo}: ${curso.prereq}`);
-            
-
             
             if (creditos + costoCreditos > 30) continue;
             console.log(`${curso.asignatura}: ${curso.creditos}`);
-            // console.log(`${curso.asignatura}: ${curso.codigo}: ${curso.prereq}`);
             semestre.push(curso);
             creditos += costoCreditos;
         }

@@ -35,21 +35,17 @@ export class MallaController {
       catalogo,
     );
   }
-
-  // === AQUÍ ES DONDE DEBE IR EL CÓDIGO NUEVO (DENTRO DE LA CLASE) ===
   
   @UseGuards(JwtAuthGuard)
-  @Get('mi-malla-con-estado-auth') // Nuevo endpoint seguro
+  @Get('mi-malla-con-estado-auth')
   async obtenerMiMallaConEstadoAuth(
     @Request() req,
     @Query('codigoCarrera') codigoCarrera?: string, 
     @Query('catalogo') catalogo?: string
   ) {
-    // Extraemos el RUT y datos del usuario DIRECTAMENTE del token seguro
     const { rut, carreras } = req.user;
     console.log('🚨 RUT que viene en el Token (incorrecto):', rut);
     const rutReal = '333333333';
-    // Si el frontend no envía carrera/catalogo, usamos los del usuario por defecto
     const carreraCode = '8266'; 
     const catalog = '202410';
     if (!rut || !carreraCode) {
@@ -57,7 +53,7 @@ export class MallaController {
     }
 
     return this.mallaService.obtenerMallaConEstado(
-      rutReal, // <--- Aquí usamos el RUT forzado
+      rutReal,
       carreraCode,
       catalog,
     );
@@ -68,11 +64,10 @@ export class MallaController {
     @Query('codigoCarrera') codigoCarrera: string, 
     @Query('catalogo') catalogo: string
   ) {
-    // Si no envías params, usa valores por defecto (ej: ITI) para probar rápido
     const carrera = codigoCarrera; 
     const cat = catalogo;        
 
     return this.mallaService.sincronizarCatalogo(carrera, cat);
   }
 
-} // <--- ¡LA CLASE SE CIERRA AQUÍ, AL FINAL DE TODO!
+}

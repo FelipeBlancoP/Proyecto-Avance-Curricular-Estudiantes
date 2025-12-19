@@ -11,17 +11,15 @@ export class Simulacion {
   rutEstudiante: string;
 
   @Column()
-  nombre: string; // "Mi plan ideal"
+  nombre: string;
 
   @CreateDateColumn({ name: 'fecha_creacion' })
   fechaCreacion: Date;
 
-  // Relación con Estudiante
   @ManyToOne(() => Estudiante, (estudiante) => estudiante.simulaciones)
   @JoinColumn({ name: 'rut_estudiante' })
   estudiante: Estudiante;
 
-  // Relación con Detalles (Cascade: true es clave para guardar todo de una)
   @OneToMany(() => SimulacionDetalle, (detalle) => detalle.simulacion, { cascade: true })
   detalles: SimulacionDetalle[];
 }

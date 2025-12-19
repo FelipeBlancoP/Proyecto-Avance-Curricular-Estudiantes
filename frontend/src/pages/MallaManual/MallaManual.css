@@ -9,7 +9,6 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  /* IMPORTANTE: Alinea todo arriba, no al centro */
   padding: 1rem 0;
   margin-bottom: 2rem;
 }
@@ -28,28 +27,21 @@
 .header-left-group {
   display: flex;
   flex-direction: column;
-  /* CAMBIO CLAVE: Apila verticalmente el botón y el título */
   align-items: flex-start;
-  /* Alinea a la izquierda */
   gap: 1rem;
-  /* Espacio entre el botón de volver y el título */
 }
 
 .header-left-group h1 {
   margin: 0;
-  /* Quita márgenes extraños del h1 para que el gap controle el espacio */
   line-height: 1.2;
 }
 
 .header-right-group {
   padding-top: 0.5rem;
-  /* Para que no quede tan pegado al borde superior si lo prefieres */
 }
 
-/* Estilo del nuevo botón */
 .mis-simulaciones-btn {
   background-color: #28a745;
-  /* Verde tipo 'Carpeta' o éxito */
   color: white;
   border: none;
   padding: 0.6rem 1.2rem;
@@ -464,8 +456,6 @@
   flex-direction: column;
 }
 
-/* === SCROLLBARS ESPECÍFICOS === */
-/* Scrollbar horizontal SOLO para semestres */
 .semestres-grid::-webkit-scrollbar {
   height: 8px;
 }
@@ -484,7 +474,6 @@
   background: #a8a8a8;
 }
 
-/* Scrollbar vertical SOLO para cursos */
 .cursos-disponibles-container::-webkit-scrollbar {
   width: 6px;
 }

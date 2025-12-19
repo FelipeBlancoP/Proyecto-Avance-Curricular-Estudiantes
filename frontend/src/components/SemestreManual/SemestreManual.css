@@ -220,7 +220,6 @@
   font-weight: 500;
 }
 
-/* Scrollbar para cursos-container */
 .cursos-container::-webkit-scrollbar {
   width: 4px;
 }
@@ -239,7 +238,6 @@
   background: #a8a8a8;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .semestre-manual {
     min-height: 250px;

@@ -20,7 +20,6 @@ export class SimulacionController {
     @Post('guardar')
     async guardarSimulacion(@Request() req, @Body() createDto: CreateSimulacionDto) {
         const { rut } = req.user;
-        // const rut = '333333333'; // Hardcode temporal si estás probando sin login real front
         return this.simulacionService.guardarSimulacionManual(rut, createDto);
     }
 

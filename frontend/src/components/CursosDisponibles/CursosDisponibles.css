@@ -138,7 +138,6 @@
   color: #adb5bd;
 }
 
-/* Scrollbar personalizado */
 .cursos-disponibles::-webkit-scrollbar {
   width: 6px;
 }
@@ -157,7 +156,6 @@
   background: #a8a8a8;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .cursos-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

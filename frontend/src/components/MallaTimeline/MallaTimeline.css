@@ -19,11 +19,7 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-
-    /* Espacio muy pequeño entre columnas para que quepan */
     gap: 4px;
-
-    /* Importante: evitar desbordamientos */
     padding-bottom: 0;
     overflow: hidden;
   }
