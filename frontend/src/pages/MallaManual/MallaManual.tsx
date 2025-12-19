@@ -28,13 +28,12 @@ function MallaManual() {
   const [error, setError] = useState<string | null>(null);
   const [simulacionGuardada, setSimulacionGuardada] = useState(false);
   const dragItem = useRef<any>(null);
-  const dragOverItem = useRef<any>(null);
+  // const dragOverItem = useRef<any>(null); // No se estaba usando
 
-  // Datos de ejemplo - deberían venir del backend o localStorage
+  // Datos de ejemplo
   const codigoCarrera = '8266';
   const catalogo = '202410';
 
-  // En el useEffect, actualiza completamente:
   useEffect(() => {
     const cargarMalla = async () => {
       try {
@@ -44,22 +43,8 @@ function MallaManual() {
         const malla = await MallaManualService.obtenerMalla(codigoCarrera, catalogo);
         console.log('✅ Datos recibidos para el usuario autenticado');
 
-        // DEBUG DETALLADO
-        console.log('=== 📊 ESTADOS DE CURSOS ===');
-        const estadosUnicos = new Set<string>();
-        malla.forEach((curso, index) => {
-          estadosUnicos.add(curso.estado || 'SIN-ESTADO');
-          console.log(`${index + 1}. ${curso.codigo} - ${curso.asignatura}`);
-          console.log(`   Estado: "${curso.estado}"`);
-          console.log(`   Estado (uppercase): "${curso.estado?.toUpperCase()}"`);
-          console.log(`   Incluye "APROBADO": ${curso.estado?.toUpperCase().includes('APROBADO')}`);
-          console.log(`   ---`);
-        });
-
-        console.log('=== 🎯 ESTADOS ÚNICOS ENCONTRADOS ===');
-        console.log(Array.from(estadosUnicos));
-
-        // FILTRO MÁS AGRESIVO - DEBUG
+        // FILTRO: Solo mostramos pendientes que no se estén cursando actualmente
+        // (Los "Cursando" se usan para validar prerequisitos pero no para inscribir de nuevo)
         const cursosPendientes = malla.filter(curso => {
           const estado = curso.estado?.toUpperCase() || '';
           const esAprobado = estado.includes('APROBADO');
@@ -69,17 +54,8 @@ function MallaManual() {
           return !esAprobado && !esCursando;
         });
 
-        console.log('=== 📈 RESULTADO FILTRADO ===');
-        console.log(`Total: ${malla.length}`);
-        console.log(`Aprobados: ${malla.filter(c => c.estado?.toUpperCase().includes('APROBADO')).length}`);
-        console.log(`Pendientes (mostrar): ${cursosPendientes.length}`);
-        console.log('Cursos pendientes:');
-        cursosPendientes.forEach(curso => {
-          console.log(`- ${curso.codigo}: ${curso.estado}`);
-        });
-
-        setMallaCompleta(malla);
-        setCursosDisponibles(cursosPendientes);
+        setMallaCompleta(malla); // Guardamos TODO para validaciones
+        setCursosDisponibles(cursosPendientes); // Mostramos solo lo disponible
 
         // Cargar simulación guardada si existe
         const simulacionGuardada = MallaManualService.cargarSimulacion();
@@ -93,43 +69,6 @@ function MallaManual() {
         console.error('❌ Error al cargar malla:', err);
         const errorMessage = err instanceof Error ? err.message : 'Error al cargar la malla';
         setError(`Error: ${errorMessage}. Verifica la consola.`);
-
-        // SOLO para desarrollo/debug - usar datos de ejemplo
-        console.log('⚠️ Usando datos de ejemplo para desarrollo');
-        const mallaEjemplo = [
-          {
-            codigo: "DCCB-00107",
-            asignatura: "Álgebra I",
-            creditos: 6,
-            nivel: 1,
-            prereq: "",
-            estado: "APROBADO"
-          },
-          {
-            codigo: "DCCB-00109",
-            asignatura: "Cálculo II",
-            creditos: 6,
-            nivel: 2,
-            prereq: "DCCB-00106",
-            estado: "REPROBADO"
-          },
-          {
-            codigo: "ECIN-00600",
-            asignatura: "Programación II",
-            creditos: 6,
-            nivel: 2,
-            prereq: "ECIN-00704",
-            estado: "No cursado"
-          }
-        ];
-
-        const cursosPendientesEjemplo = mallaEjemplo.filter(curso => {
-          const estado = curso.estado?.toUpperCase() || '';
-          return !estado.includes('APROBADO');
-        });
-
-        setMallaCompleta(mallaEjemplo);
-        setCursosDisponibles(cursosPendientesEjemplo);
       } finally {
         setLoading(false);
       }
@@ -152,48 +91,96 @@ function MallaManual() {
     const data = JSON.parse(e.dataTransfer.getData('text/plain'));
     const { curso, source, semestreId: sourceSemestreId } = data;
 
-    // Validar prerrequisitos
-    if (!MallaManualService.validarPrerrequisitos(curso, mallaCompleta, semestres, targetSemestreId)) {
-      alert(`No se puede asignar ${curso.asignatura}. Faltan prerrequisitos.`);
+    const validacionPrereq = MallaManualService.validarPrerrequisitos(
+      curso,
+      mallaCompleta,
+      semestres,
+      targetSemestreId
+    );
+
+    if (!validacionPrereq.valido) {
+      alert(`🚫 No puedes tomar ${curso.asignatura}:\n\n${validacionPrereq.mensaje}`);
       return;
     }
 
-    // Validar límite de créditos (máximo 30 por semestre)
+    const cursosPendientesReales = mallaCompleta.filter(c => {
+      const estado = c.estado?.toUpperCase() || '';
+      return !estado.includes('APROBADO') && !estado.includes('INSCRITO') && !estado.includes('CURSANDO');
+    });
+
+    const cursosSimuladosAnteriormente = new Set<string>();
+    semestres.forEach(s => {
+      if (s.id < targetSemestreId) {
+        s.cursos.forEach(c => cursosSimuladosAnteriormente.add(c.codigo));
+      }
+    });
+
+    const deudaActualizada = cursosPendientesReales.filter(c =>
+      !cursosSimuladosAnteriormente.has(c.codigo)
+    );
+
+    let nivelBaseAlumno = 1;
+    if (deudaActualizada.length > 0) {
+      nivelBaseAlumno = Math.min(...deudaActualizada.map(c => c.nivel));
+    } else {
+      nivelBaseAlumno = curso.nivel;
+    }
+
+    if ((curso.nivel - nivelBaseAlumno) > 2) {
+      alert(
+        `🚫 Bloqueo por Dispersión Académica:\n\n` +
+        `Aunque has simulado algunos ramos, aún tienes asignaturas pendientes del Nivel ${nivelBaseAlumno}.\n` +
+        `Por reglamento, no puedes tomar asignaturas del Nivel ${curso.nivel} ` +
+        `(más de 2 semestres de diferencia con tu rezago actual).`
+      );
+      return;
+    }
+
+    // =================================================================
+    // 3. VALIDACIÓN DE CRÉDITOS
+    // =================================================================
+    const esPractica = /práctica profesional/i.test(curso.asignatura);
+
     const semestreTarget = semestres.find(s => s.id === targetSemestreId);
-    if (semestreTarget && semestreTarget.creditos + curso.creditos > 30) {
-      alert('Límite de créditos excedido (máximo 30 por semestre)');
-      return;
+    if (semestreTarget) {
+      const creditosActuales = source === 'semestre' && sourceSemestreId === targetSemestreId
+        ? semestreTarget.creditos - curso.creditos
+        : semestreTarget.creditos;
+
+      if (creditosActuales + curso.creditos > 30 && !esPractica) {
+        alert('Límite de créditos excedido (máximo 30 por semestre)');
+        return;
+      }
     }
 
-    // Mover curso
+    // 4. LÓGICA DE MOVIMIENTO (Update State)
     if (source === 'disponibles') {
-      // Mover de disponibles a semestre
       setCursosDisponibles(prev => prev.filter(c => c.codigo !== curso.codigo));
       setSemestres(prev => prev.map(semestre => {
         if (semestre.id === targetSemestreId) {
           return {
             ...semestre,
             cursos: [...semestre.cursos, curso],
-            creditos: semestre.creditos + curso.creditos
+            creditos: esPractica? semestre.creditos : semestre.creditos + curso.creditos
           };
         }
         return semestre;
       }));
     } else if (source === 'semestre') {
-      // Mover entre semestres
+      if (sourceSemestreId === targetSemestreId) return;
       setSemestres(prev => prev.map(semestre => {
         if (semestre.id === sourceSemestreId) {
           return {
             ...semestre,
             cursos: semestre.cursos.filter(c => c.codigo !== curso.codigo),
-            creditos: semestre.creditos - curso.creditos
+            creditos: esPractica? semestre.creditos : semestre.creditos - curso.creditos
           };
         }
         if (semestre.id === targetSemestreId) {
           return {
             ...semestre,
             cursos: [...semestre.cursos, curso],
-            creditos: semestre.creditos + curso.creditos
+            creditos: esPractica? semestre.creditos : semestre.creditos + curso.creditos
           };
         }
         return semestre;
@@ -207,7 +194,6 @@ function MallaManual() {
     const { curso, source, semestreId: sourceSemestreId } = data;
 
     if (source === 'semestre') {
-      // Mover de semestre a disponibles
       setSemestres(prev => prev.map(semestre => {
         if (semestre.id === sourceSemestreId) {
           return {
@@ -233,13 +219,18 @@ function MallaManual() {
       return;
     }
 
-    // Mover cursos de vuelta a disponibles
     const semestreAEliminar = semestres.find(s => s.id === id);
     if (semestreAEliminar) {
       setCursosDisponibles(prev => [...prev, ...semestreAEliminar.cursos]);
     }
 
-    setSemestres(prev => prev.filter(s => s.id !== id));
+    setSemestres(prev => {
+      const semestresRestantes = prev.filter(s => s.id !== id);
+      return semestresRestantes.map((semestre, index) => ({
+        ...semestre,
+        id: index + 1
+      }));
+    });
   };
 
   const guardarSimulacion = () => {
@@ -250,7 +241,7 @@ function MallaManual() {
 
   const reiniciarSimulacion = () => {
     if (window.confirm('¿Estás seguro de reiniciar toda la simulación?')) {
-      // USAR EL MISMO FILTRO QUE EN EL USEEFFECT
+      // Recalcular disponibles basándose en la mallaCompleta original
       const disponibles = mallaCompleta.filter(curso => {
         const estado = curso.estado?.toUpperCase() || '';
         const esAprobado = estado.includes('APROBADO');
@@ -281,20 +272,14 @@ function MallaManual() {
 
   return (
     <div className="malla-manual-container">
-      <header className="malla-manual-header">
-        <button onClick={() => navigate('/')} className="back-btn">
-          ← Volver al Dashboard
-        </button>
-        <h1>Simulación Manual de Malla</h1>
-        <div className="header-actions">
-          <button onClick={guardarSimulacion} className="save-btn">
-            💾 Guardar Simulación
+      <div className="malla-manual-top-bar">
+        <div className="header-left-group">
+          <button onClick={() => navigate('/')} className="back-btn">
+            🡰
           </button>
-          <button onClick={reiniciarSimulacion} className="reset-btn">
-            🔄 Reiniciar
-          </button>
+          <h1>Simulación Manual de Malla</h1>
         </div>
-      </header>
+      </div>
 
       {simulacionGuardada && (
         <div className="success-message">
@@ -302,7 +287,6 @@ function MallaManual() {
         </div>
       )}
 
-      {/* === CONTENIDO PRINCIPAL ENVUELTO === */}
       <div className="content-wrapper">
         <div className="estado-info">
           <h3>📊 Estado Actual del Estudiante</h3>
@@ -339,26 +323,39 @@ function MallaManual() {
           </p>
         </div>
 
-        <div className="stats-bar">
-          <div className="stat">
-            <span className="stat-label">Cursos asignados:</span>
-            <span className="stat-value">{cursosAsignados}</span>
-          </div>
-          <div className="stat">
-            <span className="stat-label">Total créditos:</span>
-            <span className="stat-value">{totalCreditos}</span>
-          </div>
-          <div className="stat">
-            <span className="stat-label">Semestres:</span>
-            <span className="stat-value">{semestres.length}</span>
-          </div>
+        <div className="instructions">
+          <h3>📋 Instrucciones:</h3>
+          <ul>
+            <li>Arrastra cursos desde "Cursos Disponibles" hacia los semestres</li>
+            <li>Mueve cursos entre semestres arrastrándolos</li>
+            <li>Devuelve cursos arrastrándolos de vuelta a "Cursos Disponibles"</li>
+            <li>Límite: 30 créditos por semestre</li>
+            <li>Se validan automáticamente los prerrequisitos</li>
+          </ul>
         </div>
 
         <div className="main-content">
           <div className="cursos-section">
-            <h2>Cursos Disponibles</h2>
-            <p className="section-subtitle">Arrastra cursos a los semestres</p>
-
+            <div className="cursos-header-row">
+              <div className="cursos-header-left">
+                <h2>Cursos Disponibles</h2>
+                <p className="section-subtitle">Arrastra cursos a los semestres</p>
+              </div>
+              <div className="stats-bar">
+                <div className="stat">
+                  <span className="stat-label">Asignados:</span>
+                  <span className="stat-value">{cursosAsignados}</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-label">Créditos:</span>
+                  <span className="stat-value">{totalCreditos}</span>
+                </div>
+                <div className="stat">
+                  <span className="stat-label">Semestres:</span>
+                  <span className="stat-value">{semestres.length}</span>
+                </div>
+              </div>
+            </div>
             <div
               className="cursos-disponibles-container"
               onDragOver={handleDragOver}
@@ -391,21 +388,18 @@ function MallaManual() {
                 />
               ))}
             </div>
+
+            <div className="header-actions">
+              <button onClick={guardarSimulacion} className="save-btn">
+                Guardar Simulación
+              </button>
+              <button onClick={reiniciarSimulacion} className="reset-btn">
+                Reiniciar
+              </button>
+            </div>
           </div>
         </div>
-
-        <div className="instructions">
-          <h3>📋 Instrucciones:</h3>
-          <ul>
-            <li>Arrastra cursos desde "Cursos Disponibles" hacia los semestres</li>
-            <li>Mueve cursos entre semestres arrastrándolos</li>
-            <li>Devuelve cursos arrastrándolos de vuelta a "Cursos Disponibles"</li>
-            <li>Límite: 30 créditos por semestre</li>
-            <li>Se validan automáticamente los prerrequisitos</li>
-          </ul>
-        </div>
       </div>
-      {/* === FIN CONTENIDO PRINCIPAL === */}
     </div>
   );
 }
