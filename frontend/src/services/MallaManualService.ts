@@ -1,4 +1,4 @@
-import { Asignatura } from '../types/malla';
+import { Asignatura, Malla } from '../types/malla';
 
 interface Semestre {
   id: number;
@@ -7,21 +7,22 @@ interface Semestre {
 }
 
 export const MallaManualService = {
-  async obtenerMalla(codigoCarrera: string, catalogo: string): Promise<Asignatura[]> {
+  async obtenerMalla(rut: string, codigoCarrera: string, catalogo: string): Promise<Malla> {
     try {
-      const token = localStorage.getItem('access_token') || localStorage.getItem('token'); // Asegura obtener el token correcto
+      // Aunque el endpoint sea "sin auth" (público), validamos que exista sesión en el front
+      const token = localStorage.getItem('access_token') || localStorage.getItem('token');
       if (!token) {
         throw new Error('No hay token de autenticación');
       }
 
-      console.log('🔍 Obteniendo malla autenticada para manual...');
+      console.log(`🔍 Obteniendo malla para RUT: ${rut}, Carrera: ${codigoCarrera}`);
 
-      // CAMBIO: Llamamos al nuevo endpoint 'mi-malla-con-estado-auth'
-      // Ya NO enviamos el RUT en la URL, el backend lo saca del token
+      // CAMBIO: Usamos el endpoint que recibe parámetros por Query String
       const response = await fetch(
-        `http://localhost:3000/malla/mi-malla-con-estado-auth?codigoCarrera=${codigoCarrera}&catalogo=${catalogo}`,
+        `http://localhost:3000/malla/mi-malla-con-estado?rut=${rut}&codigoCarrera=${codigoCarrera}&catalogo=${catalogo}`,
         {
           headers: {
+            // Mantenemos el header Auth por si decides proteger el endpoint en el futuro
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }

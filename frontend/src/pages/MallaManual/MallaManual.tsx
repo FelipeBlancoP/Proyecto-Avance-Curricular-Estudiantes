@@ -5,6 +5,7 @@ import MallaManualService from '../../services/MallaManualService';
 import SemestreManual from '../../components/SemestreManual/SemestreManual';
 import CursosDisponibles from '../../components/CursosDisponibles/CursosDisponibles';
 import './MallaManual.css';
+import { estudianteService } from '../../services/estudianteService';
 
 interface Semestre {
   id: number;
@@ -31,20 +32,32 @@ function MallaManual() {
   // const dragOverItem = useRef<any>(null); // No se estaba usando
 
   // Datos de ejemplo
-  const codigoCarrera = '8266';
-  const catalogo = '202410';
 
   useEffect(() => {
-    const cargarMalla = async () => {
+    const inicializarDatos = async () => {
       try {
         setLoading(true);
         console.log('=== 🚀 INICIANDO CARGA MALLA MANUAL ===');
 
-        const malla = await MallaManualService.obtenerMalla(codigoCarrera, catalogo);
-        console.log('✅ Datos recibidos para el usuario autenticado');
+        // 1. Obtener datos del estudiante logueado (RUT y Carreras)
+        const perfil = await estudianteService.obtenerPerfil();
+        
+        if (!perfil || !perfil.carreras || perfil.carreras.length === 0) {
+            throw new Error("No se encontraron datos de carrera para el estudiante.");
+        }
 
-        // FILTRO: Solo mostramos pendientes que no se estén cursando actualmente
-        // (Los "Cursando" se usan para validar prerequisitos pero no para inscribir de nuevo)
+        // 2. Extraer datos necesarios (Usamos la primera carrera por defecto)
+        const { rut } = perfil;
+        const carreraActual = perfil.carreras[0];
+        const codigoCarrera = carreraActual.codigo;
+        const catalogo = carreraActual.catalogo;
+
+        console.log(`✅ Usuario autenticado: ${rut} - Carrera: ${codigoCarrera}`);
+
+        // 3. Obtener la malla usando los datos dinámicos
+        const malla = await MallaManualService.obtenerMalla(rut, codigoCarrera, catalogo);
+        
+        // 4. Filtrar cursos (Lógica original)
         const cursosPendientes = malla.filter(curso => {
           const estado = curso.estado?.toUpperCase() || '';
           const esAprobado = estado.includes('APROBADO');
@@ -54,28 +67,40 @@ function MallaManual() {
           return !esAprobado && !esCursando;
         });
 
-        setMallaCompleta(malla); // Guardamos TODO para validaciones
-        setCursosDisponibles(cursosPendientes); // Mostramos solo lo disponible
+        setMallaCompleta(malla);
+        setCursosDisponibles(cursosPendientes);
 
-        // Cargar simulación guardada si existe
+        // 5. Cargar simulación guardada si existe (localStorage)
         const simulacionGuardada = MallaManualService.cargarSimulacion();
         if (simulacionGuardada) {
           console.log('💾 Simulación guardada cargada');
           setSemestres(simulacionGuardada);
+          
+          // Opcional: Si cargas una simulación, deberías quitar esos cursos de "disponibles"
+          // para que no se dupliquen visualmente si el usuario refresca la página
+          const codigosEnSimulacion = new Set();
+          simulacionGuardada.forEach(s => s.cursos.forEach(c => codigosEnSimulacion.add(c.codigo)));
+          
+          setCursosDisponibles(prev => prev.filter(c => !codigosEnSimulacion.has(c.codigo)));
         }
 
         setError(null);
       } catch (err) {
-        console.error('❌ Error al cargar malla:', err);
-        const errorMessage = err instanceof Error ? err.message : 'Error al cargar la malla';
-        setError(`Error: ${errorMessage}. Verifica la consola.`);
+        console.error('❌ Error al cargar datos:', err);
+        const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
+        setError(`Error: ${errorMessage}. ¿Has iniciado sesión?`);
+        
+        // Si falla por auth, redirigir al login después de un momento podría ser útil
+        if(errorMessage.includes('token')) {
+            navigate('/login');
+        }
       } finally {
         setLoading(false);
       }
     };
 
-    cargarMalla();
-  }, [codigoCarrera, catalogo]);
+    inicializarDatos();
+  }, [navigate]);
 
   const handleDragStart = (e: React.DragEvent, curso: Asignatura, source: string, semestreId?: number) => {
     dragItem.current = { curso, source, semestreId };
