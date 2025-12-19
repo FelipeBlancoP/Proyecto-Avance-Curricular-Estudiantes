@@ -28,7 +28,10 @@ function MallaManual() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [simulacionGuardada, setSimulacionGuardada] = useState(false);
+  const [guardando, setGuardando] = useState(false);
   const dragItem = useRef<any>(null);
+
+
   // const dragOverItem = useRef<any>(null); // No se estaba usando
 
   // Datos de ejemplo
@@ -41,9 +44,9 @@ function MallaManual() {
 
         // 1. Obtener datos del estudiante logueado (RUT y Carreras)
         const perfil = await estudianteService.obtenerPerfil();
-        
+
         if (!perfil || !perfil.carreras || perfil.carreras.length === 0) {
-            throw new Error("No se encontraron datos de carrera para el estudiante.");
+          throw new Error("No se encontraron datos de carrera para el estudiante.");
         }
 
         // 2. Extraer datos necesarios (Usamos la primera carrera por defecto)
@@ -56,7 +59,7 @@ function MallaManual() {
 
         // 3. Obtener la malla usando los datos dinámicos
         const malla = await MallaManualService.obtenerMalla(rut, codigoCarrera, catalogo);
-        
+
         // 4. Filtrar cursos (Lógica original)
         const cursosPendientes = malla.filter(curso => {
           const estado = curso.estado?.toUpperCase() || '';
@@ -70,29 +73,15 @@ function MallaManual() {
         setMallaCompleta(malla);
         setCursosDisponibles(cursosPendientes);
 
-        // 5. Cargar simulación guardada si existe (localStorage)
-        const simulacionGuardada = MallaManualService.cargarSimulacion();
-        if (simulacionGuardada) {
-          console.log('💾 Simulación guardada cargada');
-          setSemestres(simulacionGuardada);
-          
-          // Opcional: Si cargas una simulación, deberías quitar esos cursos de "disponibles"
-          // para que no se dupliquen visualmente si el usuario refresca la página
-          const codigosEnSimulacion = new Set();
-          simulacionGuardada.forEach(s => s.cursos.forEach(c => codigosEnSimulacion.add(c.codigo)));
-          
-          setCursosDisponibles(prev => prev.filter(c => !codigosEnSimulacion.has(c.codigo)));
-        }
-
         setError(null);
       } catch (err) {
         console.error('❌ Error al cargar datos:', err);
         const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
         setError(`Error: ${errorMessage}. ¿Has iniciado sesión?`);
-        
+
         // Si falla por auth, redirigir al login después de un momento podría ser útil
-        if(errorMessage.includes('token')) {
-            navigate('/login');
+        if (errorMessage.includes('token')) {
+          navigate('/login');
         }
       } finally {
         setLoading(false);
@@ -186,7 +175,7 @@ function MallaManual() {
           return {
             ...semestre,
             cursos: [...semestre.cursos, curso],
-            creditos: esPractica? semestre.creditos : semestre.creditos + curso.creditos
+            creditos: esPractica ? semestre.creditos : semestre.creditos + curso.creditos
           };
         }
         return semestre;
@@ -198,14 +187,14 @@ function MallaManual() {
           return {
             ...semestre,
             cursos: semestre.cursos.filter(c => c.codigo !== curso.codigo),
-            creditos: esPractica? semestre.creditos : semestre.creditos - curso.creditos
+            creditos: esPractica ? semestre.creditos : semestre.creditos - curso.creditos
           };
         }
         if (semestre.id === targetSemestreId) {
           return {
             ...semestre,
             cursos: [...semestre.cursos, curso],
-            creditos: esPractica? semestre.creditos : semestre.creditos + curso.creditos
+            creditos: esPractica ? semestre.creditos : semestre.creditos + curso.creditos
           };
         }
         return semestre;
@@ -258,10 +247,32 @@ function MallaManual() {
     });
   };
 
-  const guardarSimulacion = () => {
-    MallaManualService.guardarSimulacion(semestres);
-    setSimulacionGuardada(true);
-    setTimeout(() => setSimulacionGuardada(false), 3000);
+  const guardarSimulacion = async () => {
+    // 1. Validar que hay algo que guardar
+    const tieneCursos = semestres.some(s => s.cursos.length > 0);
+    if (!tieneCursos) {
+      alert("La simulación está vacía. Agrega cursos antes de guardar.");
+      return;
+    }
+
+    // 2. Pedir nombre (Simple window.prompt)
+    const nombre = window.prompt("Ingresa un nombre para tu simulación:", `Simulación ${new Date().toLocaleDateString()}`);
+
+    if (!nombre) return; // Si cancela o deja vacío
+
+    try {
+      setGuardando(true);
+      // 3. Llamar al servicio actualizado
+      await MallaManualService.guardarSimulacion(nombre, semestres);
+
+      setSimulacionGuardada(true);
+      setTimeout(() => setSimulacionGuardada(false), 3000);
+
+    } catch (error) {
+      alert(error instanceof Error ? error.message : "Error al guardar");
+    } finally {
+      setGuardando(false);
+    }
   };
 
   const reiniciarSimulacion = () => {
@@ -415,8 +426,12 @@ function MallaManual() {
             </div>
 
             <div className="header-actions">
-              <button onClick={guardarSimulacion} className="save-btn">
-                Guardar Simulación
+              <button
+                onClick={guardarSimulacion}
+                className="save-btn"
+                disabled={guardando} // Deshabilitar mientras guarda
+              >
+                {guardando ? 'Guardando...' : 'Guardar Simulación'}
               </button>
               <button onClick={reiniciarSimulacion} className="reset-btn">
                 Reiniciar

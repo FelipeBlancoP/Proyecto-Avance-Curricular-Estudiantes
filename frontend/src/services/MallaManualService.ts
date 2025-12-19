@@ -119,12 +119,40 @@ export const MallaManualService = {
     return { valido: true };
   },
 
-  guardarSimulacion(semestres: Semestre[]): void {
+  async guardarSimulacion(nombre: string, semestres: Semestre[]): Promise<void> {
     try {
-      localStorage.setItem('malla-manual-simulacion', JSON.stringify(semestres));
-      console.log('Simulación guardada en localStorage');
+      const token = localStorage.getItem('access_token') || localStorage.getItem('token');
+      if (!token) throw new Error('No estás autenticado');
+
+      // 1. Transformar datos al formato del DTO del Backend (CreateSimulacionDto)
+      const payload = {
+        nombre: nombre,
+        semestres: semestres.map(s => ({
+          id: s.id,
+          cursos: s.cursos.map(c => ({ codigo: c.codigo })) // Solo mandamos el código
+        }))
+      };
+
+      // 2. Enviar al Endpoint
+      const response = await fetch('http://localhost:3000/simulacion/guardar', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Error al guardar simulación');
+      }
+
+      console.log('✅ Simulación guardada en Base de Datos');
+
     } catch (error) {
       console.error('Error al guardar simulación:', error);
+      throw error; // Re-lanzamos para que el componente muestre el error
     }
   },
 
