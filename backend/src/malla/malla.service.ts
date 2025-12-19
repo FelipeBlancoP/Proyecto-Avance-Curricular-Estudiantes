@@ -2,12 +2,18 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { AvanceService } from '../avance/avance.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Asignatura } from './entities/asignatura.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class MallaService {
   constructor(
     private readonly configService: ConfigService,
     private readonly avanceService: AvanceService,
+
+    @InjectRepository(Asignatura)
+    private readonly asignaturaRepo: Repository<Asignatura>,
   ) { }
 
   async obtenerMalla(codigoCarrera: string, catalogo: string) {
@@ -108,5 +114,51 @@ export class MallaService {
       creditosAprobados,
       creditosTotales,
     };
+  }
+
+  async sincronizarCatalogo(codigoCarrera: string, catalogo: string) {
+    console.log(`🔄 Iniciando sincronización para ${codigoCarrera}-${catalogo}...`);
+    
+    try {
+      // 1. Obtenemos la malla "cruda" de la API externa (usamos tu método existente)
+      // Nota: Tu método obtenerMalla devuelve { codigo, asignatura, creditos, nivel, prereq... }
+      const mallaExterna = await this.obtenerMalla(codigoCarrera, catalogo);
+      
+      if (!mallaExterna || mallaExterna.length === 0) {
+        return { mensaje: 'No se encontraron asignaturas en la API externa', total: 0 };
+      }
+
+      // 2. Preparamos las entidades para guardar
+      const asignaturasParaGuardar: Asignatura[] = mallaExterna.map((curso: any) => {
+        const entity = new Asignatura();
+        entity.codigo = curso.codigo;       // PK
+        entity.nombre = curso.asignatura;   // Nombre del ramo
+        entity.creditos = curso.creditos || 0; 
+        entity.nivelMalla = curso.nivel || 0;
+        
+        return entity;
+      });
+
+      // 3. Guardado Inteligente (UPSERT)
+      // .save() verifica la PK (codigo). Si existe, actualiza los campos. Si no, inserta.
+      // Esto maneja perfectamente el caso de "Cálculo I" compartido entre carreras.
+      // Si ya existía por ICCI, al sincronizar ITI solo actualizará el nombre/créditos (que deberían ser iguales).
+      await this.asignaturaRepo.save(asignaturasParaGuardar);
+
+      console.log(`✅ Sincronización exitosa. ${asignaturasParaGuardar.length} cursos procesados.`);
+      
+      return { 
+        mensaje: 'Catálogo sincronizado correctamente', 
+        carrera: codigoCarrera,
+        totalProcesados: asignaturasParaGuardar.length 
+      };
+
+    } catch (error) {
+      console.error('❌ Error en sincronización:', error);
+      throw new HttpException(
+        `Error al sincronizar catálogo: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

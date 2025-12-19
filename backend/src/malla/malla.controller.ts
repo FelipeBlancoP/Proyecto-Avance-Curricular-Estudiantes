@@ -1,4 +1,4 @@
-import { Controller, Get, Query, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Query, UseGuards, Request, Post } from '@nestjs/common';
 import { MallaService } from './malla.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Malla } from './dto/malla-api.interface';
@@ -61,6 +61,18 @@ export class MallaController {
       carreraCode,
       catalog,
     );
+  }
+
+  @Post('sincronizar')
+  async sincronizarBD(
+    @Query('codigoCarrera') codigoCarrera: string, 
+    @Query('catalogo') catalogo: string
+  ) {
+    // Si no envías params, usa valores por defecto (ej: ITI) para probar rápido
+    const carrera = codigoCarrera; 
+    const cat = catalogo;        
+
+    return this.mallaService.sincronizarCatalogo(carrera, cat);
   }
 
 } // <--- ¡LA CLASE SE CIERRA AQUÍ, AL FINAL DE TODO!
