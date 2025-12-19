@@ -7,11 +7,10 @@
 
 .malla-manual-top-bar {
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: flex-start; /* IMPORTANTE: Alinea todo arriba, no al centro */
   padding: 1rem 0;
   margin-bottom: 2rem;
-  width: 100%;
 }
 
 .malla-manual-top-bar h1 {
@@ -23,6 +22,43 @@
   margin-top: 0;
   margin-bottom: 1rem;
   line-height: 1.2;
+}
+
+.header-left-group {
+  display: flex;
+  flex-direction: column; /* CAMBIO CLAVE: Apila verticalmente el botón y el título */
+  align-items: flex-start; /* Alinea a la izquierda */
+  gap: 1rem; /* Espacio entre el botón de volver y el título */
+}
+
+.header-left-group h1 {
+  margin: 0; /* Quita márgenes extraños del h1 para que el gap controle el espacio */
+  line-height: 1.2;
+}
+
+.header-right-group {
+  padding-top: 0.5rem; /* Para que no quede tan pegado al borde superior si lo prefieres */
+}
+
+/* Estilo del nuevo botón */
+.mis-simulaciones-btn {
+    background-color: #28a745; /* Verde tipo 'Carpeta' o éxito */
+    color: white;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.mis-simulaciones-btn:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
 }
 
 .back-btn {

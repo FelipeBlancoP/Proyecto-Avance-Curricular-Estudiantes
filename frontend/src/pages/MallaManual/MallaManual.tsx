@@ -315,6 +315,14 @@ function MallaManual() {
           </button>
           <h1>Simulación Manual de Malla</h1>
         </div>
+        <div className="header-right-group">
+            <button 
+                className="mis-simulaciones-btn"
+                onClick={() => navigate('/mis-simulaciones')}
+            >
+                📂 Mis Simulaciones Guardadas
+            </button>
+        </div>
       </div>
 
       {simulacionGuardada && (

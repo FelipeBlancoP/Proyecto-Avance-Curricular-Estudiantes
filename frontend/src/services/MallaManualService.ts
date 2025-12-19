@@ -6,6 +6,12 @@ interface Semestre {
   creditos: number;
 }
 
+interface SimulacionHeader {
+  id: number;
+  nombre: string;
+  fechaCreacion: string;
+}
+
 export const MallaManualService = {
   async obtenerMalla(rut: string, codigoCarrera: string, catalogo: string): Promise<Malla> {
     try {
@@ -156,15 +162,61 @@ export const MallaManualService = {
     }
   },
 
-  cargarSimulacion(): Semestre[] | null {
+  async obtenerMisSimulaciones(): Promise<SimulacionHeader[]> {
     try {
-      const simulacionGuardada = localStorage.getItem('malla-manual-simulacion');
-      if (simulacionGuardada) {
-        return JSON.parse(simulacionGuardada);
-      }
-      return null;
+      const token = localStorage.getItem('access_token') || localStorage.getItem('token');
+      if (!token) throw new Error('No estás autenticado');
+
+      const response = await fetch('http://localhost:3000/simulacion/mis-guardadas', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) throw new Error('Error al obtener lista de simulaciones');
+      return await response.json();
     } catch (error) {
-      console.error('Error al cargar simulación:', error);
+      console.error(error);
+      return [];
+    }
+  },
+
+  async cargarSimulacion(id: number): Promise<{ nombre: string, semestres: any[] } | null> {
+    try {
+      const token = localStorage.getItem('access_token') || localStorage.getItem('token');
+      if (!token) throw new Error('No estás autenticado');
+
+      const response = await fetch(`http://localhost:3000/simulacion/cargar/${id}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) throw new Error('Error al cargar detalle de simulación');
+      
+      const data = await response.json();
+      
+      // TRANSFORMACIÓN CLAVE:
+      // El backend devuelve "cursos", pero MallaTimeline suele esperar "asignaturas"
+      // Además, aseguramos que la estructura coincida con lo que MallaTimeline necesita.
+      const semestresFormateados = data.simulacion.map((sem: any) => ({
+         nivel: sem.numero,
+         totalCreditos: sem.creditos,
+         asignaturas: sem.cursos.map((c: any) => ({
+            ...c,
+            asignatura: c.nombre, // Mapeamos nombre a asignatura si es necesario
+         }))
+      }));
+
+      return {
+        nombre: data.nombre,
+        semestres: semestresFormateados
+      };
+
+    } catch (error) {
+      console.error(error);
       return null;
     }
   },
