@@ -1,4 +1,5 @@
 .malla-page-container {
+  position: relative;
   padding: 1rem;
   padding-top: 5rem;
 }
@@ -12,6 +13,12 @@
   width: 100%;
 }
 
+.theme-switch {
+  position: absolute;
+  top: 5rem;
+  right: 5rem;
+  z-index: 10;
+}
 
 .back-btn {
   background: #003366 !important;
@@ -119,15 +126,17 @@
 
 .timeline-container-animado {
   animation: slideDown 0.3s ease-out forwards;
-  /* --- NUEVOS ESTILOS PARA EL CUADRO GRIS --- */
-  background-color: #ebf0f5; /* Un gris azulado suave, más oscuro que el fondo blanco */
-  border: 1px solid #d1d9e0; /* Un borde sutil para definir el límite */
-  border-radius: 8px;        /* Bordes redondeados */
-  padding: 1.5rem;           /* Espacio interno para que la malla no toque los bordes */
-  margin-bottom: 2rem;       /* Espacio externo para separarlo de la Simulación */
-  
-  /* Opcional: Una sombra interna suave para dar sensación de "panel hundido" o contenedor */
+  background-color: #ebf0f5;
+  border: 1px solid #d1d9e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .timeline-container-animado {
+  background-color: #003366;
+  border-color: #002244;
 }
 
 @keyframes slideDown {
@@ -135,6 +144,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -159,13 +169,14 @@
 
   .malla-page-container {
     flex-grow: 1;
-    
+
     /* CAMBIO: Reducir padding lateral drásticamente */
-    padding: 2rem 0.5rem; /* 0.5rem a los lados en vez de 2rem */
-    
-    width: 0; 
-    min-width: 0; 
-    overflow-x: hidden; 
+    padding: 2rem 0.5rem;
+    /* 0.5rem a los lados en vez de 2rem */
+
+    width: 0;
+    min-width: 0;
+    overflow-x: hidden;
   }
 
   .menu-button {

@@ -1,14 +1,15 @@
 .timeline-container {
   position: relative;
   padding: 1rem 0;
+
   &::before {
     content: "";
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 20px; 
+    left: 20px;
     width: 4px;
-    background-color: #e0e0e0; 
+    background-color: #e0e0e0;
     border-radius: 2px;
   }
 }
@@ -18,19 +19,19 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    
+
     /* Espacio muy pequeño entre columnas para que quepan */
-    gap: 4px; 
-    
+    gap: 4px;
+
     /* Importante: evitar desbordamientos */
-    padding-bottom: 0; 
-    overflow: hidden; 
+    padding-bottom: 0;
+    overflow: hidden;
   }
 
   .timeline-container::-webkit-scrollbar {
     display: none;
   }
-  
+
   .timeline-container::before {
     display: none;
   }

@@ -6,6 +6,7 @@ import SemestreManual from '../../components/SemestreManual/SemestreManual';
 import CursosDisponibles from '../../components/CursosDisponibles/CursosDisponibles';
 import './MallaManual.css';
 import { estudianteService } from '../../services/estudianteService';
+import ThemeToggle from '../../components/TemaToggle/TemaToggle';
 
 interface Semestre {
   id: number;
@@ -45,7 +46,9 @@ function MallaManual() {
         // 1. Obtener datos del estudiante logueado (RUT y Carreras)
         const perfil = await estudianteService.obtenerPerfil();
 
+
         if (!perfil || !perfil.carreras || perfil.carreras.length === 0) {
+          throw new Error("No se encontraron datos de carrera para el estudiante.");
           throw new Error("No se encontraron datos de carrera para el estudiante.");
         }
 
@@ -314,6 +317,7 @@ function MallaManual() {
             🡰
           </button>
           <h1>Simulación Manual de Malla</h1>
+          <ThemeToggle />
         </div>
         <div className="header-right-group">
             <button 

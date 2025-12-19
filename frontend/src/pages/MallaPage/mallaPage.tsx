@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import "./MallaPage.css";
 import { Estudiante } from "../../types/estudiante";
 import { estudianteService } from "../../services/estudianteService";
+import ThemeToggle from '../../components/TemaToggle/TemaToggle';
 
 export interface Semestre {
   nivel: number;
@@ -59,7 +60,7 @@ function MallaPage() {
   useEffect(() => {
     const fetchMalla = async () => {
       if (!estudiante) return; // Esperamos a que cargue el estudiante
-      
+
       // Validamos que tenga carreras
       if (!estudiante.carreras || estudiante.carreras.length === 0) {
         setError("El estudiante no tiene carreras asociadas.");
@@ -68,14 +69,14 @@ function MallaPage() {
       }
 
       // Tomamos la primera carrera (puedes cambiar esto si quieres un selector de carreras)
-      const carreraActual = estudiante.carreras[0]; 
+      const carreraActual = estudiante.carreras[0];
 
       try {
         setIsLoading(true);
         // Usamos los datos dinámicos: rut del estudiante y datos de la carrera
         const data = await mallaService.obtenerMalla(
-          estudiante.rut, 
-          carreraActual.codigo, 
+          estudiante.rut,
+          carreraActual.codigo,
           carreraActual.catalogo
         );
         setMalla(data);
@@ -139,6 +140,7 @@ function MallaPage() {
         </button>
 
         <h1 className="main-title">Simulación de Avance Curricular</h1>
+        <ThemeToggle />
 
         <div className="career-box">{nombreCarrera}</div>
         {/* BOTÓN DE MOSTRAR SIMULACIÓN Y OCULTAR */}

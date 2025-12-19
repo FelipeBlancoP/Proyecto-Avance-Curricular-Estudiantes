@@ -9,7 +9,7 @@
   content: "";
   position: absolute;
   left: 12px;
-  top: 18px; 
+  top: 18px;
   width: 16px;
   height: 16px;
   border-radius: 50%;
@@ -24,7 +24,7 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  overflow: hidden; 
+  overflow: hidden;
 }
 
 
@@ -33,14 +33,16 @@
 .semestre-header {
   display: flex;
   /* justify-content: space-between;  <-- ELIMINA O COMENTA ESTO */
-  justify-content: center;         /* <-- AGREGA ESTO: Centra el contenido (título) */
+  justify-content: center;
+  /* <-- AGREGA ESTO: Centra el contenido (título) */
   align-items: center;
   padding: 1rem;
   padding-bottom: 0px;
   cursor: pointer;
   user-select: none;
   transition: background-color 0.2s ease;
-  position: relative;              /* <-- AGREGA ESTO: Para posicionar la flecha */
+  position: relative;
+  /* <-- AGREGA ESTO: Para posicionar la flecha */
 }
 
 .semestre-header:hover {
@@ -52,7 +54,8 @@
   font-weight: 600;
   color: #333;
   margin: 0;
-  text-align: center; /* <-- Asegura el centrado del texto */
+  text-align: center;
+  /* <-- Asegura el centrado del texto */
   /* max-width: 128px; <-- ELIMINA ESTO si lo tenías, restringía el ancho */
 }
 
@@ -61,10 +64,12 @@
   font-size: 1rem;
   color: #007bff;
   transition: transform 0.3s ease;
-  
+
   /* --- NUEVOS ESTILOS PARA LA FLECHA --- */
-  position: absolute; /* La sacamos del flujo */
-  right: 1rem;        /* La pegamos a la derecha (mismo valor que el padding del header) */
+  position: absolute;
+  /* La sacamos del flujo */
+  right: 1rem;
+  /* La pegamos a la derecha (mismo valor que el padding del header) */
 }
 
 
@@ -74,7 +79,7 @@
 
 
 .asignaturas-list-container {
-  max-height: 0; 
+  max-height: 0;
   opacity: 0;
   visibility: hidden;
   transition:
@@ -85,7 +90,7 @@
 
 
 .semestre-item.is-expanded .asignaturas-list-container {
-  max-height: 1000px; 
+  max-height: 1000px;
   opacity: 1;
   visibility: visible;
   transition:
@@ -99,82 +104,87 @@
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 0 1rem 1rem 1rem; 
-  border-top: 1px solid #eee; 
+  padding: 0 1rem 1rem 1rem;
+  border-top: 1px solid #eee;
 }
 
 .semestre-creditos-bar {
-    /* Celeste claro con un poco de transparencia */
-    background-color: rgba(186, 230, 253, 0.6);
-    /* Alternativa color sólido: background-color: #e0f2fe; */
-    margin-top: -6px;
-    margin-bottom: 6px;
+  /* Celeste claro con un poco de transparencia */
+  background-color: rgba(186, 230, 253, 0.6);
+  /* Alternativa color sólido: background-color: #e0f2fe; */
+  margin-top: -6px;
+  margin-bottom: 6px;
 
-    color: #0c4a6e; /* Un azul oscuro para buen contraste del texto */
-    padding: 6px 10px;
-    text-align: center;
-    font-size: 0.9rem;
-    border-bottom: 1px solid rgba(14, 165, 233, 0.3); /* Borde sutil inferior */
+  color: #0c4a6e;
+  /* Un azul oscuro para buen contraste del texto */
+  padding: 6px 10px;
+  text-align: center;
+  font-size: 0.9rem;
+  border-bottom: 1px solid rgba(14, 165, 233, 0.3);
+  /* Borde sutil inferior */
 }
 
 @media (min-width: 768px) {
-  
+
   .semestre-item {
     /* 1. OBLIGAR A ENTRAR EN PANTALLA */
-    flex: 1;        /* Crecer equitativamente */
-    min-width: 0;   /* Permitir encogerse más allá del contenido mínimo */
-    
+    flex: 1;
+    /* Crecer equitativamente */
+    min-width: 0;
+    /* Permitir encogerse más allá del contenido mínimo */
+
     /* Quitar márgenes externos */
     margin-bottom: 0;
     margin-right: 0;
     padding-left: 0;
   }
 
-  
+
   .semestre-item::before {
     display: none;
   }
 
-  
+
   .semestre-card {
     background-color: transparent;
     border: none;
     box-shadow: none;
     padding: 0;
-    overflow: visible; 
+    overflow: visible;
   }
 
-  
+
   .semestre-header {
-    background-color: #0088CC; 
-    border-radius: 4px; /* Bordes menos redondeados ahorran espacio visual */
-    
+    background-color: #0088CC;
+    border-radius: 4px;
+    /* Bordes menos redondeados ahorran espacio visual */
+
     /* Padding reducido drásticamente */
-    padding: 0.5rem 0.2rem; 
-    
+    padding: 0.5rem 0.2rem;
+
     justify-content: center;
-    cursor: default; 
+    cursor: default;
   }
 
   .semestre-header:hover {
-    background-color: #0088CC; 
+    background-color: #0088CC;
   }
 
   .semestre-titulo {
     color: white;
     /* Fuente más pequeña para que "Semestre X" no se rompa */
-    font-size: 0.85rem; 
+    font-size: 0.85rem;
     font-weight: 700;
     text-align: center;
-    width: 100%; 
-    
+    width: 100%;
+
     /* Evitar que el texto se parta en palabras raras */
-    white-space: normal; 
+    white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
   }
 
-  
+
   .expand-icon {
     display: none;
   }
@@ -183,26 +193,28 @@
     display: none;
   }
 
-  
+
   .asignaturas-list-container {
-    max-height: none !important; 
+    max-height: none !important;
     opacity: 1 !important;
     visibility: visible !important;
   }
 
-  
+
   .asignaturas-list {
-    padding: 0.5rem 0 0 0; 
+    padding: 0.5rem 0 0 0;
     border-top: none;
-    gap: 0.4rem; /* Menos espacio entre ramos */
+    gap: 0.4rem;
+    /* Menos espacio entre ramos */
   }
 
   .semestre-creditos-bar {
-      font-size: 0.75rem; /* Letra pequeña */
-      padding: 2px 0;
-      margin-top: 4px;
-      margin-bottom: 4px;
-      border-radius: 4px;
-      /* Texto corto: "22 cred" en vez de "Total créditos..." si es necesario */
+    font-size: 0.75rem;
+    /* Letra pequeña */
+    padding: 2px 0;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    border-radius: 4px;
+    /* Texto corto: "22 cred" en vez de "Total créditos..." si es necesario */
   }
 }

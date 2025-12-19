@@ -12,6 +12,11 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+[data-theme="dark"] .semestre-card {
+    background-color: #3a3a3a;
+    border-color: #555;
+}
+
 .cuellos-card {
     background-color: #fff8e1;
     border: 1px solid #f7d26a;
