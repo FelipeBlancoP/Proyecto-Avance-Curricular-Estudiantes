@@ -14,7 +14,7 @@ import { SimulacionModule } from './simulacion/simulacion.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 5433,
+      port: 5432,
       username: 'admin_malla',    
       password: 'password123',    
       database: 'malla_db',       
