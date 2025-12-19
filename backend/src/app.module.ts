@@ -14,7 +14,7 @@ import { SimulacionModule } from './simulacion/simulacion.module';
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
-      port: 5432,
+      port: 5433,
       username: 'admin_malla',    // Mismo del docker-compose
       password: 'password123',    // Mismo del docker-compose
       database: 'malla_db',       // Mismo del docker-compose

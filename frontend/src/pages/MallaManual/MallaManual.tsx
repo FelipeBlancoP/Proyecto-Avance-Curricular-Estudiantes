@@ -6,6 +6,7 @@ import SemestreManual from '../../components/SemestreManual/SemestreManual';
 import CursosDisponibles from '../../components/CursosDisponibles/CursosDisponibles';
 import './MallaManual.css';
 import { estudianteService } from '../../services/estudianteService';
+import ThemeToggle from '../../components/TemaToggle/TemaToggle';
 
 interface Semestre {
   id: number;
@@ -41,9 +42,9 @@ function MallaManual() {
 
         // 1. Obtener datos del estudiante logueado (RUT y Carreras)
         const perfil = await estudianteService.obtenerPerfil();
-        
+
         if (!perfil || !perfil.carreras || perfil.carreras.length === 0) {
-            throw new Error("No se encontraron datos de carrera para el estudiante.");
+          throw new Error("No se encontraron datos de carrera para el estudiante.");
         }
 
         // 2. Extraer datos necesarios (Usamos la primera carrera por defecto)
@@ -56,7 +57,7 @@ function MallaManual() {
 
         // 3. Obtener la malla usando los datos dinámicos
         const malla = await MallaManualService.obtenerMalla(rut, codigoCarrera, catalogo);
-        
+
         // 4. Filtrar cursos (Lógica original)
         const cursosPendientes = malla.filter(curso => {
           const estado = curso.estado?.toUpperCase() || '';
@@ -75,12 +76,12 @@ function MallaManual() {
         if (simulacionGuardada) {
           console.log('💾 Simulación guardada cargada');
           setSemestres(simulacionGuardada);
-          
+
           // Opcional: Si cargas una simulación, deberías quitar esos cursos de "disponibles"
           // para que no se dupliquen visualmente si el usuario refresca la página
           const codigosEnSimulacion = new Set();
           simulacionGuardada.forEach(s => s.cursos.forEach(c => codigosEnSimulacion.add(c.codigo)));
-          
+
           setCursosDisponibles(prev => prev.filter(c => !codigosEnSimulacion.has(c.codigo)));
         }
 
@@ -89,10 +90,10 @@ function MallaManual() {
         console.error('❌ Error al cargar datos:', err);
         const errorMessage = err instanceof Error ? err.message : 'Error desconocido';
         setError(`Error: ${errorMessage}. ¿Has iniciado sesión?`);
-        
+
         // Si falla por auth, redirigir al login después de un momento podría ser útil
-        if(errorMessage.includes('token')) {
-            navigate('/login');
+        if (errorMessage.includes('token')) {
+          navigate('/login');
         }
       } finally {
         setLoading(false);
@@ -186,7 +187,7 @@ function MallaManual() {
           return {
             ...semestre,
             cursos: [...semestre.cursos, curso],
-            creditos: esPractica? semestre.creditos : semestre.creditos + curso.creditos
+            creditos: esPractica ? semestre.creditos : semestre.creditos + curso.creditos
           };
         }
         return semestre;
@@ -198,14 +199,14 @@ function MallaManual() {
           return {
             ...semestre,
             cursos: semestre.cursos.filter(c => c.codigo !== curso.codigo),
-            creditos: esPractica? semestre.creditos : semestre.creditos - curso.creditos
+            creditos: esPractica ? semestre.creditos : semestre.creditos - curso.creditos
           };
         }
         if (semestre.id === targetSemestreId) {
           return {
             ...semestre,
             cursos: [...semestre.cursos, curso],
-            creditos: esPractica? semestre.creditos : semestre.creditos + curso.creditos
+            creditos: esPractica ? semestre.creditos : semestre.creditos + curso.creditos
           };
         }
         return semestre;
@@ -303,6 +304,7 @@ function MallaManual() {
             🡰
           </button>
           <h1>Simulación Manual de Malla</h1>
+          <ThemeToggle />
         </div>
       </div>
 

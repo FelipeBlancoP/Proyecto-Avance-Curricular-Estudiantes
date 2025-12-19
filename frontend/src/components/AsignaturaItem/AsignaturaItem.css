@@ -61,38 +61,45 @@
   .asignatura-item {
     background-color: #f0f0f0;
     border: 1px solid #dcdcdc;
-    border-left: 4px solid #0088CC; /* Borde un poco más visible de nuevo */
+    border-left: 4px solid #0088CC;
+    /* Borde un poco más visible de nuevo */
 
     flex-direction: column;
-    
+
     /* CAMBIO 1: Centrar el contenido verticalmente si sobra espacio */
-    justify-content: center; 
+    justify-content: center;
     align-items: flex-start;
-    
-    gap: 0.3rem; /* Un poco más de separación entre nombre y créditos */
-    
+
+    gap: 0.3rem;
+    /* Un poco más de separación entre nombre y créditos */
+
     /* CAMBIO 2: Más relleno vertical (antes era 0.4rem) */
-    padding: 0.8rem 0.4rem; 
-    
+    padding: 0.8rem 0.4rem;
+
     cursor: grab;
-    
+
     /* CAMBIO 3: Altura mínima para uniformidad y que no se vean chatos */
-    min-height: 50px; /* Ajusta este valor a tu gusto (60px, 70px, 80px...) */
-    
+    min-height: 50px;
+    /* Ajusta este valor a tu gusto (60px, 70px, 80px...) */
+
     word-break: break-word;
   }
 
   .asignatura-item:hover {
-    transform: translateY(-1px); /* Efecto más sutil */
+    transform: translateY(-1px);
+    /* Efecto más sutil */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    z-index: 10; /* Para que al pasar el mouse quede por encima de las otras */
+    z-index: 10;
+    /* Para que al pasar el mouse quede por encima de las otras */
   }
 
   .asignatura-nombre {
     /* FUENTE PEQUEÑA: Estilo "Dashboard" */
-    font-size: 0.68rem; 
-    font-weight: 600; /* Un poco más negrita para compensar el tamaño */
-    line-height: 1.1; /* Líneas pegaditas */
+    font-size: 0.68rem;
+    font-weight: 600;
+    /* Un poco más negrita para compensar el tamaño */
+    line-height: 1.1;
+    /* Líneas pegaditas */
     margin-right: 0;
     color: #444;
   }
@@ -105,7 +112,7 @@
     border-radius: 3px;
     background-color: #6c757d;
     font-weight: normal;
-    
+
     /* Alineación */
     align-self: flex-start;
     margin-top: 2px;
